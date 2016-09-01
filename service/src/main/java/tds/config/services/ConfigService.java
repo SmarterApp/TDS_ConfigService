@@ -4,6 +4,7 @@ import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 /**
  * Provide an interface for interacting with the {#code configs} database and providing configuration information.
@@ -15,11 +16,9 @@ public interface ConfigService {
      *
      * @param clientName The name of the client (typically SBAC or SBAC_PT)
      * @param assessmentId The assessment identifier
-     * @return A {@code ClientTestProperty} for the specified client name and assessment id.
-     * @throws NoSuchElementException if there is no {@code ClientTestProperty} record for the specified client name and
-     * assessment id.
+     * @return A {@code Optional<ClientTestProperty>} for the specified client name and assessment id.
      */
-    ClientTestProperty getClientTestProperty(String clientName, String assessmentId) throws NoSuchElementException;
+    Optional<ClientTestProperty> getClientTestProperty(String clientName, String assessmentId);
 
     /**
      * Get the {@link ClientSystemFlag} for the specified client and audit name.
@@ -34,5 +33,5 @@ public interface ConfigService {
      * @return The {@code ClientSystemFlag} that matches the client and audit name.
      * @throws NoSuchElementException if the {@code ClientSystemFlag} with the specified audit name does not exist
      */
-    ClientSystemFlag getClientSystemFlag(String clientName, String auditObject) throws NoSuchElementException;
+    Optional<ClientSystemFlag> getClientSystemFlag(String clientName, String auditObject);
 }

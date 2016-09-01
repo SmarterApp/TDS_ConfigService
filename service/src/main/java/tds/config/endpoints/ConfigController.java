@@ -12,6 +12,9 @@ import tds.config.services.ConfigService;
 import tds.config.web.resources.ClientSystemFlagResource;
 import tds.config.web.resources.ClientTestPropertyResource;
 
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/config")
@@ -33,16 +36,22 @@ public class ConfigController {
     @RequestMapping(value = "/clientSystemFlags/{clientName}/{auditObject}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<ClientSystemFlagResource> getClientSystemFlag(@PathVariable final String clientName, @PathVariable final String auditObject) {
-        final ClientSystemFlag clientSystemFlag = configService.getClientSystemFlag(clientName, auditObject);
+        final Optional<ClientSystemFlag> clientSystemFlag = configService.getClientSystemFlag(clientName, auditObject);
+        if (!clientSystemFlag.isPresent()) {
+            throw new NoSuchElementException("Could not find ClientSystemFlag for client name " + clientName + " and audit object " + auditObject);
+        }
 
-        return ResponseEntity.ok(new ClientSystemFlagResource(clientSystemFlag));
+        return ResponseEntity.ok(new ClientSystemFlagResource(clientSystemFlag.get()));
     }
 
     @RequestMapping(value = "/clientTestProperties/{clientName}/{assessmentId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<ClientTestPropertyResource> getClientTestProperty(@PathVariable final String clientName, @PathVariable final String assessmentId) {
-        final ClientTestProperty clientTestProperty = configService.getClientTestProperty(clientName, assessmentId);
+        final Optional<ClientTestProperty> clientTestProperty = configService.getClientTestProperty(clientName, assessmentId);
+        if (!clientTestProperty.isPresent()) {
+            throw new NoSuchElementException("Could not find ClientTestProperty for " + clientName + " and assessmentId " + assessmentId);
+        }
 
-        return ResponseEntity.ok(new ClientTestPropertyResource(clientTestProperty));
+        return ResponseEntity.ok(new ClientTestPropertyResource(clientTestProperty.get()));
     }
 }

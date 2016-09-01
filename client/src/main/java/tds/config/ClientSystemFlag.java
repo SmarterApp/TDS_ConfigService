@@ -25,28 +25,16 @@ public class ClientSystemFlag {
         return auditObject;
     }
 
-    /**
-     * Protect against a {@link NullPointerException} in the event {@code equals} is called.  Possible code smell; look
-     * into refactoring {@code equals} method..
-     */
     public void setAuditObject(String auditObject) {
-        this.auditObject = auditObject == null
-                ? ""
-                : auditObject;
+        this.auditObject = auditObject;
     }
 
     public String getClientName() {
         return clientName;
     }
 
-    /**
-     * Protect against a {@link NullPointerException} in the event {@code equals} is called.  Possible code smell; look
-     * into refactoring {@code equals} method..
-     */
     public void setClientName(String clientName) {
-        this.clientName = clientName == null
-                ? ""
-                : clientName;
+        this.clientName = clientName;
     }
 
     public Boolean getIsPracticeTest() {

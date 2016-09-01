@@ -11,12 +11,12 @@ import tds.config.ClientTestProperty;
 import tds.config.ConfigServiceApplication;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = ConfigServiceApplication.class)
-@WebAppConfiguration
 public class ConfigServiceImplIntegrationTests {
     @Autowired
     private ConfigService configService;
@@ -26,35 +26,37 @@ public class ConfigServiceImplIntegrationTests {
         final String clientName = "SBAC_PT";
         final String assessmentId = "SBAC Math 3-MATH-3";
 
-        ClientTestProperty result = configService.getClientTestProperty(clientName, assessmentId);
+        Optional<ClientTestProperty> result = configService.getClientTestProperty(clientName, assessmentId);
 
-        assertThat(result).isNotNull();
-        assertThat(result.getClientName()).isEqualTo("SBAC_PT");
-        assertThat(result.getAssessmentId()).isEqualTo("SBAC Math 3-MATH-3");
-        assertThat(result.getMaxOpportunities()).isEqualTo(9999);
-        assertThat(result.getPrefetch()).isEqualTo(2);
-        assertThat(result.getIsPrintable()).isEqualTo(false);
-        assertThat(result.getIsSelectable()).isEqualTo(true);
-        assertThat(result.getLabel()).isEqualTo("Grades 3 - 5 MATH");
-        assertThat(result.getScoreByTds()).isEqualTo(true);
-        assertThat(result.getSubjectName()).isEqualTo("MATH");
-        assertThat(result.getMaskItemsBySubject()).isEqualTo(true);
-        assertThat(result.getAccommodationFamily()).isEqualTo("MATH");
-        assertThat(result.getRtsFormField()).isEqualTo("tds-testform");
-        assertThat(result.getRtsWindowField()).isEqualTo("tds-testwindow");
-        assertThat(result.getWindowTideSelectable()).isEqualTo(false);
-        assertThat(result.getRequireRtsWindow()).isEqualTo(false);
-        assertThat(result.getForceComplete()).isEqualTo(true);
-        assertThat(result.getRtsModeField()).isEqualTo("tds-testmode");
-        assertThat(result.getModeTideSelectable()).isEqualTo(false);
-        assertThat(result.getRequireRtsMode()).isEqualTo(false);
-        assertThat(result.getRequireRtsModeWindow()).isEqualTo(false);
-        assertThat(result.getDeleteUnansweredItems()).isEqualTo(false);
-        assertThat(result.getAbilitySlope()).isEqualTo(1d);
-        assertThat(result.getAbilityIntercept()).isEqualTo(0d);
-        assertThat(result.getValidateCompleteness()).isEqualTo(false);
-        assertThat(result.getGradeText()).isEqualTo("Grades 3 - 5");
-        assertThat(result.getProctorEligibility()).isEqualTo(0);
+        assertThat(result.isPresent()).isTrue();
+
+        ClientTestProperty clientTestProperty = result.get();
+        assertThat(clientTestProperty.getClientName()).isEqualTo("SBAC_PT");
+        assertThat(clientTestProperty.getAssessmentId()).isEqualTo("SBAC Math 3-MATH-3");
+        assertThat(clientTestProperty.getMaxOpportunities()).isEqualTo(9999);
+        assertThat(clientTestProperty.getPrefetch()).isEqualTo(2);
+        assertThat(clientTestProperty.getIsPrintable()).isEqualTo(false);
+        assertThat(clientTestProperty.getIsSelectable()).isEqualTo(true);
+        assertThat(clientTestProperty.getLabel()).isEqualTo("Grades 3 - 5 MATH");
+        assertThat(clientTestProperty.getScoreByTds()).isEqualTo(true);
+        assertThat(clientTestProperty.getSubjectName()).isEqualTo("MATH");
+        assertThat(clientTestProperty.getMaskItemsBySubject()).isEqualTo(true);
+        assertThat(clientTestProperty.getAccommodationFamily()).isEqualTo("MATH");
+        assertThat(clientTestProperty.getRtsFormField()).isEqualTo("tds-testform");
+        assertThat(clientTestProperty.getRtsWindowField()).isEqualTo("tds-testwindow");
+        assertThat(clientTestProperty.getWindowTideSelectable()).isEqualTo(false);
+        assertThat(clientTestProperty.getRequireRtsWindow()).isEqualTo(false);
+        assertThat(clientTestProperty.getForceComplete()).isEqualTo(true);
+        assertThat(clientTestProperty.getRtsModeField()).isEqualTo("tds-testmode");
+        assertThat(clientTestProperty.getModeTideSelectable()).isEqualTo(false);
+        assertThat(clientTestProperty.getRequireRtsMode()).isEqualTo(false);
+        assertThat(clientTestProperty.getRequireRtsModeWindow()).isEqualTo(false);
+        assertThat(clientTestProperty.getDeleteUnansweredItems()).isEqualTo(false);
+        assertThat(clientTestProperty.getAbilitySlope()).isEqualTo(1d);
+        assertThat(clientTestProperty.getAbilityIntercept()).isEqualTo(0d);
+        assertThat(clientTestProperty.getValidateCompleteness()).isEqualTo(false);
+        assertThat(clientTestProperty.getGradeText()).isEqualTo("Grades 3 - 5");
+        assertThat(clientTestProperty.getProctorEligibility()).isEqualTo(0);
     }
 
     @Test
@@ -62,17 +64,19 @@ public class ConfigServiceImplIntegrationTests {
         shouldGetAClientTestProperty();
     }
 
-    @Test(expected = NoSuchElementException.class)
-    public void shouldThrowNoSuchElementExceptionForInvalidClientName() {
+    @Test
+    public void shouldNotBePresentForInvalidClientName() {
         final String clientName = "foo";
         final String assessmentId = "SBAC Math 3-MATH-3";
 
-        configService.getClientTestProperty(clientName, assessmentId);
+        Optional<ClientTestProperty> result = configService.getClientTestProperty(clientName, assessmentId);
+
+        assertThat(result.isPresent()).isFalse();
     }
 
-    @Test(expected = NoSuchElementException.class)
-    public void should_Throw_NoSuchElementException_For_Invalid_ClientName() {
-        shouldThrowNoSuchElementExceptionForInvalidClientName();
+    @Test
+    public void should_Not_Be_Present_For_Invalid_ClientName() {
+        shouldNotBePresentForInvalidClientName();
     }
 
     @Test
@@ -80,14 +84,16 @@ public class ConfigServiceImplIntegrationTests {
         final String clientName = "SBAC_PT";
         final String auditObject = "accommodations";
 
-        ClientSystemFlag result = configService.getClientSystemFlag(clientName, auditObject);
+        Optional<ClientSystemFlag> result = configService.getClientSystemFlag(clientName, auditObject);
 
-        assertThat(result).isNotNull();
-        assertThat(result.getClientName()).isEqualTo(clientName);
-        assertThat(result.getAuditObject()).isEqualTo(auditObject);
-        assertThat(result.getDateChanged()).isNotNull();
-        assertThat(result.getIsPracticeTest()).isTrue();
-        assertThat(result.getIsOn()).isTrue();
+        assertThat(result.isPresent()).isTrue();
+
+        ClientSystemFlag clientSystemFlag = result.get();
+        assertThat(clientSystemFlag.getClientName()).isEqualTo(clientName);
+        assertThat(clientSystemFlag.getAuditObject()).isEqualTo(auditObject);
+        assertThat(clientSystemFlag.getDateChanged()).isNotNull();
+        assertThat(clientSystemFlag.getIsPracticeTest()).isTrue();
+        assertThat(clientSystemFlag.getIsOn()).isTrue();
     }
 
     @Test
@@ -95,16 +101,18 @@ public class ConfigServiceImplIntegrationTests {
         shouldGetAClientSystemFlag();
     }
 
-    @Test(expected = NoSuchElementException.class)
-    public void shouldThrowNoSuchElementExceptionForInvalidAuditObject() {
+    @Test
+    public void shouldNotBePresentForInvalidAuditObject() {
         final String clientName = "SBAC_PT";
         final String auditObject = "foo";
 
-        configService.getClientSystemFlag(clientName, auditObject);
+        Optional<ClientSystemFlag> result = configService.getClientSystemFlag(clientName, auditObject);
+
+        assertThat(result.isPresent()).isFalse();
     }
 
-    @Test(expected = NoSuchElementException.class)
-    public void should_Throw_NoSuchElementException_For_Invalid_AuditObject() {
-        shouldThrowNoSuchElementExceptionForInvalidAuditObject();
+    @Test
+    public void should_Not_Be_Present_For_Invalid_AuditObject() {
+        shouldNotBePresentForInvalidAuditObject();
     }
 }

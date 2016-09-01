@@ -10,7 +10,7 @@ import tds.config.repositories.ConfigRepository;
 import tds.config.services.ConfigService;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class ConfigServiceImpl implements ConfigService {
@@ -23,23 +23,17 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
-    public ClientTestProperty getClientTestProperty(final String clientName, final String assessmentId) throws NoSuchElementException {
+    public Optional<ClientTestProperty> getClientTestProperty(final String clientName, final String assessmentId) {
         ClientTestProperty clientTestProperty = configRepository.getClientTestProperty(clientName, assessmentId);
 
-        if (clientTestProperty == null) {
-            String message = "Could not find ClientTestProperty for client name " + clientName + " and assessment id " + assessmentId;
-            throw new NoSuchElementException(message);
-        }
-
-        return clientTestProperty;
+        return Optional.ofNullable(clientTestProperty);
     }
 
     @Override
-    public ClientSystemFlag getClientSystemFlag(String clientName, String auditObject) throws NoSuchElementException {
+    public Optional<ClientSystemFlag> getClientSystemFlag(String clientName, String auditObject) {
         List<ClientSystemFlag> clientSystemFlags = configRepository.getClientSystemFlags(clientName);
 
         return clientSystemFlags.stream().filter(f -> f.getAuditObject().equals(auditObject))
-                .findFirst()
-                .orElseThrow(() -> new NoSuchElementException("Could not find ClientSystemFlag for client name " + clientName + " and audit object " + auditObject));
+                .findFirst();
     }
 }

@@ -6,17 +6,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.context.web.WebAppConfiguration;
 import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
-import tds.config.ConfigServiceApplication;
 import tds.config.repositories.ConfigRepository;
 import tds.config.services.impl.ConfigServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.*;
@@ -38,14 +36,16 @@ public class ConfigServiceUnitTests {
     public void shouldGetAClientTestProperty() {
         when(mockConfigRepository.getClientTestProperty("SBAC_PT", "TEST_ID")).thenReturn(getMockClientTestProperty());
 
-        ClientTestProperty result = configService.getClientTestProperty("SBAC_PT", "TEST_ID");
+        Optional<ClientTestProperty> result = configService.getClientTestProperty("SBAC_PT", "TEST_ID");
 
-        assertThat(result).isNotNull();
-        assertThat(result.getClientName()).isEqualTo("SBAC_PT");
-        assertThat(result.getAssessmentId()).isEqualTo("TEST_ID");
-        assertThat(result.getAccommodationFamily()).isEqualTo("accommodation family");
-        assertThat(result.getBatchModeReport()).isEqualTo(false);
-        assertThat(result.getCategory()).isEqualTo("category");
+        assertThat(result.isPresent()).isTrue();
+
+        ClientTestProperty clientTestProperty = result.get();
+        assertThat(clientTestProperty.getClientName()).isEqualTo("SBAC_PT");
+        assertThat(clientTestProperty.getAssessmentId()).isEqualTo("TEST_ID");
+        assertThat(clientTestProperty.getAccommodationFamily()).isEqualTo("accommodation family");
+        assertThat(clientTestProperty.getBatchModeReport()).isEqualTo(false);
+        assertThat(clientTestProperty.getCategory()).isEqualTo("category");
     }
 
     @Test
@@ -53,27 +53,31 @@ public class ConfigServiceUnitTests {
         shouldGetAClientTestProperty();
     }
 
-    @Test(expected = NoSuchElementException.class)
-    public void shouldThrowNoSuchElementExceptionForInvalidClientName() {
+    @Test
+    public void shouldNotBePresentForAnInvalidClientName() {
         when(mockConfigRepository.getClientTestProperty("SBAC_PT", "TEST_ID")).thenReturn(getMockClientTestProperty());
 
-        configService.getClientTestProperty("foo", "TEST_ID");
+        Optional<ClientTestProperty> result = configService.getClientTestProperty("foo", "TEST_ID");
+
+        assertThat(result.isPresent()).isFalse();
     }
 
-    @Test(expected = NoSuchElementException.class)
-    public void should_Throw_NoSuchElement_Exception_For_Invalid_ClientName() {
-        shouldThrowNoSuchElementExceptionForInvalidClientName();
+    @Test
+    public void should_Not_Be_Present_For_an_Invalid_ClientName() {
+        shouldNotBePresentForAnInvalidClientName();
     }
 
     @Test
     public void shouldGetAClientSystemFlag() {
         when(mockConfigRepository.getClientSystemFlags("SBAC_PT")).thenReturn(getMockClientSystemFlag());
 
-        ClientSystemFlag result = configService.getClientSystemFlag("SBAC_PT", "AUDIT_OBJECT 1");
+        Optional<ClientSystemFlag> result = configService.getClientSystemFlag("SBAC_PT", "AUDIT_OBJECT 1");
 
-        assertThat(result).isNotNull();
-        assertThat(result.getClientName()).isEqualTo("SBAC_PT");
-        assertThat(result.getAuditObject()).isEqualTo("AUDIT_OBJECT 1");
+        assertThat(result.isPresent()).isTrue();
+
+        ClientSystemFlag clientSystemFlag = result.get();
+        assertThat(clientSystemFlag.getClientName()).isEqualTo("SBAC_PT");
+        assertThat(clientSystemFlag.getAuditObject()).isEqualTo("AUDIT_OBJECT 1");
     }
 
     @Test
@@ -81,16 +85,18 @@ public class ConfigServiceUnitTests {
         shouldGetAClientSystemFlag();
     }
 
-    @Test(expected = NoSuchElementException.class)
-    public void shouldThrowNoSuchElementExceptionForAnInvalidAuditObject() {
+    @Test
+    public void shouldNotBePresentForAnInvalidAuditObject() {
         when(mockConfigRepository.getClientSystemFlags("SBAC_PT")).thenReturn(getMockClientSystemFlag());
 
-        configService.getClientSystemFlag("SBAC_PT", "foo");
+        Optional<ClientSystemFlag> result = configService.getClientSystemFlag("SBAC_PT", "foo");
+
+        assertThat(result.isPresent()).isFalse();
     }
 
-    @Test(expected = NoSuchElementException.class)
-    public void should_Throw_NoSuchElementException_For_Invalid_AuditObject() {
-        shouldThrowNoSuchElementExceptionForAnInvalidAuditObject();
+    @Test
+    public void should_Not_Be_Present_For_Invalid_AuditObject() {
+        shouldNotBePresentForAnInvalidAuditObject();
     }
 
     @After
