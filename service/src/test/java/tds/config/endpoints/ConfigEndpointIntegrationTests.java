@@ -49,7 +49,8 @@ public class ConfigEndpointIntegrationTests {
             .statusCode(200)
             .body("clientTestProperty.clientName", equalTo(clientName))
             .body("clientTestProperty.assessmentId", equalTo(testId))
-            .body("clientTestProperty.maxOpportunities", equalTo(9999));
+            .body("clientTestProperty.maxOpportunities", equalTo(9999))
+            .body("_links.self.href", equalTo("http://localhost:8080/config/clientTestProperties/SBAC_PT/SBAC%20Math%203-MATH-3"));
     }
 
 
@@ -59,7 +60,7 @@ public class ConfigEndpointIntegrationTests {
     }
 
     @Test
-    public void shouldReturn404ForInvalidClientName() {
+    public void shouldReturn404ForClientTestPropertyWithInvalidClientName() {
         final String clientName = "foo";
         final String testId = "SBAC Math 3-MATH-3";
 
@@ -73,7 +74,50 @@ public class ConfigEndpointIntegrationTests {
     }
 
     @Test
-    public void should_Return_a_404_For_Invalid_ClientName() {
-        shouldReturn404ForInvalidClientName();
+    public void should_Return_a_404_For_ClientTestProperty_With_Invalid_ClientName() {
+        shouldReturn404ForClientTestPropertyWithInvalidClientName();
+    }
+
+    @Test
+    public void shouldGetAClientSystemFlag() {
+        final String clientName = "SBAC_PT";
+        final String auditObject = "accommodations";
+
+        given()
+            .accept(ContentType.JSON)
+        .when()
+            .get(CONFIG_RESOURCE + "/clientSystemFlags/" + clientName + "/" + auditObject)
+        .then()
+            .contentType(ContentType.JSON)
+            .statusCode(200)
+            .body("clientSystemFlag.clientName", equalTo(clientName))
+            .body("clientSystemFlag.auditObject", equalTo(auditObject))
+            .body("clientSystemFlag.isPracticeTest", equalTo(true))
+            .body("clientSystemFlag.isOn", equalTo(true))
+            .body("_links.self.href", equalTo("http://localhost:8080/config/clientSystemFlags/SBAC_PT/accommodations"));
+    }
+
+    @Test
+    public void should_Get_a_ClientSystemFlag() {
+        shouldGetAClientSystemFlag();
+    }
+
+    @Test
+    public void shouldGetA404ForClientSystemFlagWithAnInvalidAuditObject() {
+        final String clientName = "SBAC_PT";
+        final String auditObject = "foo";
+
+        given()
+            .accept(ContentType.JSON)
+        .when()
+            .get(CONFIG_RESOURCE + "/clientSystemFlags/" + clientName + "/" + auditObject)
+        .then()
+            .contentType(ContentType.JSON)
+            .statusCode(404);
+    }
+
+    @Test
+    public void should_Get_a_404_For_ClientSystemFlag_With_an_Invalid_AuditObject() {
+        shouldGetA404ForClientSystemFlagWithAnInvalidAuditObject();
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import tds.config.exceptions.NotFoundException;
 import tds.config.web.resources.ExceptionMessageResource;
 
 import java.util.NoSuchElementException;
@@ -17,10 +18,10 @@ public class ExceptionAdvice {
     private static final Logger LOG = LoggerFactory.getLogger(ExceptionAdvice.class);
 
     // TODO:  Find better/more appropriate exception?  Make our own?
-    @ExceptionHandler(NoSuchElementException.class)
+    @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ResponseBody
-    ResponseEntity<ExceptionMessageResource> handleNotFoundException(final NoSuchElementException ex) {
+    ResponseEntity<ExceptionMessageResource> handleNotFoundException(final NotFoundException ex) {
         if (LOG.isDebugEnabled()) {
             LOG.debug("Not Found exception occurred", ex);
         } else {
