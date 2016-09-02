@@ -49,8 +49,7 @@ public class ConfigEndpointIntegrationTests {
             .statusCode(200)
             .body("clientTestProperty.clientName", equalTo(clientName))
             .body("clientTestProperty.assessmentId", equalTo(testId))
-            .body("clientTestProperty.maxOpportunities", equalTo(9999))
-            .body("_links.self.href", equalTo("http://localhost:8080/config/clientTestProperties/SBAC_PT/SBAC%20Math%203-MATH-3"));
+            .body("clientTestProperty.maxOpportunities", equalTo(9999));
     }
 
 
@@ -62,12 +61,12 @@ public class ConfigEndpointIntegrationTests {
     @Test
     public void shouldReturn404ForInvalidClientName() {
         final String clientName = "foo";
-        final String assessmentId = "SBAC Math 3-MATH-3";
+        final String testId = "SBAC Math 3-MATH-3";
 
         given()
             .accept(ContentType.JSON)
         .when()
-            .get(CONFIG_RESOURCE + "/clientTestProperties/" + clientName + "/" + assessmentId)
+            .get(CONFIG_RESOURCE + "/clientTestProperties/" + clientName + "/" + testId)
         .then()
             .contentType(ContentType.JSON)
             .statusCode(404);
@@ -76,47 +75,5 @@ public class ConfigEndpointIntegrationTests {
     @Test
     public void should_Return_a_404_For_Invalid_ClientName() {
         shouldReturn404ForInvalidClientName();
-    }
-
-    @Test
-    public void shouldGetAClientSystemFlag() {
-        final String clientName = "SBAC_PT";
-        final String auditObject = "accommodations";
-
-        given()
-            .accept(ContentType.JSON)
-        .when()
-            .get(CONFIG_RESOURCE + "/clientSystemFlags/" + clientName + "/" + auditObject)
-        .then()
-            .contentType(ContentType.JSON)
-            .statusCode(200)
-            .body("clientSystemFlag.clientName", equalTo(clientName))
-            .body("clientSystemFlag.auditObject", equalTo(auditObject))
-            .body("clientSystemFlag.isOn", equalTo(true))
-            .body("clientSystemFlag.isPracticeTest", equalTo(true));
-    }
-
-    @Test
-    public void should_Get_a_ClientSystemFlag() {
-        shouldGetAClientSystemFlag();
-    }
-
-    @Test
-    public void shouldReturnA404ForInvalidAuditObject() {
-        final String clientName = "SBAC_PT";
-        final String auditObject = "foo";
-
-        given()
-            .accept(ContentType.JSON)
-        .when()
-            .get(CONFIG_RESOURCE + "/clientSystemFlags/" + clientName + "/" + auditObject)
-        .then()
-            .contentType(ContentType.JSON)
-            .statusCode(404);
-    }
-
-    @Test
-    public void should_Return_a_404_For_Invalid_AuditObject() {
-        shouldReturnA404ForInvalidAuditObject();
     }
 }
