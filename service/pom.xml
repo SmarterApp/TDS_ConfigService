@@ -151,7 +151,7 @@
                         <configuration>
                             <skipTests>${integration-tests.skip}</skipTests>
                             <includes>
-                                <include>**/*IntegrationTest.java</include>
+                                <include>**/*IntegrationTests.java</include>
                             </includes>
                         </configuration>
                     </execution>
