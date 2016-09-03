@@ -24,15 +24,10 @@ public class ConfigEndpointIntegrationTests {
         given()
             .accept(ContentType.JSON)
         .when()
-            .get(CONFIG_RESOURCE + "/isAlive")
+            .get("/isAlive")
         .then()
             .contentType(ContentType.JSON)
             .statusCode(200);
-    }
-
-    @Test
-    public void should_Respond_to_IsAlive() {
-        shouldRespondToIsAlive();
     }
 
     @Test
@@ -49,14 +44,8 @@ public class ConfigEndpointIntegrationTests {
             .statusCode(200)
             .body("clientTestProperty.clientName", equalTo(clientName))
             .body("clientTestProperty.assessmentId", equalTo(testId))
-            .body("clientTestProperty.maxOpportunities", equalTo(9999))
+            .body("clientTestProperty.maxOpportunities", equalTo(3))
             .body("_links.self.href", equalTo("http://localhost:8080/config/clientTestProperties/SBAC_PT/SBAC%20Math%203-MATH-3"));
-    }
-
-
-    @Test
-    public void should_Get_a_ClientTestProperty() {
-        shouldGetAClientTestProperty();
     }
 
     @Test
@@ -71,11 +60,6 @@ public class ConfigEndpointIntegrationTests {
         .then()
             .contentType(ContentType.JSON)
             .statusCode(404);
-    }
-
-    @Test
-    public void should_Return_a_404_For_ClientTestProperty_With_Invalid_ClientName() {
-        shouldReturn404ForClientTestPropertyWithInvalidClientName();
     }
 
     @Test
@@ -98,11 +82,6 @@ public class ConfigEndpointIntegrationTests {
     }
 
     @Test
-    public void should_Get_a_ClientSystemFlag() {
-        shouldGetAClientSystemFlag();
-    }
-
-    @Test
     public void shouldGetA404ForClientSystemFlagWithAnInvalidAuditObject() {
         final String clientName = "SBAC_PT";
         final String auditObject = "foo";
@@ -114,10 +93,5 @@ public class ConfigEndpointIntegrationTests {
         .then()
             .contentType(ContentType.JSON)
             .statusCode(404);
-    }
-
-    @Test
-    public void should_Get_a_404_For_ClientSystemFlag_With_an_Invalid_AuditObject() {
-        shouldGetA404ForClientSystemFlagWithAnInvalidAuditObject();
     }
 }

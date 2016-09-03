@@ -85,9 +85,22 @@
         </dependency>
 
         <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.192</version>
+        </dependency>
+
+
+        <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>2.3.9</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>${flyway.version}</version>
         </dependency>
 
         <!-- Unit testing dependencies -->
@@ -134,9 +147,39 @@
                 <configuration>
                     <skipTests>${unit-tests.skip}</skipTests>
                     <excludes>
-                        <exclude>**/*IntegrationTest.java</exclude>
+                        <exclude>**/*IntegrationTests.java</exclude>
                     </excludes>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>4.0.3</version>
+                <executions>
+                    <execution>
+                        <id>flyway_test_migrations</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>migrate</goal>
+                        </goals>
+                        <configuration>
+                            <!-- no point in running migrations if integration tests are skipped -->
+                            <skip>${integration-tests.skip}</skip>
+                            <url>jdbc:h2:mem:configs;MODE=MySQL;DB_CLOSE_DELAY=-1;INIT=CREATE SCHEMA IF NOT EXISTS "public";</url>
+                            <user>sa</user>
+                            <password></password>
+                        </configuration>
+                    </execution>
+                </executions>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>com.h2database</groupId>
+                        <artifactId>h2</artifactId>
+                        <version>1.4.191</version>
+                    </dependency>
+                </dependencies>
             </plugin>
 
             <plugin>
@@ -149,7 +192,7 @@
                             <goal>verify</goal>
                         </goals>
                         <configuration>
-                            <skipTests>${integration-tests.skip}</skipTests>
+                            <skipITs>${integration-tests.skip}</skipITs>
                             <includes>
                                 <include>**/*IntegrationTests.java</include>
                             </includes>
