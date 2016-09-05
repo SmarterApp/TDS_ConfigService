@@ -5,12 +5,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
 import tds.config.ConfigServiceApplication;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,7 +31,7 @@ public class ConfigServiceImplIntegrationTests {
         ClientTestProperty clientTestProperty = result.get();
         assertThat(clientTestProperty.getClientName()).isEqualTo("SBAC_PT");
         assertThat(clientTestProperty.getAssessmentId()).isEqualTo("SBAC Math 3-MATH-3");
-        assertThat(clientTestProperty.getMaxOpportunities()).isEqualTo(9999);
+        assertThat(clientTestProperty.getMaxOpportunities()).isEqualTo(3);
         assertThat(clientTestProperty.getPrefetch()).isEqualTo(2);
         assertThat(clientTestProperty.getIsPrintable()).isEqualTo(false);
         assertThat(clientTestProperty.getIsSelectable()).isEqualTo(true);
@@ -60,11 +58,6 @@ public class ConfigServiceImplIntegrationTests {
     }
 
     @Test
-    public void should_Get_a_ClientTestProperty() {
-        shouldGetAClientTestProperty();
-    }
-
-    @Test
     public void shouldNotBePresentForInvalidClientName() {
         final String clientName = "foo";
         final String assessmentId = "SBAC Math 3-MATH-3";
@@ -72,11 +65,6 @@ public class ConfigServiceImplIntegrationTests {
         Optional<ClientTestProperty> result = configService.getClientTestProperty(clientName, assessmentId);
 
         assertThat(result.isPresent()).isFalse();
-    }
-
-    @Test
-    public void should_Not_Be_Present_For_Invalid_ClientName() {
-        shouldNotBePresentForInvalidClientName();
     }
 
     @Test
@@ -97,11 +85,6 @@ public class ConfigServiceImplIntegrationTests {
     }
 
     @Test
-    public void should_Get_a_ClientSystemFlag() {
-        shouldGetAClientSystemFlag();
-    }
-
-    @Test
     public void shouldNotBePresentForInvalidAuditObject() {
         final String clientName = "SBAC_PT";
         final String auditObject = "foo";
@@ -109,10 +92,5 @@ public class ConfigServiceImplIntegrationTests {
         Optional<ClientSystemFlag> result = configService.getClientSystemFlag(clientName, auditObject);
 
         assertThat(result.isPresent()).isFalse();
-    }
-
-    @Test
-    public void should_Not_Be_Present_For_Invalid_AuditObject() {
-        shouldNotBePresentForInvalidAuditObject();
     }
 }

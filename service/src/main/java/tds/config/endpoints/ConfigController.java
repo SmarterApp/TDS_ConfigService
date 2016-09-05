@@ -13,9 +13,6 @@ import tds.config.services.ConfigService;
 import tds.config.web.resources.ClientSystemFlagResource;
 import tds.config.web.resources.ClientTestPropertyResource;
 
-import java.util.NoSuchElementException;
-import java.util.Optional;
-
 
 @RestController
 @RequestMapping("/config")
@@ -28,31 +25,21 @@ public class ConfigController {
         this.configService = configService;
     }
 
-    @RequestMapping(value = "/isAlive", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    ResponseEntity<String> isAlive() {
-        return ResponseEntity.ok("Hello from Config service");
-    }
-
     @RequestMapping(value = "/clientSystemFlags/{clientName}/{auditObject}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<ClientSystemFlagResource> getClientSystemFlag(@PathVariable final String clientName, @PathVariable final String auditObject) throws NotFoundException {
-        final Optional<ClientSystemFlag> clientSystemFlag = configService.getClientSystemFlag(clientName, auditObject);
-        if (!clientSystemFlag.isPresent()) {
-            throw new NotFoundException("Could not find ClientSystemFlag for client name " + clientName + " and audit object " + auditObject);
-        }
+        final ClientSystemFlag clientSystemFlag = configService.getClientSystemFlag(clientName, auditObject)
+                .orElseThrow(() -> new NotFoundException("Could not find ClientSystemFlag for client name " + clientName + " and audit object " + auditObject));
 
-        return ResponseEntity.ok(new ClientSystemFlagResource(clientSystemFlag.get()));
+        return ResponseEntity.ok(new ClientSystemFlagResource(clientSystemFlag));
     }
 
     @RequestMapping(value = "/clientTestProperties/{clientName}/{assessmentId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<ClientTestPropertyResource> getClientTestProperty(@PathVariable final String clientName, @PathVariable final String assessmentId) throws NotFoundException {
-        final Optional<ClientTestProperty> clientTestProperty = configService.getClientTestProperty(clientName, assessmentId);
-        if (!clientTestProperty.isPresent()) {
-            throw new NotFoundException("Could not find ClientTestProperty for " + clientName + " and assessmentId " + assessmentId);
-        }
+        final ClientTestProperty clientTestProperty = configService.getClientTestProperty(clientName, assessmentId)
+                .orElseThrow(() -> new NotFoundException("Could not find ClientTestProperty for " + clientName + " and assessmentId " + assessmentId));
 
-        return ResponseEntity.ok(new ClientTestPropertyResource(clientTestProperty.get()));
+        return ResponseEntity.ok(new ClientTestPropertyResource(clientTestProperty));
     }
 }

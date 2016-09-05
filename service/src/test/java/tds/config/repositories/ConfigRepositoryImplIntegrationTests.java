@@ -5,7 +5,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
 import tds.config.ConfigServiceApplication;
@@ -32,11 +31,6 @@ public class ConfigRepositoryImplIntegrationTests {
     }
 
     @Test
-    public void should_Get_a_ClientSystemFlag_List() {
-        shouldGetAClientSystemFlagsList();
-    }
-
-    @Test
     public void shouldGetAClientTestProperty() throws Exception {
         final String clientName = "SBAC_PT";
         final String assessmentId = "SBAC Math 3-MATH-3";
@@ -46,7 +40,7 @@ public class ConfigRepositoryImplIntegrationTests {
         assertThat(result).isNotNull();
         assertThat(result.getClientName()).isEqualTo("SBAC_PT");
         assertThat(result.getAssessmentId()).isEqualTo("SBAC Math 3-MATH-3");
-        assertThat(result.getMaxOpportunities()).isEqualTo(9999);
+        assertThat(result.getMaxOpportunities()).isEqualTo(3);
         assertThat(result.getPrefetch()).isEqualTo(2);
         assertThat(result.getIsPrintable()).isEqualTo(false);
         assertThat(result.getIsSelectable()).isEqualTo(true);
@@ -73,22 +67,12 @@ public class ConfigRepositoryImplIntegrationTests {
     }
 
     @Test
-    public void should_Get_a_ClientTestProperty() throws Exception {
-        shouldGetAClientTestProperty();
-    }
-
-    @Test
-    public void shouldReturnNullForAnInvalidClientName() {
+    public void shouldReturnANullClientTestPropertyForAnInvalidClientName() {
         final String phonyClientName = "foo";
         final String assessmentId = "SBAC Math 3-MATH-3";
 
         ClientTestProperty result = configRepository.getClientTestProperty(phonyClientName, assessmentId);
 
         assertThat(result).isNull();
-    }
-
-    @Test
-    public void should_Return_Null_For_an_Invalid_ClientName() {
-        shouldReturnNullForAnInvalidClientName();
     }
 }

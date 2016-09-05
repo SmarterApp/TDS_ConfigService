@@ -13,7 +13,6 @@ import tds.config.services.impl.ConfigServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
@@ -49,22 +48,12 @@ public class ConfigServiceUnitTests {
     }
 
     @Test
-    public void should_Get_a_ClientTestProperty() {
-        shouldGetAClientTestProperty();
-    }
-
-    @Test
     public void shouldNotBePresentForAnInvalidClientName() {
         when(mockConfigRepository.getClientTestProperty("SBAC_PT", "TEST_ID")).thenReturn(getMockClientTestProperty());
 
         Optional<ClientTestProperty> result = configService.getClientTestProperty("foo", "TEST_ID");
 
         assertThat(result.isPresent()).isFalse();
-    }
-
-    @Test
-    public void should_Not_Be_Present_For_an_Invalid_ClientName() {
-        shouldNotBePresentForAnInvalidClientName();
     }
 
     @Test
@@ -81,22 +70,12 @@ public class ConfigServiceUnitTests {
     }
 
     @Test
-    public void should_Get_a_ClientSystemFlag() {
-        shouldGetAClientSystemFlag();
-    }
-
-    @Test
     public void shouldNotBePresentForAnInvalidAuditObject() {
         when(mockConfigRepository.getClientSystemFlags("SBAC_PT")).thenReturn(getMockClientSystemFlag());
 
         Optional<ClientSystemFlag> result = configService.getClientSystemFlag("SBAC_PT", "foo");
 
         assertThat(result.isPresent()).isFalse();
-    }
-
-    @Test
-    public void should_Not_Be_Present_For_Invalid_AuditObject() {
-        shouldNotBePresentForAnInvalidAuditObject();
     }
 
     @After
