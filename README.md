@@ -14,7 +14,7 @@ The `TDS_ConfigService` (aka Config Support Service) consists of two modules:
   * `mvn clean install -Dintegration-tests.skip=false -f /path/to/service/pom.xml`
 
 ## Integration Test Notes
-* Integeration tests are not run during a typical Maven build
+* Integration tests are not run during a typical Maven build
 * To run integration tests during a build, refer to the **Build** section above
 
 ### Database Migrations
@@ -26,9 +26,8 @@ The `TDS_ConfigService` (aka Config Support Service) consists of two modules:
 * Naming database migration files uses the following convention (note there are two underscores between the timestamp and the database name):
 
 V[***timestamp***]_\_[***database name***]\_[***DDL operation***]\_[***object name***].sql
-
-* To generate the timestamp, use use [http://www.unixtimestamp.com/](http://www.unixtimestamp.com/) and copy the UTC timestamp
 * Example file name: `V1472923547__configs_create_table_client_systemflags.sql`
+* To generate the timestamp, use [http://www.unixtimestamp.com/](http://www.unixtimestamp.com/) and copy the UTC timestamp
 
 ### Database Migrations Troubleshooting
 

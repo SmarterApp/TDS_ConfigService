@@ -1,3 +1,16 @@
+/***********************************************************************************************************************
+  File: V1472923755__configs_create_table_client_externs.sql
+
+  Desc: Create the client_externs table in the configs database and load it with seed data.  The table creation and seed
+  data are intended to support integration tests.  The schema and seed data are representative of what is deployed when
+  a TDS system is deployed.
+
+  This table does not directly affect any of the integration tests, the session.externs view references this table.  In
+  order to have an accurate schema to test against, this table is created.
+
+  Auth:  Jeff Johnson <jeffjohnson9046>
+
+***********************************************************************************************************************/
 USE configs;
 DROP TABLE IF EXISTS client_externs;
 CREATE TABLE client_externs (

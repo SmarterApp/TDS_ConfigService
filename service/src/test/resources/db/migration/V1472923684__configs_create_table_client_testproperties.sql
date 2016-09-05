@@ -1,3 +1,13 @@
+/***********************************************************************************************************************
+  File: V1472923684__configs_create_table_client_testproperties.sql
+
+  Desc: Create the client_testproperties table in the configs database and load it with seed data.  The table creation
+  and seed data are intended to support integration tests.  The schema and seed data are representative of what is
+  deployed when a TDS system is deployed.
+
+  Auth:  Jeff Johnson <jeffjohnson9046>
+
+***********************************************************************************************************************/
 USE configs;
 DROP TABLE IF EXISTS client_testproperties;
 CREATE TABLE client_testproperties (

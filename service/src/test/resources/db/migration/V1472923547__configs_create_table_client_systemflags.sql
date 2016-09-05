@@ -1,3 +1,13 @@
+/***********************************************************************************************************************
+  File: V1472923547__configs_create_table_client_systemflags.sql
+
+  Desc: Create the client_systemflags table in the configs database and load it with seed data.  The table creation and
+  seed data are intended to support integration tests.  The schema and seed data are representative of what is deployed
+  when a TDS system is deployed.
+
+  Auth:  Jeff Johnson <jeffjohnson9046>
+
+***********************************************************************************************************************/
 USE configs;
 DROP TABLE IF EXISTS client_systemflags;
 CREATE TABLE client_systemflags (

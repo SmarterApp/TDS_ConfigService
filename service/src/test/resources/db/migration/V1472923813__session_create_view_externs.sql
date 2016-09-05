@@ -1,23 +1,33 @@
-/*
-This is code for the session.externs view.  Is this view required?  The only data collected from the session
-database is the session._externs.clientname and session._externs.environment values.  The configs.client_externs table
-has the same values with the same data:
+/***********************************************************************************************************************
+  File: V1472923813__session_create_view_externs.sql
 
-select c._key, c.clientname, c.environment from configs.client_externs c;
-# _key, clientname, environment
-?, 'SBAC', 'Development'
-?, 'SBAC_PT', 'Development'
+  Desc: Create the externs view in the session database and load it with seed data.  The table creation
+  and seed data are intended to support integration tests.  The schema and seed data are representative of what is
+  deployed when a TDS system is deployed.
 
-select clientName, environment from session._externs; -- this is the TABLE, not the VIEW.  The "foo", "bar" record was
-inserted by me at some point during troubleshooting the deployment process.
+  The query to fetch client system flag information from the configs database relies on the session.externs view, which
+  relies on this table being present (as well as sevral others).  This means that there are some instances where the
+  Config service will query data from the session database.
 
-# clientName, environment
-'foo', 'bar'
-'SBAC', 'Development'
-'SBAC_PT', 'Development'
+  NOTE: Is this view required?  The only data collected from the session database is the session._externs.clientname and
+  session._externs.environment values.  The configs.client_externs table has the same values with the same data:
 
- */
+    select c._key, c.clientname, c.environment from configs.client_externs c;
+    # _key, clientname, environment
+    ?, 'SBAC', 'Development'
+    ?, 'SBAC_PT', 'Development'
 
+  select clientName, environment from session._externs; -- this is the TABLE, not the VIEW.  The "foo", "bar" record was
+  inserted by me at some point during troubleshooting the deployment process.
+
+    # clientName, environment
+    'foo', 'bar'
+    'SBAC', 'Development'
+    'SBAC_PT', 'Development'
+
+  Auth:  Jeff Johnson <jeffjohnson9046>
+
+***********************************************************************************************************************/
 USE session;
 CREATE OR REPLACE VIEW externs AS
   SELECT
@@ -43,4 +53,4 @@ CREATE OR REPLACE VIEW externs AS
     JOIN
     configs.client_externs e
       ON (e.clientname = x.clientname
-          AND e.environment = x.environment);
+      AND e.environment = x.environment);
