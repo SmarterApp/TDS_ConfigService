@@ -88,9 +88,9 @@
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
+            <scope>test</scope>
             <version>${h2-database.version}</version>
         </dependency>
-
 
         <dependency>
             <groupId>com.zaxxer</groupId>
@@ -101,16 +101,11 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
+            <scope>test</scope>
             <version>${flyway.version}</version>
         </dependency>
 
         <!-- Unit testing dependencies -->
-        <dependency>
-            <groupId>com.jayway.jsonpath</groupId>
-            <artifactId>json-path</artifactId>
-            <scope>test</scope>
-        </dependency>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -120,18 +115,27 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
             <version>${assertj.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>com.jayway.restassured</groupId>
             <artifactId>rest-assured</artifactId>
+            <scope>test</scope>
             <version>${rest-assured.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
+            <scope>test</scope>
             <version>1.9.5</version>
         </dependency>
     </dependencies>
@@ -160,12 +164,12 @@
                 <executions>
                     <execution>
                         <id>flyway_test_migrations</id>
-                        <phase>compile</phase>
+                        <phase>test</phase>
                         <goals>
                             <goal>migrate</goal>
                         </goals>
                         <configuration>
-                            <!-- no point in running migrations if integration tests are skipped -->
+                            <!-- do not migrations if integration tests are skipped -->
                             <skip>${integration-tests.skip}</skip>
                             <url>jdbc:h2:mem:configs;MODE=MySQL;DB_CLOSE_DELAY=-1;INIT=CREATE SCHEMA IF NOT EXISTS "public";</url>
                             <user>sa</user>
@@ -209,9 +213,6 @@
                 <configuration>
                     <imageName>${docker.image.prefix}/${project.artifactId}</imageName>
                     <dockerDirectory>${project.basedir}/src/main/docker</dockerDirectory>
-                    <imageTags>
-                        <imageTag>page</imageTag>
-                    </imageTags>
                     <resources>
                         <resource>
                             <targetPath>/</targetPath>
