@@ -1,4 +1,11 @@
 #!/bin/sh
+#-----------------------------------------------------------------------------------------------------------------------
+# File:  docker-startup.sh
+#
+# Desc:  Start the tds-config-service.jar with the appropriate properties.
+#
+#-----------------------------------------------------------------------------------------------------------------------
+
 # Determine the amount of memory available to the container, for use with setting the Xms and Xmx values when starting
 # the jar (in this case setting both values to 80% of free memory).
 freeMem=`awk '/MemFree/ { print int($2/1024) }' /proc/meminfo`
