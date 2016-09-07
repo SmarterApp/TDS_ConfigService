@@ -45,7 +45,34 @@ java -Xms256m -Xmx512m \
 ```
 
 ### Run Docker Container
-To run the Config Support Service Docker container run the following commands:
+The Config Support Service requires several environment variables to be set prior to starting the `.jar`.  The environment variables are managed by an [environment file](https://docs.docker.com/engine/reference/commandline/run/#/set-environment-variables-e-env-env-file), which Docker uses to set the appropriate environment variables.
+
+To create the environment file:
+
+* Navigate to where the `docker-compose.yml` file is located
+* Create a new file named `config-service.env`
+* Open `config-service.env` in an editor and set the following values:
+
+```
+CONFIGS_DB_HOST=[IP address or FQDN of the MySQL database server that hosts the TDS configs and session databases]
+CONFIGS_DB_PORT=[The port on which the MySQL database server listens]
+CONFIGS_DB_NAME=[The name of the TDS configs database (typically "configs")]
+CONFIGS_DB_USER=[The MySQL user account with sufficient privileges to read from the configs and session databases]
+CONFIGS_DB_PASSWORD=[The password for the MySQL user account]
+```
+
+* Example `config-service.env` file:
+
+```
+CONFIGS_DB_HOST=tds-mysql-instance.example.com
+CONFIGS_DB_PORT=3306
+CONFIGS_DB_NAME=configs
+CONFIGS_DB_USER=tds_user
+CONFIGS_DB_PASSWORD=protohorsecarbattery
+```
+**NOTE:**  Any file with a `.env` extension will _not_ be committed to source control; the `.gitignore` is set to exclude files with this extension.  Therefore, sensitive information stored in this file will not be committed.
+
+After the `config-service.env` file is saved, run the Config Support Service Docker container with the following commands:
  
 ```
 mvn clean install docker:build -f /path/to/service/pom.xml
@@ -74,7 +101,7 @@ CONTAINER ID        IMAGE                        COMMAND                CREATED 
 To tail the log files for the process(es) running on the Docker container:
 
 * `docker logs -f [container id]`
-  * **NOTE:** To view the logs without tailing them, omit the `-f` from the command above
+  * **NOTE:**  To view the logs without tailing them, omit the `-f` from the command above
 * example:  `docker logs -f 4b267a450d3b`
 
 ## Integration Test Notes
@@ -98,9 +125,10 @@ V[***timestamp***]_\_[***database name***]\_[***DDL operation***]\_[***object na
 #### Seed Data
 * Loading data from a MySQL dump file into an H2 database requires some special handling:
   * Remove all backtick (`) characters from the SQL
-  * Exported `bit` columns must be updated:
-      * Replace all `,'\0',` with `,0,`
-      * Replace all `,'',` with `,1,`  
+  * Exported `BIT` columns must be updated:
+      * Replace all `,'\0',` (non-printable `null` character) with `,0,`
+      * Replace all `,'',` (non-printable character `u0001` [`SOH` or `START OF HEADER`]) with `,1,`  
+      * ***NOTE:***  Take care when replacing the exported `BIT` columns.  It is possilbe the export also has empty `VARCHAR` fields, which might also be replaced by using the patterns above.
   * To handle MySQL `VARBINARY` values (e.g. the UUIDs used as primary keys):
       * In MySQL, use `HEX` to get the `VARBINARY` value in a readable format, e.g.: `SELECT HEX(_key), clientname FROM configs.client_externs;`
       * Copy the "expanded"/readable `VARBINARY` value
