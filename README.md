@@ -70,7 +70,7 @@ CONFIGS_DB_NAME=configs
 CONFIGS_DB_USER=tds_user
 CONFIGS_DB_PASSWORD=protohorsecarbattery
 ```
-**NOTE:**  Any file with a `.env` extension will _not_ be committed to source control; the `.gitignore` is set to exclude files with this extension.  Therefore, sensitive information stored in this file will not be committed.
+**NOTE:**  Any file with a `.env` extension will _not_ be committed to source control; the `.gitignore` is set to exclude files with a `.env` extension.  Therefore, sensitive information stored in this file will not be committed.
 
 After the `config-service.env` file is saved, run the Config Support Service Docker container with the following commands:
  
@@ -80,7 +80,7 @@ docker-compose up -d -f /path/to/docker-compose.yml
 ```
 
 #### Additional Details for Interacting With Docker
-* The `Dockerfile` included in this repository is intended for use with [Spotify's Docker Maven plugin](https://github.com/spotify/docker-maven-plugin).  As such, the `docker build` command will fail because it cannot find the compiled `.jar`.
+The `Dockerfile` included in this repository is intended for use with [Spotify's Docker Maven plugin](https://github.com/spotify/docker-maven-plugin).  As such, the `docker build` command will fail because it cannot find the compiled `.jar`.
 
 The Docker container can be started via `docker-compose` or `docker run`:
 
@@ -117,6 +117,7 @@ To tail the log files for the process(es) running on the Docker container:
 * Naming database migration files uses the following convention (note there are two underscores between the timestamp and the database name):
 
 V[***timestamp***]_\_[***database name***]\_[***DDL operation***]\_[***object name***].sql
+
 * Example file name: `V1472923547__configs_create_table_client_systemflags.sql`
 * To generate the timestamp, use [http://www.unixtimestamp.com/](http://www.unixtimestamp.com/) and copy the UTC timestamp
 
