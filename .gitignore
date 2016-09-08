@@ -121,3 +121,7 @@ release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
+
+### Project-specific ###
+# Ignore Docker environment variable files
+**/*.env
