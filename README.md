@@ -18,6 +18,9 @@ To build the service and run integration tests:
   
 * `mvn clean install -Dintegration-tests.skip=false -f /path/to/service/pom.xml`
 
+### Docker Support
+The Config Support Service provides a `Dockerfile` for building a Docker image and a `docker-compose.yml` for running a Docker container that hosts the service `.jar`.  Resources for downloading and installing Docker on various operating systems can be found [here](https://docs.docker.com/engine/installation/).  For details on what Docker is and how it works, refer to [this page](https://www.docker.com/what-docker).  For this command to work, the Docker Engine must be installed on the target build machine.
+
 To build the service and its associated Docker image:
 
 * `mvn clean install docker:build -f /path/to/service/pom.xml`
