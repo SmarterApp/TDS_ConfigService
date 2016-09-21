@@ -49,6 +49,12 @@ public class ClientTestProperty {
     private Integer proctorEligibility;
     private String category;
 
+    /**
+     * This client name corresponds to one of the values stored in the {@code configs.client_externs} table or the
+     * {@code session._externs} table.  Typically this value will be "SBAC" or "SBAC_PT".
+     *
+     * @return The name of the client that owns this {@link ClientTestProperty}.
+     */
     public String getClientName() {
         return clientName;
     }
@@ -57,6 +63,11 @@ public class ClientTestProperty {
         this.clientName = clientName;
     }
 
+    /**
+     * The value for this getter/setter is typically referred to as "testid" in the database.
+     *
+     * @return The unique identifier of the assessment to which this {@link ClientTestProperty} is associated.
+     */
     public String getAssessmentId() {
         return assessmentId;
     }
@@ -65,6 +76,9 @@ public class ClientTestProperty {
         this.assessmentId = assessmentId;
     }
 
+    /**
+     * @return The maximum number of times a Student may take this Assessment.
+     */
     public Integer getMaxOpportunities() {
         return maxOpportunities;
     }

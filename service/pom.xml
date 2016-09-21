@@ -19,8 +19,11 @@
     </parent>
 
     <properties>
+        <tds.common>0.0.1-SNAPSHOT</tds.common>
+        <tds.config.client>0.0.1-SNAPSHOT</tds.config.client>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
+        <maven.compiler.plugin.version>3.5.1</maven.compiler.plugin.version>
         <unit-tests.skip>false</unit-tests.skip>
         <integration-tests.skip>true</integration-tests.skip>
         <docker.image.prefix>sbacoss</docker.image.prefix>
@@ -34,7 +37,13 @@
         <dependency>
             <groupId>org.opentestsystem.config</groupId>
             <artifactId>tds-config-client</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${tds.config.client}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.opentestsystem.common</groupId>
+            <artifactId>tds-common</artifactId>
+            <version>${tds.common}</version>
         </dependency>
 
         <!-- Spring dependencies -->
@@ -145,6 +154,16 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
             </plugin>
 
             <plugin>

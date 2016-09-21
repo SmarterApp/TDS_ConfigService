@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
+import tds.config.TimeLimits;
 import tds.config.repositories.ConfigRepository;
 import tds.config.services.ConfigService;
 
+import java.sql.Time;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,16 +26,35 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Override
     public Optional<ClientTestProperty> getClientTestProperty(final String clientName, final String assessmentId) {
-        ClientTestProperty clientTestProperty = configRepository.getClientTestProperty(clientName, assessmentId);
-
-        return Optional.ofNullable(clientTestProperty);
+        return configRepository.getClientTestProperty(clientName, assessmentId);
     }
 
     @Override
     public Optional<ClientSystemFlag> getClientSystemFlag(String clientName, String auditObject) {
         List<ClientSystemFlag> clientSystemFlags = configRepository.getClientSystemFlags(clientName);
 
-        return clientSystemFlags.stream().filter(f -> f.getAuditObject().equals(auditObject))
+        return clientSystemFlags.stream()
+                .filter(f -> f.getAuditObject().equals(auditObject))
                 .findFirst();
+    }
+
+    @Override
+    public Optional<Integer> getTaCheckInTimeLimit(final String clientName) {
+        Optional<TimeLimits> timeLimits =  configRepository.getTimeLimits(clientName);
+
+        if (timeLimits.isPresent()) {
+            return Optional.of(
+                    timeLimits.map(TimeLimits::getTaCheckinTimeMinutes)
+                    .orElse(0));
+        } else {
+            return Optional.empty();
+        }
+    }
+
+    @Override
+    public Optional<TimeLimits> getTimeLimits(String clientName, String assessmentId) {
+        return configRepository.getTimeLimits(clientName, assessmentId)
+                .map(Optional::of)
+                .orElseGet(() -> configRepository.getTimeLimits(clientName));
     }
 }

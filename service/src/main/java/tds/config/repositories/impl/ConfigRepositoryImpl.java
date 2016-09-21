@@ -3,7 +3,9 @@ package tds.config.repositories.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -11,15 +13,31 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
+import tds.config.TimeLimits;
 import tds.config.repositories.ConfigRepository;
 
 import javax.sql.DataSource;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ConfigRepositoryImpl implements ConfigRepository {
     private static final Logger LOG = LoggerFactory.getLogger(ConfigRepositoryImpl.class);
     private final NamedParameterJdbcTemplate jdbcTemplate;
+    private final String TIMELIMITS_BASE_SQL =
+            "SELECT \n" +
+            "   clientname, \n" +
+            "   _efk_testid AS assessmentId, \n" +
+            "   environment, \n" +
+            "   opprestart AS examRestartWindowMinutes, \n" +
+            "   oppdelay AS examDelayDays, \n" +
+            "   interfacetimeout AS interfaceTimeoutMinutes, \n" +
+            "   requestinterfacetimeout AS requestInterfaceTimeoutMinutes, \n" +
+            "   tacheckintime AS taCheckinTimeMinutes \n" +
+            "FROM \n" +
+            "   session.timelimits \n" +
+            "WHERE \n" +
+            "   clientname = :clientName \n";
 
     @Autowired
     public ConfigRepositoryImpl(DataSource dataSource) {
@@ -48,19 +66,23 @@ public class ConfigRepositoryImpl implements ConfigRepository {
                 "WHERE\n" +
                 "   e.clientname = :clientName";
 
+        List<ClientSystemFlag> clientSystemFlags;
         try {
-            return jdbcTemplate.query(
-                    SQL,
-                    parameters,
-                    new BeanPropertyRowMapper<>(ClientSystemFlag.class));
-        } catch(EmptyResultDataAccessException e) {
-            LOG.debug(String.format("{} did not return results for clientName = {}", SQL, clientName));
-            return null;
+            clientSystemFlags =
+                    jdbcTemplate.query(
+                            SQL,
+                            parameters,
+                            new BeanPropertyRowMapper<>(ClientSystemFlag.class));
+        } catch(DataAccessException e) {
+            LOG.debug("{} did not return results for clientName = {}", SQL, clientName);
+            throw e;
         }
+
+        return clientSystemFlags;
     }
 
     @Override
-    public ClientTestProperty getClientTestProperty(final String clientName, final String assessmentId) {
+    public Optional<ClientTestProperty> getClientTestProperty(final String clientName, final String assessmentId) {
         final SqlParameterSource parameters = new MapSqlParameterSource("clientName", clientName)
                 .addValue("assessmentId", assessmentId);
 
@@ -113,11 +135,60 @@ public class ConfigRepositoryImpl implements ConfigRepository {
                 "WHERE\n" +
                 "   clientname = :clientName\n" +
                 "   AND testid = :assessmentId";
+
+        Optional<ClientTestProperty> clientTestPropertyOptional;
         try {
-            return jdbcTemplate.queryForObject(SQL, parameters, new BeanPropertyRowMapper<>(ClientTestProperty.class));
+            clientTestPropertyOptional = Optional.of(
+                    jdbcTemplate.queryForObject(
+                            SQL,
+                            parameters,
+                            new BeanPropertyRowMapper<>(ClientTestProperty.class)));
         } catch (EmptyResultDataAccessException e) {
             LOG.debug("{} did not return results for clientName = {}, assessmentId = {}", SQL, clientName, assessmentId);
-            return null;
+            clientTestPropertyOptional = Optional.empty();
         }
+
+        return clientTestPropertyOptional;
+    }
+
+    @Override
+    public Optional<TimeLimits> getTimeLimits(final String clientName) {
+        final SqlParameterSource parameters = new MapSqlParameterSource("clientName", clientName);
+
+        final String SQL = TIMELIMITS_BASE_SQL + "   AND _efk_testid IS NULL";
+
+        Optional<TimeLimits> timeLimitsOptional;
+        try {
+            timeLimitsOptional = Optional.of(
+                    jdbcTemplate.queryForObject(
+                            SQL,
+                            parameters,
+                            new BeanPropertyRowMapper<>(TimeLimits.class)));
+        } catch(IncorrectResultSizeDataAccessException e) {
+            timeLimitsOptional = Optional.empty();
+        }
+
+        return timeLimitsOptional;
+    }
+
+    @Override
+    public Optional<TimeLimits> getTimeLimits(final String clientName, final String assessmentId) {
+        final SqlParameterSource parameters = new MapSqlParameterSource("clientName", clientName)
+                .addValue("assessmentId", assessmentId);
+
+        final String SQL = TIMELIMITS_BASE_SQL + "   AND _efk_testid = :assessmentId";
+
+        Optional<TimeLimits> timeLimitsOptional;
+        try {
+            timeLimitsOptional = Optional.of(
+                    jdbcTemplate.queryForObject(
+                            SQL,
+                            parameters,
+                            new BeanPropertyRowMapper<>(TimeLimits.class)));
+        } catch(IncorrectResultSizeDataAccessException e) {
+            timeLimitsOptional = Optional.empty();
+        }
+
+        return timeLimitsOptional;
     }
 }
