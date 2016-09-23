@@ -16,8 +16,10 @@ public class ClientTestPropertyResource extends ResourceSupport {
     public ClientTestPropertyResource(ClientTestProperty clientTestProperty) {
         this.clientTestProperty = clientTestProperty;
         this.add(linkTo(
-                methodOn(ConfigController.class)
-                        .getClientTestProperty(clientTestProperty.getClientName(), clientTestProperty.getAssessmentId()))
+                methodOn(
+                        ConfigController.class).getClientTestProperty(
+                                clientTestProperty.getClientName(),
+                                clientTestProperty.getAssessmentId()))
                 .withSelfRel());
     }
 

@@ -48,7 +48,7 @@ public class ConfigEndpointIntegrationTests {
             .body("clientTestProperty.clientName", equalTo(clientName))
             .body("clientTestProperty.assessmentId", equalTo(testId))
             .body("clientTestProperty.maxOpportunities", equalTo(3))
-            .body("_links.self.href", equalTo("http://localhost:8080/config/clientTestProperties/SBAC_PT/SBAC%20Math%203-MATH-3"));
+            .body("_links.self.href", equalTo("http://localhost:8080/config/client-test-properties/SBAC_PT/SBAC%20Math%203-MATH-3"));
     }
 
     @Test
@@ -59,7 +59,7 @@ public class ConfigEndpointIntegrationTests {
         given()
             .accept(ContentType.JSON)
         .when()
-            .get(CONFIG_RESOURCE + "/clientTestProperties/" + clientName + "/" + testId)
+            .get(CONFIG_RESOURCE + "/client-test-properties/" + clientName + "/" + testId)
         .then()
             .contentType(ContentType.JSON)
             .statusCode(404);
@@ -84,7 +84,7 @@ public class ConfigEndpointIntegrationTests {
             .body("clientSystemFlag.auditObject", equalTo(auditObject))
             .body("clientSystemFlag.isPracticeTest", equalTo(true))
             .body("clientSystemFlag.isOn", equalTo(true))
-            .body("_links.self.href", equalTo("http://localhost:8080/config/clientSystemFlags/SBAC_PT/accommodations"));
+            .body("_links.self.href", equalTo("http://localhost:8080/config/client-system-flags/SBAC_PT/accommodations"));
     }
 
     @Test
@@ -95,100 +95,7 @@ public class ConfigEndpointIntegrationTests {
         given()
             .accept(ContentType.JSON)
         .when()
-            .get(CONFIG_RESOURCE + "/clientSystemFlags/" + clientName + "/" + auditObject)
-        .then()
-            .contentType(ContentType.JSON)
-            .statusCode(404);
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // TimeLimits Tests
-    // -----------------------------------------------------------------------------------------------------------------
-    @Test
-    public void shouldGetTimeLimitsForClientNameAndAssessmentId() {
-        final String clientName = "SBAC_PT";
-        final String assessmentId = "SBAC Math 3-MATH-3";
-
-        given()
-            .accept(ContentType.JSON)
-        .when()
-            .get(CONFIG_RESOURCE + "/timelimits/" + clientName + "/" + assessmentId)
-        .then()
-            .contentType(ContentType.JSON)
-            .statusCode(200)
-            .body("timeLimits.clientName", equalTo(clientName))
-            .body("timeLimits.environment", equalTo("Development"))
-            .body("timeLimits.assessmentId", equalTo(assessmentId))
-            .body("timeLimits.examRestartWindowMinutes", equalTo(10))
-            .body("timeLimits.examDelayDays", equalTo(-1))
-            .body("timeLimits.interfaceTimeoutMinutes", equalTo(10))
-            .body("timeLimits.requestInterfaceTimeoutMinutes", equalTo(15))
-            .body("timeLimits.taCheckinTimeMinutes", equalTo(20));
-    }
-
-    @Test
-    public void shouldGetTimeLimitsForClientNameAndNonExistentAssessmentId() {
-        final String clientName = "SBAC_PT";
-        final String assessmentId = "foo";
-
-        given()
-            .accept(ContentType.JSON)
-        .when()
-            .get(CONFIG_RESOURCE + "/timelimits/" + clientName + "/" + assessmentId)
-        .then()
-            .contentType(ContentType.JSON)
-            .statusCode(200)
-            .body("timeLimits.clientName", equalTo(clientName))
-            .body("timeLimits.clientName", equalTo(clientName))
-            .body("timeLimits.environment", equalTo("Development"))
-            .body("timeLimits.assessmentId", is(nullValue()))
-            .body("timeLimits.examRestartWindowMinutes", equalTo(10))
-            .body("timeLimits.examDelayDays", equalTo(-1))
-            .body("timeLimits.interfaceTimeoutMinutes", equalTo(10))
-            .body("timeLimits.requestInterfaceTimeoutMinutes", equalTo(15))
-            .body("timeLimits.taCheckinTimeMinutes", equalTo(20));
-    }
-
-    @Test
-    public void shouldGet404WhenGettingTimeLimitsWithInvalidClientNameAndAssessmentId() {
-        final String clientName = "foo";
-        final String assessmentId = "bar";
-
-        given()
-            .accept(ContentType.JSON)
-        .when()
-            .get(CONFIG_RESOURCE + "/timelimits/" + clientName + "/" + assessmentId)
-        .then()
-            .contentType(ContentType.JSON)
-            .statusCode(404);
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // TaCheckIn Time Tests
-    // -----------------------------------------------------------------------------------------------------------------
-
-    @Test
-    public void shouldGetATaCheckInTimeForAClientName() {
-        final String clientName = "SBAC_PT";
-
-        given()
-            .accept(ContentType.JSON)
-        .when()
-            .get(CONFIG_RESOURCE + "/timelimits/" + clientName + "/checkin")
-        .then()
-            .contentType(ContentType.JSON)
-            .statusCode(200)
-            .body("taCheckinTimeMinutes", equalTo(20));
-    }
-
-    @Test
-    public void shouldGet404ForTaCheckInTimeForAnInvalidClientName() {
-        final String clientName = "foo";
-
-        given()
-            .accept(ContentType.JSON)
-        .when()
-            .get(CONFIG_RESOURCE + "/timelimits/" + clientName + "/checkin")
+            .get(CONFIG_RESOURCE + "/client-system-flags/" + clientName + "/" + auditObject)
         .then()
             .contentType(ContentType.JSON)
             .statusCode(404);

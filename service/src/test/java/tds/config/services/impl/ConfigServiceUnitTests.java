@@ -8,7 +8,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
-import tds.config.TimeLimits;
 import tds.config.repositories.ConfigRepository;
 import tds.config.services.ConfigService;
 
@@ -32,31 +31,51 @@ public class ConfigServiceUnitTests {
         configService = new ConfigServiceImpl(mockConfigRepository);
     }
 
+    @After
+    public void Teardown() {
+        mockConfigRepository = null;
+        configService = null;
+    }
+
     // -----------------------------------------------------------------------------------------------------------------
     // ClientSystemProperty Tests
     // -----------------------------------------------------------------------------------------------------------------
     @Test
     public void shouldGetAClientTestProperty() {
-        when(mockConfigRepository.getClientTestProperty("SBAC_PT", "TEST_ID")).thenReturn(getMockClientTestProperty());
+        when(mockConfigRepository.findClientTestProperty("SBAC_PT", "TEST_ID")).thenReturn(getMockClientTestProperty());
 
-        Optional<ClientTestProperty> result = configService.getClientTestProperty("SBAC_PT", "TEST_ID");
+        Optional<ClientTestProperty> result = configService.findClientTestProperty("SBAC_PT", "TEST_ID");
 
         assertThat(result.isPresent()).isTrue();
 
         ClientTestProperty clientTestProperty = result.get();
         assertThat(clientTestProperty.getClientName()).isEqualTo("SBAC_PT");
         assertThat(clientTestProperty.getAssessmentId()).isEqualTo("TEST_ID");
+        assertThat(clientTestProperty.getMaxOpportunities()).isEqualTo(3);
+        assertThat(clientTestProperty.getPrefetch()).isEqualTo(2);
+        assertThat(clientTestProperty.getIsSelectable()).isTrue();
+        assertThat(clientTestProperty.getLabel()).isEqualTo("label");
+        assertThat(clientTestProperty.getSubjectName()).isEqualTo("subject name");
+        assertThat(clientTestProperty.getInitialAbilityBySubject()).isTrue();
         assertThat(clientTestProperty.getAccommodationFamily()).isEqualTo("accommodation family");
-        assertThat(clientTestProperty.getBatchModeReport()).isEqualTo(false);
-        assertThat(clientTestProperty.getCategory()).isEqualTo("category");
+        assertThat(clientTestProperty.getSortOrder()).isEqualTo(1);
+        assertThat(clientTestProperty.getRtsFormField()).isEqualTo("rts form field");
+        assertThat(clientTestProperty.getRequireRtsWindow()).isTrue();
+        assertThat(clientTestProperty.getTideId()).isEqualTo("tide id");
+        assertThat(clientTestProperty.getRequireRtsModeWindow()).isTrue();
+        assertThat(clientTestProperty.getDeleteUnansweredItems()).isTrue();
+        assertThat(clientTestProperty.getAbilitySlope()).isEqualTo(5.0D);
+        assertThat(clientTestProperty.getAbilityIntercept()).isEqualTo(10.0D);
+        assertThat(clientTestProperty.getValidateCompleteness()).isTrue();
+        assertThat(clientTestProperty.getGradeText()).isEqualTo("grade text");
     }
 
     @Test
     public void shouldReturnOptionalEmptyClientTestPropertyForAnInvalidClientName() {
-        when(mockConfigRepository.getClientTestProperty("SBAC_PT", "TEST_ID")).thenReturn(getMockClientTestProperty());
-        when(mockConfigRepository.getClientTestProperty("foo", "TEST_ID")).thenReturn(Optional.empty());
+        when(mockConfigRepository.findClientTestProperty("SBAC_PT", "TEST_ID")).thenReturn(getMockClientTestProperty());
+        when(mockConfigRepository.findClientTestProperty("foo", "TEST_ID")).thenReturn(Optional.empty());
 
-        Optional<ClientTestProperty> result = configService.getClientTestProperty("foo", "TEST_ID");
+        Optional<ClientTestProperty> result = configService.findClientTestProperty("foo", "TEST_ID");
 
         assertThat(result).isNotPresent();
     }
@@ -66,9 +85,9 @@ public class ConfigServiceUnitTests {
     // -----------------------------------------------------------------------------------------------------------------
     @Test
     public void shouldGetAClientSystemFlag() {
-        when(mockConfigRepository.getClientSystemFlags("SBAC_PT")).thenReturn(getMockClientSystemFlag());
+        when(mockConfigRepository.findClientSystemFlags("SBAC_PT")).thenReturn(getMockClientSystemFlag());
 
-        Optional<ClientSystemFlag> result = configService.getClientSystemFlag("SBAC_PT", "AUDIT_OBJECT 1");
+        Optional<ClientSystemFlag> result = configService.findClientSystemFlag("SBAC_PT", "AUDIT_OBJECT 1");
 
         assertThat(result.isPresent()).isTrue();
 
@@ -79,77 +98,36 @@ public class ConfigServiceUnitTests {
 
     @Test
     public void shouldReturnOptionalEmptyClientSystemFlagForAnInvalidAuditObject() {
-        when(mockConfigRepository.getClientSystemFlags("SBAC_PT")).thenReturn(getMockClientSystemFlag());
+        when(mockConfigRepository.findClientSystemFlags("SBAC_PT")).thenReturn(getMockClientSystemFlag());
 
-        Optional<ClientSystemFlag> result = configService.getClientSystemFlag("SBAC_PT", "foo");
-
-        assertThat(result).isNotPresent();
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // TACheckinTime Tests
-    // -----------------------------------------------------------------------------------------------------------------
-    @Test
-    public void shouldGetTaCheckInTimeForAClientName() {
-        when(mockConfigRepository.getTimeLimits("SBAC_PT")).thenReturn(getMockTimeLimits());
-
-        Optional<Integer> result = configService.getTaCheckInTimeLimit("SBAC_PT");
-
-        assertThat(result).isPresent();
-        assertThat(result).isEqualTo(20);
-    }
-
-    @Test
-    public void shouldReturnOptionalEmptyForTaCheckInWhenClientNameTimeLimitsDoNotExist() {
-        when(mockConfigRepository.getTimeLimits("foo")).thenReturn(Optional.empty());
-
-        Optional<Integer> result = configService.getTaCheckInTimeLimit("foo");
+        Optional<ClientSystemFlag> result = configService.findClientSystemFlag("SBAC_PT", "foo");
 
         assertThat(result).isNotPresent();
-    }
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // TimeLimits Tests
-    // -----------------------------------------------------------------------------------------------------------------
-    @Test
-    public void shouldGetTimeLimitsForAClientNameAndAssessmentId() {
-        when(mockConfigRepository.getTimeLimits("SBAC_PT", "TEST_ID")).thenReturn(getMockTimeLimits());
-
-        Optional<TimeLimits> result = configService.getTimeLimits("SBAC_PT", "TEST_ID");
-
-        assertThat(result).isPresent();
-        assertThat(result.get().getAssessmentId()).isNotNull();
-        assertThat(result.get().getAssessmentId()).isEqualTo("TEST_ID");
-        assertThat(result.get().getEnvironment()).isEqualTo("UNIT_TEST");
-        assertThat(result.get().getClientName()).isEqualTo("SBAC_PT");
-    }
-
-    @Test
-    public void shouldGetTimeLimitsForAClientNameAndNullAssessmentId() {
-        when(mockConfigRepository.getTimeLimits("SBAC_PT", "foo")).thenReturn(getMockTimeLimitsWithoutAssessmentId());
-
-        Optional<TimeLimits> result = configService.getTimeLimits("SBAC_PT", "foo");
-
-        assertThat(result).isPresent();
-        assertThat(result.get().getAssessmentId()).isNull();
-        assertThat(result.get().getEnvironment()).isEqualTo("UNIT_TEST");
-        assertThat(result.get().getClientName()).isEqualTo("SBAC_PT");
-
-    }
-
-    @After
-    public void Teardown() {
-        mockConfigRepository = null;
-        configService = null;
     }
 
     private Optional<ClientTestProperty> getMockClientTestProperty() {
-        ClientTestProperty clientTestProperty = new ClientTestProperty();
-        clientTestProperty.setClientName("SBAC_PT");
-        clientTestProperty.setAssessmentId("TEST_ID");
-        clientTestProperty.setAccommodationFamily("accommodation family");
-        clientTestProperty.setBatchModeReport(false);
-        clientTestProperty.setCategory("category");
+        ClientTestProperty clientTestProperty = new ClientTestProperty.Builder()
+                .withClientName("SBAC_PT")
+                .withAssessmentId("TEST_ID")
+                .withMaxOpportunities(3)
+                .withPrefetch(2)
+                .withIsSelectable(true)
+                .withLabel("label")
+                .withSubjectName("subject name")
+                .withInitialAbilityBySubject(true)
+                .withAccommodationFamily("accommodation family")
+                .withSortOrder(1)
+                .withRtsFormField("rts form field")
+                .withRequireRtsWindow(true)
+                .withTideId("tide id")
+                .withRequireRtsMode(true)
+                .withRequireRtsModeWindow(true)
+                .withDeleteUnansweredItems(true)
+                .withAbilitySlope(5.0D)
+                .withAbilityIntercept(10.0D)
+                .withValidateCompleteness(true)
+                .withGradeText("grade text")
+                .build();
 
         return Optional.of(clientTestProperty);
     }
@@ -158,43 +136,17 @@ public class ConfigServiceUnitTests {
         List<ClientSystemFlag> clientSystemFlags = new ArrayList<>();
 
         for (Integer i = 0; i < 5; i++) {
-            ClientSystemFlag clientSystemFlag = new ClientSystemFlag();
-            clientSystemFlag.setClientName("SBAC_PT");
-            clientSystemFlag.setAuditObject("AUDIT_OBJECT " + i.toString());
-            clientSystemFlag.setDescription("unit test description " + i.toString());
-            clientSystemFlag.setIsOn(true);
-            clientSystemFlag.setIsPracticeTest(true);
+            ClientSystemFlag clientSystemFlag = new ClientSystemFlag.Builder()
+                    .withClientName("SBAC_PT")
+                    .withAuditObject("AUDIT_OBJECT " + i.toString())
+                    .withDescription("unit test description " + i.toString())
+                    .withIsOn(true)
+                    .withIsPracticeTest(true)
+                    .build();
 
             clientSystemFlags.add(clientSystemFlag);
         }
 
         return clientSystemFlags;
-    }
-
-    private Optional<TimeLimits> getMockTimeLimits() {
-        TimeLimits timeLimits = new TimeLimits();
-        timeLimits.setClientName("SBAC_PT");
-        timeLimits.setAssessmentId("TEST_ID");
-        timeLimits.setEnvironment("UNIT_TEST");
-        timeLimits.setExamRestartWindowMinutes(5);
-        timeLimits.setInterfaceTimeoutMinutes(10);
-        timeLimits.setExamDelayDays(1);
-        timeLimits.setRequestInterfaceTimeoutMinutes(15);
-        timeLimits.setTaCheckinTimeMinutes(20);
-
-        return Optional.of(timeLimits);
-    }
-
-    private Optional<TimeLimits> getMockTimeLimitsWithoutAssessmentId() {
-        TimeLimits timeLimits = new TimeLimits();
-        timeLimits.setClientName("SBAC_PT");
-        timeLimits.setEnvironment("UNIT_TEST");
-        timeLimits.setExamRestartWindowMinutes(5);
-        timeLimits.setInterfaceTimeoutMinutes(10);
-        timeLimits.setExamDelayDays(1);
-        timeLimits.setRequestInterfaceTimeoutMinutes(15);
-        timeLimits.setTaCheckinTimeMinutes(20);
-
-        return Optional.of(timeLimits);
     }
 }

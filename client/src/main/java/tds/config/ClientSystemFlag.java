@@ -1,6 +1,6 @@
 package tds.config;
 
-import java.sql.Timestamp;
+import java.time.Instant;
 
 /**
  Represents a record in the {@code configs.client_systemflags} table.
@@ -8,66 +8,117 @@ import java.sql.Timestamp;
 public class ClientSystemFlag {
     private String auditObject = "";
     private String clientName = "";
-    private Boolean isPracticeTest;
-    private Boolean isOn;
+    private boolean isPracticeTest;
+    private boolean isOn;
     private String description;
-    private Timestamp dateChanged;
-    private Timestamp datePublished;
+    private Instant dateChanged;
+    private Instant datePublished;
 
-    public ClientSystemFlag() { }
+    public static class Builder {
+        private String auditObject = "";
+        private String clientName = "";
+        private boolean isPracticeTest;
+        private boolean isOn;
+        private String description;
+        private Instant dateChanged;
+        private Instant datePublished;
 
-    public ClientSystemFlag(String auditObject, String clientName) {
-        this.setAuditObject(auditObject);
-        this.setClientName(clientName);
+        public Builder withAuditObject(String auditObject) {
+            this.auditObject = auditObject;
+            return this;
+        }
+
+        public Builder withClientName(String clientName) {
+            this.clientName = clientName;
+            return this;
+        }
+
+        public Builder withIsPracticeTest(boolean isPracticeTest) {
+            this.isPracticeTest = isPracticeTest;
+            return this;
+        }
+
+        public Builder withIsOn(boolean isOn) {
+            this.isOn = isOn;
+            return this;
+        }
+
+        public Builder withDescription(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public Builder withDateChanged(Instant dateChanged) {
+            this.dateChanged = dateChanged;
+            return this;
+        }
+
+        public Builder withDatePublished(Instant datePublished) {
+            this.datePublished = datePublished;
+            return this;
+        }
+
+        public ClientSystemFlag build() {
+            return new ClientSystemFlag(this);
+        }
     }
 
+    public ClientSystemFlag() {}
+
+    private ClientSystemFlag(Builder builder) {
+        this.auditObject = builder.auditObject;
+        this.clientName = builder.clientName;
+        this.isPracticeTest = builder.isPracticeTest;
+        this.isOn = builder.isOn;
+        this.description = builder.description;
+        this.dateChanged = builder.dateChanged;
+        this.datePublished = builder.datePublished;
+    }
+
+
     /**
-     * Examples of audit object names: AnonymousTestee, latencies, SuppressScores.
-     *
      * @return The type of thing this {@link ClientSystemFlag} represents/is related to.
      */
     public String getAuditObject() {
         return auditObject;
     }
 
-    public void setAuditObject(String auditObject) {
-        this.auditObject = auditObject;
-    }
-
     /**
-     * This client name corresponds to one of the values stored in the {@code configs.client_externs} table or the
-     * {@code session._externs} table.  Typically this value will be "SBAC" or "SBAC_PT".
-     *
-     * @return The name of the client that owns this {@link ClientTestProperty}.
+     *  @return The name of the client that owns this {@link ClientTestProperty}.
      */
     public String getClientName() {
         return clientName;
     }
 
-    public void setClientName(String clientName) {
-        this.clientName = clientName;
-    }
-
     /**
      * @return Identify if the {@link ClientSystemFlag} is associated/relevant to practice assessments.
      */
-    public Boolean getIsPracticeTest() {
+    public boolean getIsPracticeTest() {
         return isPracticeTest;
     }
 
-    public void setIsPracticeTest(Boolean practiceTest) {
-        isPracticeTest = practiceTest;
-    }
-
     /**
+     * <p>
+     *     Cannot be null in {@code configs.client_systemflags} table.  This value is an  {#code INT(11)} in the
+     *     database, but is treated like a boolean value in the legacy code's logic.  An example of how this property is
+     *     treated (edited for clarity):
+     *     <pre>
+     *         {@code
+     *             select IsOn as flag from  ${ConfigDB}.client_systemflags F, externs E  where E.ClientName = ${clientname} and F.clientname = ${clientname} and E.IsPracticeTest = F.IsPracticeTest and AuditOBject = ${responses}
+     *             // ... execute query...
+     *             if (DbComparator.isEqual (flag, 0)) {
+     *                 return 0;
+     *             } else {
+     *                 return 1;
+     *             }
+     *         }
+     *     </pre>
+     * </p>
+     *
      * @return {@code True} if the {@link ClientSystemFlag} is enabled; otherwise {@code False}.
      */
-    public Boolean getIsOn() {
+    public boolean getIsOn() {
         return isOn;
-    }
-
-    public void setIsOn(Boolean on) {
-        isOn = on;
     }
 
     /**
@@ -77,27 +128,15 @@ public class ClientSystemFlag {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     /**
      * @return The most recent date and time when the {@link ClientSystemFlag} was changed.
      */
-    public Timestamp getDateChanged() {
+    public Instant getDateChanged() {
         return dateChanged;
     }
 
-    public void setDateChanged(Timestamp dateChanged) {
-        this.dateChanged = dateChanged;
-    }
-
-    public Timestamp getDatePublished() {
+    public Instant getDatePublished() {
         return datePublished;
-    }
-
-    public void setDatePublished(Timestamp datePublished) {
-        this.datePublished = datePublished;
     }
 
     @Override
@@ -116,7 +155,8 @@ public class ClientSystemFlag {
 
         ClientSystemFlag that = (ClientSystemFlag)other;
         return this.getAuditObject().equals(that.getAuditObject())
-                && this.getClientName().equals(that.getClientName());
+                && this.getClientName().equals(that.getClientName())
+                && this.getIsPracticeTest() == (that.getIsPracticeTest());
     }
 
     @Override
