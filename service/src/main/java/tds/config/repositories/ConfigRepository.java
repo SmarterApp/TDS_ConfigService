@@ -4,23 +4,25 @@ import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
- * Data Access Object for interacting with the {@code configs} database.
+ * Data Access for interacting with the {@code configs} database.
  */
 public interface ConfigRepository {
     /**
      * Get the {@link ClientTestProperty} record from {@code configs.client_testproperties} for the specified client name
      * and test id.
      * <p>
-     *     Because these values will rarely change, they are strong candidates for caching.
+     *     Because the {@link ClientTestProperty} values will rarely change, they are strong candidates for caching.
      * </p>
      *
-     * @param clientName The client name for which the {@code ClientTestProperty} records should be fetched.
-     * @param assessmentId The ID (which is the name) of the test for which the {@code ClientTestProperty} records should be fetched.
-     * @return A {@code ClientTestProperty} for the specified client name and test id.
+     * @param clientName The client name for which the {@link ClientTestProperty} records should be fetched.
+     * @param assessmentId The ID (which is the name) of the test for which the {@link ClientTestProperty} records
+     *                     should be fetched.
+     * @return A {@link ClientTestProperty} for the specified client name and test id.
      */
-    ClientTestProperty getClientTestProperty(String clientName, String assessmentId);
+    Optional<ClientTestProperty> findClientTestProperty(String clientName, String assessmentId);
 
     /**
      * Get all the {@link ClientSystemFlag} records from the {@code configs.client_systemflags} database for the
@@ -31,11 +33,11 @@ public interface ConfigRepository {
      *     {@code CommonDLL.selectIsOnByAuditObject} method.
      * </p>
      * <p>
-     *     Because these values will rarely change, they are strong candidates for caching.
+     *     Because the {@link ClientSystemFlag} values will rarely change, they are strong candidates for caching.
      * </p>
      *
-     * @param clientName The client name for which the {@code ClientSystemFlag} records should be fetched.
-     * @return A collection of {@code ClientSystemFlag} records for the specified client name.
+     * @param clientName The client name for which the {@link ClientSystemFlag} records should be fetched.
+     * @return A collection of {@link ClientSystemFlag} records for the specified client name.
      */
-    List<ClientSystemFlag> getClientSystemFlags(String clientName);
+    List<ClientSystemFlag> findClientSystemFlags(String clientName);
 }

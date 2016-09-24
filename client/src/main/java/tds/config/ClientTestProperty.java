@@ -1,7 +1,5 @@
 package tds.config;
 
-import java.sql.Timestamp;
-
 /**
  * Represents a record from the {#code configs.client_testproperties} table.
  */
@@ -9,380 +7,276 @@ public class ClientTestProperty {
     private String clientName;
     private String assessmentId;
     private Integer maxOpportunities;
-    private Integer handScoredProject;
-    private Integer prefetch;
-    private Timestamp dateChanged;
-    private Boolean isPrintable;
-    private Boolean isSelectable;
+    private int prefetch;
+    private boolean isSelectable;
     private String label;
-    private String printItemTypes;
-    private Boolean scoreByTds;
-    private Boolean batchModeReport;
     private String subjectName;
-    private String origin;
-    private String source;
-    private Boolean maskItemsBySubject;
-    private Boolean initialAbilityBySubject;
-    private Timestamp startDate;
-    private Timestamp endDate;
-    private Timestamp ftStartDate;
-    private Timestamp ftEndDate;
+    private boolean initialAbilityBySubject;
     private String accommodationFamily;
     private Integer sortOrder;
     private String rtsFormField;
-    private String rtsWindowField;
-    private Boolean windowTideSelectable;
-    private Boolean requireRtsWindow;
-    private String reportingInstrument;
+    private boolean requireRtsWindow;
     private String tideId;
-    private Boolean forceComplete;
     private String rtsModeField;
-    private Boolean modeTideSelectable;
-    private Boolean requireRtsMode;
-    private Boolean requireRtsModeWindow;
-    private Boolean deleteUnansweredItems;
+    private boolean requireRtsMode;
+    private boolean requireRtsModeWindow;
+    private boolean deleteUnansweredItems;
     private Double abilitySlope;
     private Double abilityIntercept;
-    private Boolean validateCompleteness;
+    private boolean validateCompleteness;
     private String gradeText;
-    private String initialAbilityTestId;
-    private Integer proctorEligibility;
-    private String category;
 
+    public static class Builder {
+        private String clientName;
+        private String assessmentId;
+        private Integer maxOpportunities;
+        private int prefetch;
+        private boolean isSelectable;
+        private String label;
+        private String subjectName;
+        private boolean initialAbilityBySubject;
+        private String accommodationFamily;
+        private Integer sortOrder;
+        private String rtsFormField;
+        private boolean requireRtsWindow;
+        private String tideId;
+        private String rtsModeField;
+        private boolean requireRtsMode;
+        private boolean requireRtsModeWindow;
+        private boolean deleteUnansweredItems;
+        private Double abilitySlope;
+        private Double abilityIntercept;
+        private boolean validateCompleteness;
+        private String gradeText;
+        
+        public Builder withClientName(String newClientName) {
+            this.clientName = newClientName;
+            return this;
+        }
+        
+        public Builder withAssessmentId(String newAssessmentId) {
+            this.assessmentId = newAssessmentId;
+            return this;
+        }
+        
+        public Builder withMaxOpportunities(Integer newMaxOpportunities) {
+            this.maxOpportunities = newMaxOpportunities;
+            return this;
+        }
+        
+        public Builder withPrefetch(int newPrefetch) {
+            this.prefetch = newPrefetch;
+            return this;
+        }
+        
+        public Builder withIsSelectable(boolean newIsSelectable) {
+            this.isSelectable = newIsSelectable;
+            return this;
+        }
+        
+        public Builder withLabel(String newLabel) {
+            this.label = newLabel;
+            return this;
+        }
+        
+        public Builder withSubjectName(String newSubjectName) {
+            this.subjectName = newSubjectName;
+            return this;
+        }
+        
+        public Builder withInitialAbilityBySubject(boolean newInitialAbilityBySubject) {
+            this.initialAbilityBySubject = newInitialAbilityBySubject;
+            return this;
+        }
+        
+        public Builder withAccommodationFamily(String newAccommodationFamily) {
+            this.accommodationFamily = newAccommodationFamily;
+            return this;
+        }
+        
+        public Builder withSortOrder(Integer newSortOrder) {
+            this.sortOrder = newSortOrder;
+            return this;
+        }
+        
+        public Builder withRtsFormField(String newRtsFormField) {
+            this.rtsFormField = newRtsFormField;
+            return this;
+        }
+        
+        public Builder withRequireRtsWindow(boolean newRequireRtsWindow) {
+            this.requireRtsWindow = newRequireRtsWindow;
+            return this;
+        }
+        
+        public Builder withTideId(String newTideId) {
+            this.tideId = newTideId;
+            return this;
+        }
+        
+        public Builder withRtsModeField(String newRtsModeField) {
+            this.rtsModeField = newRtsModeField;
+            return this;
+        }
+        
+        public Builder withRequireRtsMode(boolean newRequireRtsMode) {
+            this.requireRtsMode = newRequireRtsMode;
+            return this;
+        }
+        
+        public Builder withRequireRtsModeWindow(boolean newRequireRtsModeWindow) {
+            this.requireRtsModeWindow = newRequireRtsModeWindow;
+            return this;
+        }
+        
+        public Builder withDeleteUnansweredItems(boolean newDeleteUnansweredItems) {
+            this.deleteUnansweredItems = newDeleteUnansweredItems;
+            return this;
+        }
+        
+        public Builder withAbilitySlope(Double newAbilitySlope) {
+            this.abilitySlope = newAbilitySlope;
+            return this;
+        }
+        
+        public Builder withAbilityIntercept(Double newAbilityIntercept) {
+            this.abilityIntercept = newAbilityIntercept;
+            return this;
+        }
+        
+        public Builder withValidateCompleteness(boolean newValidateCompleteness) {
+            this.validateCompleteness = newValidateCompleteness;
+            return this;
+        }
+        
+        public Builder withGradeText(String newGradeText) {
+            this.gradeText = newGradeText;
+            return this;
+        }
+        
+        public ClientTestProperty build() { return new ClientTestProperty(this); }
+    }
+    
+    private ClientTestProperty(Builder builder) {
+        this.clientName = builder.clientName;
+        this.assessmentId = builder.assessmentId;
+        this.maxOpportunities = builder.maxOpportunities;
+        this.prefetch = builder.prefetch;
+        this.isSelectable = builder.isSelectable;
+        this.label = builder.label;
+        this.subjectName = builder.subjectName;
+        this.initialAbilityBySubject = builder.initialAbilityBySubject;
+        this.accommodationFamily = builder.accommodationFamily;
+        this.sortOrder = builder.sortOrder;
+        this.rtsFormField = builder.rtsFormField;
+        this.requireRtsWindow = builder.requireRtsWindow;
+        this.tideId = builder.tideId;
+        this.rtsModeField = builder.rtsModeField;
+        this.requireRtsMode = builder.requireRtsMode;
+        this.requireRtsModeWindow = builder.requireRtsModeWindow;
+        this.deleteUnansweredItems = builder.deleteUnansweredItems;
+        this.abilitySlope = builder.abilitySlope;
+        this.abilityIntercept = builder.abilityIntercept;
+        this.validateCompleteness = builder.validateCompleteness;
+        this.gradeText = builder.gradeText;
+    }
+
+    /**
+     * This client name corresponds to one of the values stored in the {@code configs.client_externs} table or the
+     * {@code session._externs} table.  Typically this value will be "SBAC" or "SBAC_PT".
+     *
+     * @return The name of the client that owns this {@link ClientTestProperty}.
+     */
     public String getClientName() {
         return clientName;
     }
 
-    public void setClientName(String clientName) {
-        this.clientName = clientName;
-    }
-
+    /**
+     * The value for this getter/setter is typically referred to as "testid" in the database.
+     *
+     * @return The unique identifier of the assessment to which this {@link ClientTestProperty} is associated.
+     */
     public String getAssessmentId() {
         return assessmentId;
     }
 
-    public void setAssessmentId(String assessmentId) {
-        this.assessmentId = assessmentId;
-    }
-
+    /**
+     * @return The maximum number of times a Student may take this Assessment.
+     */
     public Integer getMaxOpportunities() {
         return maxOpportunities;
     }
 
-    public void setMaxOpportunities(Integer maxOpportunities) {
-        this.maxOpportunities = maxOpportunities;
-    }
-
-    public Integer getHandScoredProject() {
-        return handScoredProject;
-    }
-
-    public void setHandScoredProject(Integer handScoredProject) {
-        this.handScoredProject = handScoredProject;
-    }
-
-    public Integer getPrefetch() {
+    public int getPrefetch() {
         return prefetch;
     }
 
-    public void setPrefetch(Integer prefetch) {
-        this.prefetch = prefetch;
-    }
-
-    public Timestamp getDateChanged() {
-        return dateChanged;
-    }
-
-    public void setDateChanged(Timestamp dateChanged) {
-        this.dateChanged = dateChanged;
-    }
-
-    public Boolean getIsPrintable() {
-        return isPrintable;
-    }
-
-    public void setIsPrintable(Boolean printable) {
-        isPrintable = printable;
-    }
-
-    public Boolean getIsSelectable() {
+    public boolean getIsSelectable() {
         return isSelectable;
-    }
-
-    public void setIsSelectable(Boolean selectable) {
-        isSelectable = selectable;
     }
 
     public String getLabel() {
         return label;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-    public String getPrintItemTypes() {
-        return printItemTypes;
-    }
-
-    public void setPrintItemTypes(String printItemTypes) {
-        this.printItemTypes = printItemTypes;
-    }
-
-    public Boolean getScoreByTds() {
-        return scoreByTds;
-    }
-
-    public void setScoreByTds(Boolean scoreByTds) {
-        this.scoreByTds = scoreByTds;
-    }
-
-    public Boolean getBatchModeReport() {
-        return batchModeReport;
-    }
-
-    public void setBatchModeReport(Boolean batchModeReport) {
-        this.batchModeReport = batchModeReport;
-    }
-
     public String getSubjectName() {
         return subjectName;
     }
 
-    public void setSubjectName(String subjectName) {
-        this.subjectName = subjectName;
-    }
-
-    public String getOrigin() {
-        return origin;
-    }
-
-    public void setOrigin(String origin) {
-        this.origin = origin;
-    }
-
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
-    }
-
-    public Boolean getMaskItemsBySubject() {
-        return maskItemsBySubject;
-    }
-
-    public void setMaskItemsBySubject(Boolean maskItemsBySubject) {
-        this.maskItemsBySubject = maskItemsBySubject;
-    }
-
-    public Boolean getInitialAbilityBySubject() {
+    public boolean getInitialAbilityBySubject() {
         return initialAbilityBySubject;
-    }
-
-    public void setInitialAbilityBySubject(Boolean initialAbilityBySubject) {
-        this.initialAbilityBySubject = initialAbilityBySubject;
-    }
-
-    public Timestamp getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Timestamp startDate) {
-        this.startDate = startDate;
-    }
-
-    public Timestamp getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Timestamp endDate) {
-        this.endDate = endDate;
-    }
-
-    public Timestamp getFtStartDate() {
-        return ftStartDate;
-    }
-
-    public void setFtStartDate(Timestamp ftStartDate) {
-        this.ftStartDate = ftStartDate;
-    }
-
-    public Timestamp getFtEndDate() {
-        return ftEndDate;
-    }
-
-    public void setFtEndDate(Timestamp ftEndDate) {
-        this.ftEndDate = ftEndDate;
     }
 
     public String getAccommodationFamily() {
         return accommodationFamily;
     }
 
-    public void setAccommodationFamily(String accommodationFamily) {
-        this.accommodationFamily = accommodationFamily;
-    }
-
     public Integer getSortOrder() {
         return sortOrder;
-    }
-
-    public void setSortOrder(Integer sortOrder) {
-        this.sortOrder = sortOrder;
     }
 
     public String getRtsFormField() {
         return rtsFormField;
     }
 
-    public void setRtsFormField(String rtsFormField) {
-        this.rtsFormField = rtsFormField;
-    }
-
-    public String getRtsWindowField() {
-        return rtsWindowField;
-    }
-
-    public void setRtsWindowField(String rtsWindowField) {
-        this.rtsWindowField = rtsWindowField;
-    }
-
-    public Boolean getWindowTideSelectable() {
-        return windowTideSelectable;
-    }
-
-    public void setWindowTideSelectable(Boolean windowTideSelectable) {
-        this.windowTideSelectable = windowTideSelectable;
-    }
-
-    public Boolean getRequireRtsWindow() {
+    public boolean getRequireRtsWindow() {
         return requireRtsWindow;
-    }
-
-    public void setRequireRtsWindow(Boolean requireRtsWindow) {
-        this.requireRtsWindow = requireRtsWindow;
-    }
-
-    public String getReportingInstrument() {
-        return reportingInstrument;
-    }
-
-    public void setReportingInstrument(String reportingInstrument) {
-        this.reportingInstrument = reportingInstrument;
     }
 
     public String getTideId() {
         return tideId;
     }
 
-    public void setTideId(String tideId) {
-        this.tideId = tideId;
-    }
-
-    public Boolean getForceComplete() {
-        return forceComplete;
-    }
-
-    public void setForceComplete(Boolean forceComplete) {
-        this.forceComplete = forceComplete;
-    }
-
     public String getRtsModeField() {
         return rtsModeField;
     }
 
-    public void setRtsModeField(String rtsModeField) {
-        this.rtsModeField = rtsModeField;
-    }
-
-    public Boolean getModeTideSelectable() {
-        return modeTideSelectable;
-    }
-
-    public void setModeTideSelectable(Boolean modeTideSelectable) {
-        this.modeTideSelectable = modeTideSelectable;
-    }
-
-    public Boolean getRequireRtsMode() {
+    public boolean getRequireRtsMode() {
         return requireRtsMode;
     }
 
-    public void setRequireRtsMode(Boolean requireRtsMode) {
-        this.requireRtsMode = requireRtsMode;
-    }
-
-    public Boolean getRequireRtsModeWindow() {
+    public boolean getRequireRtsModeWindow() {
         return requireRtsModeWindow;
     }
 
-    public void setRequireRtsModeWindow(Boolean requireRtsModeWindow) {
-        this.requireRtsModeWindow = requireRtsModeWindow;
-    }
-
-    public Boolean getDeleteUnansweredItems() {
+    public boolean getDeleteUnansweredItems() {
         return deleteUnansweredItems;
-    }
-
-    public void setDeleteUnansweredItems(Boolean deleteUnansweredItems) {
-        this.deleteUnansweredItems = deleteUnansweredItems;
     }
 
     public Double getAbilitySlope() {
         return abilitySlope;
     }
 
-    public void setAbilitySlope(Double abilitySlope) {
-        this.abilitySlope = abilitySlope;
-    }
-
     public Double getAbilityIntercept() {
         return abilityIntercept;
     }
 
-    public void setAbilityIntercept(Double abilityIntercept) {
-        this.abilityIntercept = abilityIntercept;
-    }
-
-    public Boolean getValidateCompleteness() {
+    public boolean getValidateCompleteness() {
         return validateCompleteness;
-    }
-
-    public void setValidateCompleteness(Boolean validateCompleteness) {
-        this.validateCompleteness = validateCompleteness;
     }
 
     public String getGradeText() {
         return gradeText;
-    }
-
-    public void setGradeText(String gradeText) {
-        this.gradeText = gradeText;
-    }
-
-    public String getInitialAbilityTestId() {
-        return initialAbilityTestId;
-    }
-
-    public void setInitialAbilityTestId(String initialAbilityTestId) {
-        this.initialAbilityTestId = initialAbilityTestId;
-    }
-
-    public Integer getProctorEligibility() {
-        return proctorEligibility;
-    }
-
-    public void setProctorEligibility(Integer proctorEligibility) {
-        this.proctorEligibility = proctorEligibility;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 }
 

@@ -1,4 +1,4 @@
-package tds.config.endpoints;
+package tds.config.web.endpoints;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

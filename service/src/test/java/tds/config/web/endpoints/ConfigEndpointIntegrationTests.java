@@ -1,4 +1,4 @@
-package tds.config.endpoints;
+package tds.config.web.endpoints;
 
 import com.jayway.restassured.http.ContentType;
 import org.junit.Test;
@@ -30,6 +30,9 @@ public class ConfigEndpointIntegrationTests {
             .statusCode(200);
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
+    // ClientSystemProperty Tests
+    // -----------------------------------------------------------------------------------------------------------------
     @Test
     public void shouldGetAClientTestProperty() {
         final String clientName = "SBAC_PT";
@@ -45,23 +48,26 @@ public class ConfigEndpointIntegrationTests {
             .body("clientTestProperty.clientName", equalTo(clientName))
             .body("clientTestProperty.assessmentId", equalTo(testId))
             .body("clientTestProperty.maxOpportunities", equalTo(3))
-            .body("_links.self.href", equalTo("http://localhost:8080/config/clientTestProperties/SBAC_PT/SBAC%20Math%203-MATH-3"));
+            .body("_links.self.href", equalTo("http://localhost:8080/config/client-test-properties/SBAC_PT/SBAC%20Math%203-MATH-3"));
     }
 
     @Test
-    public void shouldReturn404ForClientTestPropertyWithInvalidClientName() {
+    public void shouldReturn404WhenGettingClientTestPropertyWithInvalidClientName() {
         final String clientName = "foo";
         final String testId = "SBAC Math 3-MATH-3";
 
         given()
             .accept(ContentType.JSON)
         .when()
-            .get(CONFIG_RESOURCE + "/clientTestProperties/" + clientName + "/" + testId)
+            .get(CONFIG_RESOURCE + "/client-test-properties/" + clientName + "/" + testId)
         .then()
             .contentType(ContentType.JSON)
             .statusCode(404);
     }
 
+    // -----------------------------------------------------------------------------------------------------------------
+    // ClientSystemFlag Tests
+    // -----------------------------------------------------------------------------------------------------------------
     @Test
     public void shouldGetAClientSystemFlag() {
         final String clientName = "SBAC_PT";
@@ -78,18 +84,18 @@ public class ConfigEndpointIntegrationTests {
             .body("clientSystemFlag.auditObject", equalTo(auditObject))
             .body("clientSystemFlag.isPracticeTest", equalTo(true))
             .body("clientSystemFlag.isOn", equalTo(true))
-            .body("_links.self.href", equalTo("http://localhost:8080/config/clientSystemFlags/SBAC_PT/accommodations"));
+            .body("_links.self.href", equalTo("http://localhost:8080/config/client-system-flags/SBAC_PT/accommodations"));
     }
 
     @Test
-    public void shouldGetA404ForClientSystemFlagWithAnInvalidAuditObject() {
+    public void shouldReturn404WhenGettingClientSystemFlagWithAnInvalidAuditObject() {
         final String clientName = "SBAC_PT";
         final String auditObject = "foo";
 
         given()
             .accept(ContentType.JSON)
         .when()
-            .get(CONFIG_RESOURCE + "/clientSystemFlags/" + clientName + "/" + auditObject)
+            .get(CONFIG_RESOURCE + "/client-system-flags/" + clientName + "/" + auditObject)
         .then()
             .contentType(ContentType.JSON)
             .statusCode(404);

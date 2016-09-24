@@ -1,7 +1,5 @@
 package tds.config.services.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tds.config.ClientSystemFlag;
@@ -14,7 +12,6 @@ import java.util.Optional;
 
 @Service
 public class ConfigServiceImpl implements ConfigService {
-    private static final Logger LOG = LoggerFactory.getLogger(ConfigServiceImpl.class);
     private final ConfigRepository configRepository;
 
     @Autowired
@@ -23,17 +20,16 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
-    public Optional<ClientTestProperty> getClientTestProperty(final String clientName, final String assessmentId) {
-        ClientTestProperty clientTestProperty = configRepository.getClientTestProperty(clientName, assessmentId);
-
-        return Optional.ofNullable(clientTestProperty);
+    public Optional<ClientTestProperty> findClientTestProperty(final String clientName, final String assessmentId) {
+        return configRepository.findClientTestProperty(clientName, assessmentId);
     }
 
     @Override
-    public Optional<ClientSystemFlag> getClientSystemFlag(String clientName, String auditObject) {
-        List<ClientSystemFlag> clientSystemFlags = configRepository.getClientSystemFlags(clientName);
+    public Optional<ClientSystemFlag> findClientSystemFlag(String clientName, String auditObject) {
+        List<ClientSystemFlag> clientSystemFlags = configRepository.findClientSystemFlags(clientName);
 
-        return clientSystemFlags.stream().filter(f -> f.getAuditObject().equals(auditObject))
+        return clientSystemFlags.stream()
+                .filter(f -> f.getAuditObject().equals(auditObject))
                 .findFirst();
     }
 }
