@@ -7,7 +7,7 @@ import java.util.Optional;
 /**
  * Provide an interface for interacting with the {@code session} database and providing time limit configuration.
  * <p>
- *     The logic in {@code StudentDLL.T_StartTestOpportunity_SP} starting at line 3668 is as follows:
+ *     The logic for getting time limit configuration is as follows:
  *     <ul>
  *         <li>Attempt to find a record in {@code session.timelimits} for the specified assessment id and client name.</li>
  *         <li>
