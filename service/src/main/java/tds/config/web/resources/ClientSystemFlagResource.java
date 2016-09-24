@@ -16,8 +16,9 @@ public class ClientSystemFlagResource extends ResourceSupport {
     public ClientSystemFlagResource(ClientSystemFlag clientSystemFlag) {
         this.clientSystemFlag = clientSystemFlag;
         this.add(linkTo(
-                methodOn(ConfigController.class)
-                        .getClientSystemFlag(clientSystemFlag.getClientName(), clientSystemFlag.getAuditObject()))
+                methodOn(ConfigController.class).getClientSystemFlag(
+                        clientSystemFlag.getClientName(),
+                        clientSystemFlag.getAuditObject()))
                 .withSelfRel());
     }
 

@@ -17,14 +17,12 @@ public class TimeLimitConfigurationResource extends ResourceSupport {
         this.timeLimitConfiguration = timeLimitConfiguration;
         if (timeLimitConfiguration.getAssessmentId() == null) {
             this.add(linkTo(
-                    methodOn(
-                            TimeLimitConfigurationController.class).getTimeLimitConfiguration(
+                    methodOn(TimeLimitConfigurationController.class).getTimeLimitConfiguration(
                             timeLimitConfiguration.getClientName()))
                     .withSelfRel());
         } else {
             this.add(linkTo(
-                    methodOn(
-                            TimeLimitConfigurationController.class).getTimeLimitConfiguration(
+                    methodOn(TimeLimitConfigurationController.class).getTimeLimitConfiguration(
                             timeLimitConfiguration.getClientName(),
                             timeLimitConfiguration.getAssessmentId()))
                     .withSelfRel());
