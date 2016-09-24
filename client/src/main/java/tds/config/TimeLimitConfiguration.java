@@ -111,8 +111,6 @@ public class TimeLimitConfiguration {
         }
     }
 
-    public TimeLimitConfiguration() {}
-
     private TimeLimitConfiguration(Builder builder) {
         this.clientName = builder.clientName;
         this.environment = builder.environment;

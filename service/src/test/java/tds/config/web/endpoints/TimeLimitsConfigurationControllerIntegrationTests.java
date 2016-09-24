@@ -17,7 +17,7 @@ import static org.hamcrest.Matchers.*;
 @WebAppConfiguration
 @IntegrationTest("server.port:8080")
 public class TimeLimitsConfigurationControllerIntegrationTests {
-    private static final String TIME_LIMITS_RESOURCE = "/config/timelimits/";
+    private static final String TIME_LIMITS_RESOURCE = "/config/time-limits/";
 
     @Test
     public void shouldGetTimeLimitsConfigurationForClientNameAndAssessmentId() {
@@ -39,7 +39,7 @@ public class TimeLimitsConfigurationControllerIntegrationTests {
             .body("timeLimitConfiguration.interfaceTimeoutMinutes", equalTo(10))
             .body("timeLimitConfiguration.requestInterfaceTimeoutMinutes", equalTo(15))
             .body("timeLimitConfiguration.taCheckinTimeMinutes", equalTo(20))
-            .body("_links.self.href", equalTo("http://localhost:8080/config/timelimits/SBAC_PT/SBAC%20Math%203-MATH-3"));
+            .body("_links.self.href", equalTo("http://localhost:8080/config/time-limits/SBAC_PT/SBAC%20Math%203-MATH-3"));
     }
 
     @Test
@@ -62,7 +62,7 @@ public class TimeLimitsConfigurationControllerIntegrationTests {
             .body("timeLimitConfiguration.interfaceTimeoutMinutes", equalTo(10))
             .body("timeLimitConfiguration.requestInterfaceTimeoutMinutes", equalTo(15))
             .body("timeLimitConfiguration.taCheckinTimeMinutes", equalTo(20))
-            .body("_links.self.href", equalTo("http://localhost:8080/config/timelimits/SBAC_PT"));
+            .body("_links.self.href", equalTo("http://localhost:8080/config/time-limits/SBAC_PT"));
     }
 
     @Test
@@ -84,7 +84,7 @@ public class TimeLimitsConfigurationControllerIntegrationTests {
             .body("timeLimitConfiguration.interfaceTimeoutMinutes", equalTo(10))
             .body("timeLimitConfiguration.requestInterfaceTimeoutMinutes", equalTo(15))
             .body("timeLimitConfiguration.taCheckinTimeMinutes", equalTo(20))
-            .body("_links.self.href", equalTo("http://localhost:8080/config/timelimits/SBAC_PT"));
+            .body("_links.self.href", equalTo("http://localhost:8080/config/time-limits/SBAC_PT"));
     }
 
     @Test

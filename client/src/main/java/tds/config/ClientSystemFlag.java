@@ -63,8 +63,6 @@ public class ClientSystemFlag {
         }
     }
 
-    public ClientSystemFlag() {}
-
     private ClientSystemFlag(Builder builder) {
         this.auditObject = builder.auditObject;
         this.clientName = builder.clientName;

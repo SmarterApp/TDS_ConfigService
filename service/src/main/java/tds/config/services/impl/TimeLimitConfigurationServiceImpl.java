@@ -19,13 +19,24 @@ public class TimeLimitConfigurationServiceImpl implements TimeLimitConfiguration
 
     @Override
     public Optional<TimeLimitConfiguration> findTimeLimitConfiguration(String clientName) {
-        return timeLimitConfigurationRepository.findTimeLimitConfiguration(clientName);
+        return this.findTimeLimitConfiguration(clientName, null);
     }
 
     @Override
     public Optional<TimeLimitConfiguration> findTimeLimitConfiguration(String clientName, String assessmentId) {
-        return timeLimitConfigurationRepository.findTimeLimitConfiguration(clientName, assessmentId)
-                .map(Optional::of)
-                .orElseGet(() -> timeLimitConfigurationRepository.findTimeLimitConfiguration(clientName));
+        Optional<TimeLimitConfiguration> maybeTimeLimitConfig;
+
+        if (assessmentId == null) {
+            return timeLimitConfigurationRepository.findTimeLimitConfiguration(clientName);
+        }
+
+        // RULE:  If time limit configuration cannot be found for clientName + assessmentId, get time limit configuration
+        // for clientName.
+        maybeTimeLimitConfig = timeLimitConfigurationRepository.findTimeLimitConfiguration(clientName, assessmentId);
+        if (!maybeTimeLimitConfig.isPresent()) {
+            maybeTimeLimitConfig = timeLimitConfigurationRepository.findTimeLimitConfiguration(clientName);
+        }
+
+        return maybeTimeLimitConfig;
     }
 }

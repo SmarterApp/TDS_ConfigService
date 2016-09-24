@@ -157,8 +157,6 @@ public class ClientTestProperty {
         public ClientTestProperty build() { return new ClientTestProperty(this); }
     }
     
-    public ClientTestProperty() {}
-    
     private ClientTestProperty(Builder builder) {
         this.clientName = builder.clientName;
         this.assessmentId = builder.assessmentId;

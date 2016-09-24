@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 public class TimeLimitsConfigurationControllerUnitTests {
     private TimeLimitConfigurationController timeLimitConfigurationController;
     private TimeLimitConfigurationService mockTimeLimitConfigurationService;
-    private final String LOCALHOST_HREF_ROOT = "http://localhost/config/timelimits";
+    private final String LOCALHOST_HREF_ROOT = "http://localhost/config/time-limits";
 
     @Before
     public void Setup() {

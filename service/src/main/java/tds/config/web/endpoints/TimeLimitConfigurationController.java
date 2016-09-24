@@ -10,7 +10,7 @@ import tds.config.services.TimeLimitConfigurationService;
 import tds.config.web.resources.TimeLimitConfigurationResource;
 
 @RestController
-@RequestMapping("/config/timelimits")
+@RequestMapping("/config/time-limits")
 public class TimeLimitConfigurationController {
     private final TimeLimitConfigurationService timeLimitConfigurationService;
 
