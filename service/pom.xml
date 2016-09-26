@@ -198,6 +198,9 @@
                             <goal>migrate</goal>
                         </goals>
                         <configuration>
+                            <locations>
+                                <location>filesystem:src/test/resources/db/migration</location>
+                            </locations>
                             <!-- do not run migrations if integration tests are skipped -->
                             <skip>${integration-tests.skip}</skip>
                             <url>jdbc:h2:mem:configs;MODE=MySQL;DB_CLOSE_DELAY=-1;INIT=CREATE SCHEMA IF NOT EXISTS "public";</url>
