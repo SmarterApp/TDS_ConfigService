@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
+import tds.config.repositories.ClientTestPropertyQueryRepository;
 import tds.config.repositories.ConfigRepository;
 import tds.config.services.ConfigService;
 
@@ -26,9 +27,12 @@ public class ConfigServiceUnitTests {
     @Mock
     private ConfigRepository mockConfigRepository;
 
+    @Mock
+    private ClientTestPropertyQueryRepository mockClientTestPropertyQueryRepository;
+
     @Before
     public void Setup() {
-        configService = new ConfigServiceImpl(mockConfigRepository);
+        configService = new ConfigServiceImpl(mockConfigRepository, mockClientTestPropertyQueryRepository);
     }
 
     @After
@@ -42,7 +46,7 @@ public class ConfigServiceUnitTests {
     // -----------------------------------------------------------------------------------------------------------------
     @Test
     public void shouldGetAClientTestProperty() {
-        when(mockConfigRepository.findClientTestProperty("SBAC_PT", "TEST_ID")).thenReturn(getMockClientTestProperty());
+        when(mockClientTestPropertyQueryRepository.findClientTestProperty("SBAC_PT", "TEST_ID")).thenReturn(getMockClientTestProperty());
 
         Optional<ClientTestProperty> result = configService.findClientTestProperty("SBAC_PT", "TEST_ID");
 
@@ -72,8 +76,8 @@ public class ConfigServiceUnitTests {
 
     @Test
     public void shouldReturnOptionalEmptyClientTestPropertyForAnInvalidClientName() {
-        when(mockConfigRepository.findClientTestProperty("SBAC_PT", "TEST_ID")).thenReturn(getMockClientTestProperty());
-        when(mockConfigRepository.findClientTestProperty("foo", "TEST_ID")).thenReturn(Optional.empty());
+        when(mockClientTestPropertyQueryRepository.findClientTestProperty("SBAC_PT", "TEST_ID")).thenReturn(getMockClientTestProperty());
+        when(mockClientTestPropertyQueryRepository.findClientTestProperty("foo", "TEST_ID")).thenReturn(Optional.empty());
 
         Optional<ClientTestProperty> result = configService.findClientTestProperty("foo", "TEST_ID");
 
