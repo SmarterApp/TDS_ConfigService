@@ -1,8 +1,9 @@
 package tds.config.web.resources;
 
 import org.springframework.hateoas.ResourceSupport;
+
 import tds.config.ClientTestProperty;
-import tds.config.web.endpoints.ConfigController;
+import tds.config.web.endpoints.ClientTestPropertyController;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
@@ -16,7 +17,7 @@ public class ClientTestPropertyResource extends ResourceSupport {
     public ClientTestPropertyResource(ClientTestProperty clientTestProperty) {
         this.clientTestProperty = clientTestProperty;
         this.add(linkTo(
-                methodOn(ConfigController.class).getClientTestProperty(
+                methodOn(ClientTestPropertyController.class).getClientTestProperty(
                                 clientTestProperty.getClientName(),
                                 clientTestProperty.getAssessmentId()))
                 .withSelfRel());
