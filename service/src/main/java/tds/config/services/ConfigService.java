@@ -1,9 +1,10 @@
 package tds.config.services;
 
+import java.util.Optional;
+
 import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
-
-import java.util.Optional;
+import tds.config.model.CurrentExamWindow;
 
 /**
  * Provide an interface for interacting with the {@code configs} database and providing configuration information.
@@ -32,4 +33,6 @@ public interface ConfigService {
      * @return The {@link Optional<ClientSystemFlag>} that matches the client and audit name.
      */
     Optional<ClientSystemFlag> findClientSystemFlag(String clientName, String auditObject);
+
+    Optional<CurrentExamWindow> getExamWindow(long studentId, String clientName, String assessmentId, int shiftWindowStart, int shiftWindowEnd);
 }

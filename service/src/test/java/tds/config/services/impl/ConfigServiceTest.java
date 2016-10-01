@@ -6,21 +6,25 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-import tds.config.ClientSystemFlag;
-import tds.config.ClientTestProperty;
-import tds.config.repositories.ClientTestPropertyQueryRepository;
-import tds.config.repositories.ConfigRepository;
-import tds.config.services.ConfigService;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.Mockito.*;
-import static org.assertj.core.api.Assertions.*;
+import tds.config.ClientSystemFlag;
+import tds.config.ClientTestProperty;
+import tds.config.model.CurrentExamWindow;
+import tds.config.repositories.ClientTestPropertyQueryRepository;
+import tds.config.repositories.ConfigRepository;
+import tds.config.repositories.ExamWindowQueryRepository;
+import tds.config.services.ConfigService;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ConfigServiceUnitTests {
+public class ConfigServiceTest {
 
     private ConfigService configService;
 
@@ -30,9 +34,16 @@ public class ConfigServiceUnitTests {
     @Mock
     private ClientTestPropertyQueryRepository mockClientTestPropertyQueryRepository;
 
+    @Mock
+    private ExamWindowQueryRepository mockExamWindowQueryRepository;
+
     @Before
     public void Setup() {
-        configService = new ConfigServiceImpl(mockConfigRepository, mockClientTestPropertyQueryRepository);
+        configService = new ConfigServiceImpl(
+            mockConfigRepository,
+            mockClientTestPropertyQueryRepository,
+            mockExamWindowQueryRepository
+        );
     }
 
     @After
@@ -107,6 +118,21 @@ public class ConfigServiceUnitTests {
         Optional<ClientSystemFlag> result = configService.findClientSystemFlag("SBAC_PT", "foo");
 
         assertThat(result).isNotPresent();
+    }
+
+    @Test
+    public void shouldReturnEmptyWindowWhenNoResultsAreFoundForGuest() {
+        when(mockExamWindowQueryRepository.findCurrentTestWindowsForGuest("test", "assessment", 0, 0)).thenReturn(Optional.empty());
+        assertThat(configService.getExamWindow(-1, "test", "assessment", 0, 0)).isNotPresent();
+    }
+
+    @Test
+    public void shouldReturnWindowForGuestWhenFound() {
+        CurrentExamWindow window = new CurrentExamWindow.Builder().withWindowId("id").build();
+
+        when(mockExamWindowQueryRepository.findCurrentTestWindowsForGuest("test", "assessment", 0, 0)).thenReturn(Optional.of(window));
+        assertThat(configService.getExamWindow(-1, "test", "assessment", 0, 0).get()).isEqualTo(window);
+        verify(mockExamWindowQueryRepository).findCurrentTestWindowsForGuest("test", "assessment", 0, 0);
     }
 
     private Optional<ClientTestProperty> getMockClientTestProperty() {

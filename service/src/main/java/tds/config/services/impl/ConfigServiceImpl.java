@@ -2,24 +2,31 @@ package tds.config.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tds.config.ClientSystemFlag;
-import tds.config.ClientTestProperty;
-import tds.config.repositories.ClientTestPropertyQueryRepository;
-import tds.config.repositories.ConfigRepository;
-import tds.config.services.ConfigService;
 
 import java.util.List;
 import java.util.Optional;
+
+import tds.config.ClientSystemFlag;
+import tds.config.ClientTestProperty;
+import tds.config.model.CurrentExamWindow;
+import tds.config.repositories.ClientTestPropertyQueryRepository;
+import tds.config.repositories.ConfigRepository;
+import tds.config.repositories.ExamWindowQueryRepository;
+import tds.config.services.ConfigService;
 
 @Service
 public class ConfigServiceImpl implements ConfigService {
     private final ConfigRepository configRepository;
     private final ClientTestPropertyQueryRepository clientTestPropertyQueryRepository;
+    private final ExamWindowQueryRepository examWindowQueryRepository;
 
     @Autowired
-    public ConfigServiceImpl(ConfigRepository configRepository, ClientTestPropertyQueryRepository clientTestPropertyQueryRepository) {
+    public ConfigServiceImpl(ConfigRepository configRepository,
+                             ClientTestPropertyQueryRepository clientTestPropertyQueryRepository,
+                             ExamWindowQueryRepository examWindowQueryRepository) {
         this.configRepository = configRepository;
         this.clientTestPropertyQueryRepository = clientTestPropertyQueryRepository;
+        this.examWindowQueryRepository = examWindowQueryRepository;
     }
 
     @Override
@@ -34,5 +41,14 @@ public class ConfigServiceImpl implements ConfigService {
         return clientSystemFlags.stream()
                 .filter(f -> f.getAuditObject().equals(auditObject))
                 .findFirst();
+    }
+
+    @Override
+    public Optional<CurrentExamWindow> getExamWindow(long studentId, String clientName, String assessmentId, int shiftWindowStart, int shiftWindowEnd) {
+         if (studentId < 0) {
+             return examWindowQueryRepository.findCurrentTestWindowsForGuest(clientName, assessmentId, shiftWindowStart, shiftWindowEnd);
+         }
+
+         return Optional.empty();
     }
 }
