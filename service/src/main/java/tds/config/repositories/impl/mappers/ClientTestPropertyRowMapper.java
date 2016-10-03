@@ -1,10 +1,11 @@
 package tds.config.repositories.impl.mappers;
 
 import org.springframework.jdbc.core.RowMapper;
-import tds.config.ClientTestProperty;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import tds.config.ClientTestProperty;
 
 /**
  * Map a {@link ClientTestProperty} from the database to a POJO.
@@ -34,6 +35,7 @@ public class ClientTestPropertyRowMapper implements RowMapper<ClientTestProperty
                 .withAbilityIntercept(rs.getDouble("abilityIntercept"))
                 .withValidateCompleteness(rs.getBoolean("validateCompleteness"))
                 .withGradeText(rs.getString("gradeText"))
+                .withRtsWindowField(rs.getString("rtswindowfield"))
                 .build();
     }
 }

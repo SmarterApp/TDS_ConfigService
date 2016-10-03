@@ -25,6 +25,7 @@ public class ClientTestProperty {
     private Double abilityIntercept;
     private boolean validateCompleteness;
     private String gradeText;
+    private String rtsWindowField;
 
     public static class Builder {
         private String clientName;
@@ -48,6 +49,7 @@ public class ClientTestProperty {
         private Double abilityIntercept;
         private boolean validateCompleteness;
         private String gradeText;
+        private String rtsWindowField;
         
         public Builder withClientName(String newClientName) {
             this.clientName = newClientName;
@@ -151,6 +153,11 @@ public class ClientTestProperty {
         
         public Builder withGradeText(String newGradeText) {
             this.gradeText = newGradeText;
+            return this;
+        }
+
+        public Builder withRtsWindowField(String rtsWindowField) {
+            this.rtsWindowField = rtsWindowField;
             return this;
         }
         
@@ -277,6 +284,10 @@ public class ClientTestProperty {
 
     public String getGradeText() {
         return gradeText;
+    }
+
+    public String getRtsWindowField() {
+        return rtsWindowField;
     }
 }
 
