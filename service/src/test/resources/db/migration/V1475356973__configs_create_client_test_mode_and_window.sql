@@ -1,3 +1,12 @@
+/***********************************************************************************************************************
+  File: V1475356973__configs_create_client_test_mode_and_window.sql
+
+  Desc: Creates the client test mode and client test window tables and inserts some seed data for tests.
+
+***********************************************************************************************************************/
+
+USE configs;
+
 DROP TABLE IF EXISTS client_testmode;
 CREATE TABLE client_testmode (
   clientname varchar(100) NOT NULL,
