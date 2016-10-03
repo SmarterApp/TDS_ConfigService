@@ -3,19 +3,20 @@ package tds.config.services.impl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import tds.config.ClientSystemFlag;
-import tds.config.ClientTestProperty;
-import tds.config.ConfigServiceApplication;
-import tds.config.services.ConfigService;
 
 import java.util.Optional;
+
+import tds.config.ClientSystemFlag;
+import tds.config.ClientTestProperty;
+import tds.config.model.CurrentExamWindow;
+import tds.config.services.ConfigService;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = ConfigServiceApplication.class)
+@SpringBootTest
 public class ConfigServiceImplIntegrationTests {
     @Autowired
     private ConfigService configService;
@@ -91,5 +92,33 @@ public class ConfigServiceImplIntegrationTests {
         Optional<ClientSystemFlag> result = configService.findClientSystemFlag(clientName, auditObject);
 
         assertThat(result.isPresent()).isFalse();
+    }
+
+    /*
+    Exam Window Tests
+     */
+    @Test
+    public void shouldReturnEmptyWindowWhenNoResultsAreFoundForGuest() {
+        assertThat(configService.getExamWindow(-1, "test", "assessment", 0, 0)).isNotPresent();
+    }
+
+    @Test
+    public void shouldReturnEmptyWindowWhenNotFound() {
+        Optional<CurrentExamWindow> maybeWindow = configService.getExamWindow(-1, "test", "assessment", 0, 0);
+        assertThat(maybeWindow).isEmpty();
+    }
+
+    @Test
+    public void shouldReturnWindowWhenFound() {
+        Optional<CurrentExamWindow> maybeWindow = configService.getExamWindow(-1, "SBAC_PT", "SBAC-IRP-CAT-ELA-11", 0, 0);
+        assertThat(maybeWindow).isPresent();
+
+        CurrentExamWindow window = maybeWindow.get();
+        assertThat(window.getMode()).isEqualTo("online");
+        assertThat(window.getWindowId()).isEqualTo("ANNUAL");
+        assertThat(window.getModeMaxAttempts()).isEqualTo(999);
+        assertThat(window.getModeSessionType()).isEqualTo(0);
+        assertThat(window.getWindowMaxAttempts()).isEqualTo(999);
+        assertThat(window.getWindowSessionType()).isEqualTo(-1);
     }
 }

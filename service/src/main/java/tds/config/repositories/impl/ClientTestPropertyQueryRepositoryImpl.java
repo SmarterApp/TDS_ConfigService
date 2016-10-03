@@ -53,7 +53,7 @@ public class ClientTestPropertyQueryRepositoryImpl implements ClientTestProperty
                 "   abilityslope AS abilitySlope,\n" +
                 "   abilityintercept AS abilityIntercept,\n" +
                 "   validatecompleteness AS validateCompleteness,\n" +
-                "   gradetext AS gradeText\n" +
+                "   gradetext AS gradeText,\n" +
                 "   rtswindowfield \n" +
                 "FROM\n" +
                 "   configs.client_testproperties\n" +

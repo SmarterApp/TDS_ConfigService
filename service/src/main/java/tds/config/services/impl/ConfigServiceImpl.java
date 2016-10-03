@@ -39,16 +39,31 @@ public class ConfigServiceImpl implements ConfigService {
         List<ClientSystemFlag> clientSystemFlags = configRepository.findClientSystemFlags(clientName);
 
         return clientSystemFlags.stream()
-                .filter(f -> f.getAuditObject().equals(auditObject))
-                .findFirst();
+            .filter(f -> f.getAuditObject().equals(auditObject))
+            .findFirst();
     }
 
     @Override
     public Optional<CurrentExamWindow> getExamWindow(long studentId, String clientName, String assessmentId, int shiftWindowStart, int shiftWindowEnd) {
-         if (studentId < 0) {
-             return examWindowQueryRepository.findCurrentTestWindowsForGuest(clientName, assessmentId, shiftWindowStart, shiftWindowEnd);
-         }
+        if (studentId < 0) {
+            return examWindowQueryRepository.findCurrentTestWindowsForGuest(clientName, assessmentId, shiftWindowStart, shiftWindowEnd);
+        }
 
-         return Optional.empty();
+        boolean requireWindow = false;
+        boolean isFormTest = false;
+        String windowField;
+        String tideId;
+
+        Optional<ClientTestProperty> maybeProperties = clientTestPropertyQueryRepository.findClientTestProperty(clientName, assessmentId);
+        if (maybeProperties.isPresent()) {
+            ClientTestProperty property = maybeProperties.get();
+            requireWindow = property.getRequireRtsWindow();
+            windowField = property.getRtsWindowField();
+            tideId = property.getTideId();
+        }
+
+
+
+        return Optional.empty();
     }
 }
