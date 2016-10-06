@@ -26,8 +26,9 @@
         <maven.compiler.plugin.version>3.5.1</maven.compiler.plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <tds.config.client>0.0.1-SNAPSHOT</tds.config.client>
-        <tds.common>0.0.1-SNAPSHOT</tds.common>
+        <tds.config.client.version>0.0.1-SNAPSHOT</tds.config.client.version>
+        <tds.common.version>0.0.1-SNAPSHOT</tds.common.version>
+        <tds.student.client.version>0.0.1-SNAPSHOT</tds.student.client.version>
 
         <unit-tests.skip>false</unit-tests.skip>
         <integration-tests.skip>true</integration-tests.skip>

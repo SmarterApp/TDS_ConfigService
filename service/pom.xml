@@ -21,13 +21,19 @@
         <dependency>
             <groupId>org.opentestsystem.config</groupId>
             <artifactId>tds-config-client</artifactId>
-            <version>${tds.config.client}</version>
+            <version>${tds.config.client.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.opentestsystem.common</groupId>
             <artifactId>tds-common</artifactId>
-            <version>${tds.common}</version>
+            <version>${tds.common.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.opentestsystem.student</groupId>
+            <artifactId>tds-student-client</artifactId>
+            <version>${tds.student.client.version}</version>
         </dependency>
 
         <!-- Spring dependencies -->
