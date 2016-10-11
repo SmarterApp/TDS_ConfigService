@@ -7,9 +7,11 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.List;
 import java.util.Optional;
 
 import tds.config.model.CurrentExamWindow;
+import tds.config.model.ExamFormWindow;
 import tds.config.repositories.ExamWindowQueryRepository;
 
 import static tds.common.data.mapping.ResultSetMapperUtility.mapTimeStampToInstant;
@@ -25,10 +27,10 @@ public class ExamWindowQueryRepositoryImpl implements ExamWindowQueryRepository 
 
     @Override
     public Optional<CurrentExamWindow> findCurrentTestWindowsForGuest(String clientName, String assessmentId, int shiftWindowStart, int shiftWindowEnd) {
-        final MapSqlParameterSource parameters = new MapSqlParameterSource("clientName", clientName);
-        parameters.addValue("assessmentId", assessmentId);
-        parameters.addValue("shiftWindowStart", shiftWindowStart);
-        parameters.addValue("shiftWindowEnd", shiftWindowEnd);
+        final MapSqlParameterSource parameters = new MapSqlParameterSource("clientName", clientName)
+            .addValue("assessmentId", assessmentId)
+            .addValue("shiftWindowStart", shiftWindowStart)
+            .addValue("shiftWindowEnd", shiftWindowEnd);
 
         String SQL = "SELECT \n" +
             "      distinct W.numopps as windowMax, \n" +
@@ -84,5 +86,94 @@ public class ExamWindowQueryRepositoryImpl implements ExamWindowQueryRepository 
         }
 
         return maybeCurrentExamWindow;
+    }
+
+    @Override
+    public List<ExamFormWindow> findExamFormWindows(String clientName, String assessmentId, int sessionType, int shiftWindowStart, int shiftWindowEnd, int shiftFormStart, int shiftFormEnd) {
+        final MapSqlParameterSource parameters = new MapSqlParameterSource("clientName", clientName)
+            .addValue("assessmentId", assessmentId)
+            .addValue("sessionType", sessionType)
+            .addValue("shiftWindowStart", shiftWindowStart)
+            .addValue("shiftWindowEnd", shiftWindowEnd)
+            .addValue("shiftFormStart", shiftFormStart)
+            .addValue("shiftFormEnd", shiftFormEnd);
+
+        String SQL = "SELECT\n" +
+            "   windowID, \n" +
+            "   W.numopps as windowMax, \n" +
+            "   M.maxopps as modeMax, \n" +
+            "   CASE WHEN W.startDate is null THEN NOW() ELSE (W.startDate + INTERVAL :shiftWindowsStart DAY) end as startDate,\n" +
+            "   CASE WHEN W.endDate is null THEN NOW() ELSE (W.endDate + INTERVAL :shiftWindowsEnd DAY) end  as endDate,\n" +
+            "   CASE WHEN F.startDate is null THEN NOW() ELSE ( F.startdate + INTERVAL :shiftFormStart DAY) end as formStart,\n" +
+            "   CASE WHEN F.enddate is null THEN NOW() ELSE (F.enddate + INTERVAL :shiftFormEnd DAY ) end as formEnd,\n" +
+            "   _efk_TestForm as formKey, \n" +
+            "   FormID, \n" +
+            "   F.Language, \n" +
+            "   M.mode,\n" +
+            "   M.testkey, \n" +
+            "   W.sessionType as windowSession, \n" +
+            "   M.sessionType as modeSession\n" +
+            "FROM configs.client_testwindow W\n" +
+            "JOIN configs.client_testmode M ON\n" +
+            "   M.testid = W.testid AND\n" +
+            "   M.clientname = W.clientname AND\n" +
+            "   (M.sessionType = -1 or M.sessionType = :sessionType) \n" +
+            "JOIN configs.client_testformproperties F ON \n" +
+            "   M.testkey = F.testkey AND\n" +
+            "   F.testid = W.testid AND\n" +
+            "   F.clientname = W.clientname AND\n" +
+            "   NOW() BETWEEN CASE WHEN F.startDate is null THEN NOW() ELSE (F.startdate + INTERVAL :shiftFormStart DAY) END\n" +
+            "   AND CASE WHEN F.enddate is null THEN NOW() ELSE (F.enddate + INTERVAL :shiftFormEnd DAY) END      \n" +
+            "WHERE W.clientname = :clientName AND \n" +
+            "      W.testid = :assessmentId AND\n" +
+            "      (W.sessionType = -1 or W.sessionType = :sessionType) AND \n" +
+            "      NOW() BETWEEN CASE WHEN W.startDate is null THEN NOW() ELSE (W.startDate + INTERVAL :shiftWindowStart DAY) END\n" +
+            "    AND CASE WHEN W.endDate is null THEN NOW() ELSE (W.endDate + INTERVAL :shiftWindowEnd DAY ) END;\n" +
+            "UNION (\n" +
+            "SELECT\n" +
+            "   windowID, \n" +
+            "   W.numopps, \n" +
+            "   M.maxopps,\n" +
+            "   CASE WHEN W.startDate is null THEN NOW() ELSE  (W.startDate + INTERVAL :shiftWindowStart DAY) end  as startDate ,\n" +
+            "   CASE WHEN W.endDate is null THEN NOW() ELSE (W.endDate + INTERVAL :shiftWindowEnd DAY) end  as endDate ,\n" +
+            "   CASE WHEN F.startDate is null THEN NOW() ELSE ( F.startdate + INTERVAL :shiftFormStart DAY) end as formStart ,\n" +
+            "   CASE WHEN F.enddate is null THEN NOW() ELSE (F.enddate + INTERVAL :shiftFormEnd DAY ) end as formEnd,\n" +
+            "   _efk_TestForm as formKey, \n" +
+            "   FormID, \n" +
+            "   F.Language, \n" +
+            "   M.mode, \n" +
+            "   M.testkey as TestKey, \n" +
+            "   W.sessionType , \n" +
+            "   M.sessionType\n" +
+            "FROM \n" +
+            "   configs.client_segmentproperties S\n" +
+            "   JOIN configs.client_testformproperties F ON \n" +
+            "            S.clientname = :clientName\n" +
+            "            AND S.parentTest = :assessmentId \n" +
+            "            AND S.clientname = F.clientname\n" +
+            "            AND NOW() between \n" +
+            "               ( CASE WHEN F.startDate is null THEN NOW() ELSE (F.startdate + INTERVAL :shiftFormStart DAY) end )\n" +
+            "               AND ( CASE WHEN F.enddate is null THEN NOW() ELSE (F.enddate + INTERVAL :shiftFormEnd DAY) end )\n" +
+            "            AND S.segmentid = F.testid\n" +
+            "   JOIN configs.client_testmode M ON\n" +
+            "            F.clientname = M.clientname\n" +
+            "            AND S.parentTest = M.testID \n" +
+            "            AND (M.sessionType = -1 or M.sessionType = :sessionType) \n" +
+            "            AND S.modekey = M.testkey\n" +
+            "   JOIN configs.client_testwindow W ON\n" +
+            "            M.clientname = W.clientname\n" +
+            "            AND W.testID = S.parentTest \n" +
+            "            AND (W.sessionType = -1 or W.sessionType = :sessionType)\n" +
+            "            AND NOW() between\n" +
+            "               ( CASE WHEN W.startDate is null THEN NOW() ELSE (W.startDate + INTERVAL :shiftWindowStart DAY) end )\n" +
+            "               AND ( CASE WHEN W.endDate is null THEN NOW() ELSE (W.endDate + INTERVAL :shiftWindowEnd DAY ) end )\n" +
+            ");";
+
+
+        return jdbcTemplate.query(SQL, parameters, (rs, rowNum) -> new ExamFormWindow(
+            rs.getString("windowId"),
+            rs.getInt("windowMax"),
+            rs.getInt("modeMax")
+        ));
     }
 }

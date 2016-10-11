@@ -11,6 +11,7 @@ import java.util.Optional;
 import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
 import tds.config.model.CurrentExamWindow;
+import tds.config.model.ExamWindowProperties;
 import tds.config.services.ConfigService;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -99,18 +100,25 @@ public class ConfigServiceImplIntegrationTests {
      */
     @Test
     public void shouldReturnEmptyWindowWhenNoResultsAreFoundForGuest() {
-        assertThat(configService.getExamWindow(-1, "test", "assessment", 0, 0)).isNotPresent();
+        ExamWindowProperties properties = new ExamWindowProperties.Builder(-1, "clientName", "assessment")
+            .withWindowList("")
+            .withFormList("")
+            .build();
+        assertThat(configService.getExamWindow(properties)).isNotPresent();
     }
 
     @Test
     public void shouldReturnEmptyWindowWhenNotFound() {
-        Optional<CurrentExamWindow> maybeWindow = configService.getExamWindow(-1, "test", "assessment", 0, 0);
+        ExamWindowProperties properties = new ExamWindowProperties.Builder(-1, "clientName", "assessment").build();
+        Optional<CurrentExamWindow> maybeWindow = configService.getExamWindow(properties);
         assertThat(maybeWindow).isEmpty();
     }
 
     @Test
     public void shouldReturnWindowWhenFound() {
-        Optional<CurrentExamWindow> maybeWindow = configService.getExamWindow(-1, "SBAC_PT", "SBAC-IRP-CAT-ELA-11", 0, 0);
+        ExamWindowProperties properties = new ExamWindowProperties.Builder(-1, "SBAC_PT", "SBAC-IRP-CAT-ELA-11").build();
+
+        Optional<CurrentExamWindow> maybeWindow = configService.getExamWindow(properties);
         assertThat(maybeWindow).isPresent();
 
         CurrentExamWindow window = maybeWindow.get();

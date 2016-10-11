@@ -5,6 +5,7 @@ import java.util.Optional;
 import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
 import tds.config.model.CurrentExamWindow;
+import tds.config.model.ExamWindowProperties;
 
 /**
  * Provide an interface for interacting with the {@code configs} database and providing configuration information.
@@ -34,5 +35,5 @@ public interface ConfigService {
      */
     Optional<ClientSystemFlag> findClientSystemFlag(String clientName, String auditObject);
 
-    Optional<CurrentExamWindow> getExamWindow(long studentId, String clientName, String assessmentId, int shiftWindowStart, int shiftWindowEnd);
+    Optional<CurrentExamWindow> getExamWindow(ExamWindowProperties examWindowProperties);
 }
