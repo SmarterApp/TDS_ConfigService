@@ -100,7 +100,7 @@ public class ConfigServiceImplIntegrationTests {
      */
     @Test
     public void shouldReturnEmptyWindowWhenNoResultsAreFoundForGuest() {
-        ExamWindowProperties properties = new ExamWindowProperties.Builder(-1, "clientName", "assessment")
+        ExamWindowProperties properties = new ExamWindowProperties.Builder(-1, "clientName", "assessment", 0)
             .withWindowList("")
             .withFormList("")
             .build();
@@ -109,14 +109,14 @@ public class ConfigServiceImplIntegrationTests {
 
     @Test
     public void shouldReturnEmptyWindowWhenNotFound() {
-        ExamWindowProperties properties = new ExamWindowProperties.Builder(-1, "clientName", "assessment").build();
+        ExamWindowProperties properties = new ExamWindowProperties.Builder(-1, "clientName", "assessment", 0).build();
         Optional<CurrentExamWindow> maybeWindow = configService.getExamWindow(properties);
         assertThat(maybeWindow).isEmpty();
     }
 
     @Test
     public void shouldReturnWindowWhenFound() {
-        ExamWindowProperties properties = new ExamWindowProperties.Builder(-1, "SBAC_PT", "SBAC-IRP-CAT-ELA-11").build();
+        ExamWindowProperties properties = new ExamWindowProperties.Builder(-1, "SBAC_PT", "SBAC-IRP-CAT-ELA-11", 0).build();
 
         Optional<CurrentExamWindow> maybeWindow = configService.getExamWindow(properties);
         assertThat(maybeWindow).isPresent();

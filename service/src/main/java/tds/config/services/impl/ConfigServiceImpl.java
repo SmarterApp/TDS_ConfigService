@@ -12,6 +12,7 @@ import java.util.Optional;
 import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
 import tds.config.model.CurrentExamWindow;
+import tds.config.model.ExamFormWindow;
 import tds.config.model.ExamWindowProperties;
 import tds.config.repositories.ClientTestFormPropertiesQueryRepository;
 import tds.config.repositories.ClientTestPropertyQueryRepository;
@@ -100,10 +101,24 @@ public class ConfigServiceImpl implements ConfigService {
             if(tideId != null && windowList != null) {
                 windows = createWindowsList(windowList, tideId);
             }
-
         }
 
+        //Lines StudentDLL 5955 - 5975
+        List<ExamFormWindow> formWindows = examWindowQueryRepository.findExamFormWindows(clientName,
+            assessmentId,
+            examWindowProperties.getSessionType(),
+            examWindowProperties.getShiftWindowStart(),
+            examWindowProperties.getShiftWindowEnd(),
+            examWindowProperties.getShiftFormStart(),
+            examWindowProperties.getShiftFormEnd()
+        );
 
+        if (!formWindows.isEmpty()) {
+            //Logic in StudentDLL lines 5963
+            //The first call in the StudentDLL._GetTesteeTestForms_SP is to get the window for the guest which is duplication from earlier code
+
+
+        }
 
         Optional<Float> op = Optional.of(1F);
 

@@ -4,6 +4,7 @@ public class ExamWindowProperties {
     private long studentId;
     private String clientName;
     private String assessmentId;
+    private int sessionType;
     private int shiftWindowStart;
     private int shiftWindowEnd;
     private int shiftFormStart;
@@ -21,6 +22,7 @@ public class ExamWindowProperties {
         this.shiftFormEnd = builder.shiftFormEnd;
         this.windowList = builder.windowList;
         this.formList = builder.formList;
+        this.sessionType = builder.sessionType;
     }
 
     public long getStudentId() {
@@ -33,6 +35,10 @@ public class ExamWindowProperties {
 
     public String getAssessmentId() {
         return assessmentId;
+    }
+
+    public int getSessionType() {
+        return sessionType;
     }
 
     public int getShiftWindowStart() {
@@ -63,6 +69,7 @@ public class ExamWindowProperties {
         private long studentId;
         private String clientName;
         private String assessmentId;
+        private int sessionType;
         private int shiftWindowStart = 0;
         private int shiftWindowEnd = 0;
         private int shiftFormStart = 0;
@@ -70,10 +77,11 @@ public class ExamWindowProperties {
         private String windowList = "";
         private String formList = "";
 
-        public Builder(long studentId, String clientName, String assessmentId) {
+        public Builder(long studentId, String clientName, String assessmentId, int sessionType) {
             this.studentId = studentId;
             this.clientName = clientName;
             this.assessmentId = assessmentId;
+            this.sessionType = sessionType;
         }
 
         public Builder withShiftWindowStart(int shiftWindowStart) {

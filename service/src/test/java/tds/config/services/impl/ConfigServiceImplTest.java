@@ -136,7 +136,7 @@ public class ConfigServiceImplTest {
 
     @Test
     public void shouldReturnEmptyWindowWhenNoResultsAreFoundForGuest() {
-        ExamWindowProperties properties = new ExamWindowProperties.Builder(-1, "test", "assessment").build();
+        ExamWindowProperties properties = new ExamWindowProperties.Builder(-1, "test", "assessment", 0).build();
         when(mockExamWindowQueryRepository.findCurrentTestWindowsForGuest("test", "assessment", 0, 0)).thenReturn(Optional.empty());
         assertThat(configService.getExamWindow(properties)).isNotPresent();
     }
@@ -144,7 +144,7 @@ public class ConfigServiceImplTest {
     @Test
     public void shouldReturnWindowForGuestWhenFound() {
         CurrentExamWindow window = new CurrentExamWindow.Builder().withWindowId("id").build();
-        ExamWindowProperties properties = new ExamWindowProperties.Builder(-1, "test", "assessment").build();
+        ExamWindowProperties properties = new ExamWindowProperties.Builder(-1, "test", "assessment", 0).build();
 
         when(mockExamWindowQueryRepository.findCurrentTestWindowsForGuest("test", "assessment", 0, 0)).thenReturn(Optional.of(window));
         assertThat(configService.getExamWindow(properties).get()).isEqualTo(window);
