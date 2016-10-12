@@ -11,6 +11,7 @@ import java.util.Optional;
 
 import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
+import tds.config.model.AssessmentProperties;
 import tds.config.model.CurrentExamWindow;
 import tds.config.model.ExamFormWindow;
 import tds.config.model.ExamWindowProperties;
@@ -59,7 +60,7 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
-    public Optional<CurrentExamWindow> getExamWindow(ExamWindowProperties examWindowProperties) {
+    public Optional<CurrentExamWindow> getExamWindow(ExamWindowProperties examWindowProperties)  {
         long studentId = examWindowProperties.getStudentId();
         String clientName = examWindowProperties.getClientName();
         String assessmentId = examWindowProperties.getAssessmentId();
@@ -117,12 +118,94 @@ public class ConfigServiceImpl implements ConfigService {
             //Logic in StudentDLL lines 5963
             //The first call in the StudentDLL._GetTesteeTestForms_SP is to get the window for the guest which is duplication from earlier code
 
-
+            return findCurrentExamWindowFromFormWindows(examWindowProperties, formWindows);
         }
 
-        Optional<Float> op = Optional.of(1F);
 
 
+        return Optional.empty();
+    }
+
+    private Optional<CurrentExamWindow> findCurrentExamWindowFromFormWindows(ExamWindowProperties examWindowProperties, List<ExamFormWindow> formWindows) {
+        String tideId = null, formField = null;
+        boolean requireFormWindow = false, requireForm = false, ifExists = false;
+
+        //Lines 3712 - 3730 in StudentDLL._GetTesteeTestForms_SP
+        Optional<AssessmentProperties> maybeAsessmentProperties = examWindowQueryRepository.findExamFormWindowProperties(examWindowProperties.getClientName(), examWindowProperties.getAssessmentId(), examWindowProperties.getSessionType());
+
+        if (maybeAsessmentProperties.isPresent()) {
+            AssessmentProperties properties = maybeAsessmentProperties.get();
+            tideId = properties.getTideId();
+            formField = properties.getFormField();
+            ifExists = properties.isRequireIfFormExists();
+        }
+
+        String formList = examWindowProperties.getFormList();
+        if (formList != null) {
+            if (formList.indexOf (':') > -1)
+                requireFormWindow = true;
+            else {
+                requireForm = true;
+                requireFormWindow = false;
+            }
+        } else if (tideId != null && formField != null) {
+            Optional<RtsStudentPackageAttribute> maybeAttribute = studentService.findRtsStudentPackageAttribute(
+                examWindowProperties.getClientName(),
+                examWindowProperties.getStudentId(),
+                formField);
+
+            if(maybeAttribute.isPresent()) {
+                formList = maybeAttribute.get().getValue();
+            }
+        }
+
+        //Key is a the form key and the value is the list of window ids associated with the form key
+        Map<String, List<String>> studentPackageForms = new HashMap<>();
+
+        //Lines 3753 - 3781 in StudentDLL._GetTesteeTestForms_SP
+        String[] forms = formList.split(";");
+        for (String formValue : forms) {
+            String wid;
+            String form;
+
+            int idx;
+            if ((idx = formValue.indexOf (":")) > -1) {// i.e. found
+                wid = formValue.substring (0, idx);
+                form = formValue.substring (idx + 1);
+            } else {
+                form = formValue;
+                wid = null;
+            }
+
+            if(!studentPackageForms.containsKey(form)) {
+                studentPackageForms.put(form, new ArrayList<>());
+            }
+
+            if (wid != null) {
+                studentPackageForms.get(form).add(wid);
+            }
+        }
+
+        //Lines 2786 - 2815 in StudentDLL._GetTesteeTestForms_SP
+        if(requireFormWindow) {
+            for (ExamFormWindow formWindow : formWindows) {
+                String formKey = formWindow.getFormKey();
+                if (studentPackageForms.containsKey(formKey) &&
+                    studentPackageForms.get(formKey).contains(formWindow.getWindowId())) {
+
+                    return Optional.of(convert(formWindow));
+                }
+            }
+        } else if (requireForm || (ifExists && !studentPackageForms.isEmpty())) {
+            for (ExamFormWindow formWindow : formWindows) {
+                String formKey = formWindow.getFormKey();
+                if (studentPackageForms.containsKey(formKey)) {
+                    return Optional.of(convert(formWindow));
+                }
+            }
+        } else {
+            return Optional.of(convert(formWindows.get(0)));
+        }
 
         return Optional.empty();
     }
@@ -132,16 +215,29 @@ public class ConfigServiceImpl implements ConfigService {
         String[] windowNames = windowList.split(";");
         List<Map<String, String>> windows = new ArrayList<>();
         for (String windowName : windowNames) {
-            String likeRec1 = String.format ("%s:", tideId);
+            String likeRec1 = String.format("%s:", tideId);
             Map<String, String> record = new HashMap<>();
             int idx;
-            if (windowName.startsWith (likeRec1) && (idx = windowName.indexOf (':')) != -1) {
-                String win = windowName.substring (idx + 1);
-                record.put ("win", win);
+            if (windowName.startsWith(likeRec1) && (idx = windowName.indexOf(':')) != -1) {
+                String win = windowName.substring(idx + 1);
+                record.put("win", win);
                 windows.add(record);
             }
         }
 
         return windows;
+    }
+
+    private CurrentExamWindow convert(ExamFormWindow formWindow) {
+        return new CurrentExamWindow.Builder()
+            .withWindowId(formWindow.getWindowId())
+            .withWindowMaxAttempts(formWindow.getWindowMax())
+            .withStartTime(formWindow.getStartDate())
+            .withEndTime(formWindow.getEndDate())
+            .withFormKey(formWindow.getFormKey())
+            .withMode(formWindow.getMode())
+            //TODO - look into assessment id instead of test key
+            .withAssessmentId(formWindow.getAssessmentKey())
+            .build();
     }
 }
