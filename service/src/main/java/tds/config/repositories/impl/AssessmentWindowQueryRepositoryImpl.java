@@ -106,8 +106,8 @@ class AssessmentWindowQueryRepositoryImpl implements AssessmentWindowQueryReposi
             "   windowID, \n" +
             "   W.numopps AS windowMax, \n" +
             "   M.maxopps AS modeMax, \n" +
-            "   CASE WHEN W.startDate IS NULL THEN NOW() ELSE (W.startDate + INTERVAL :shiftWindowsStart DAY) END AS startDate,\n" +
-            "   CASE WHEN W.endDate IS NULL THEN NOW() ELSE (W.endDate + INTERVAL :shiftWindowsEnd DAY) END  AS endDate,\n" +
+            "   CASE WHEN W.startDate IS NULL THEN NOW() ELSE (W.startDate + INTERVAL :shiftWindowStart DAY) END AS startDate,\n" +
+            "   CASE WHEN W.endDate IS NULL THEN NOW() ELSE (W.endDate + INTERVAL :shiftWindowEnd DAY) END  AS endDate,\n" +
             "   CASE WHEN F.startDate IS NULL THEN NOW() ELSE ( F.startdate + INTERVAL :shiftFormStart DAY) END AS formStart,\n" +
             "   CASE WHEN F.enddate IS NULL THEN NOW() ELSE (F.enddate + INTERVAL :shiftFormEnd DAY ) END AS formEnd,\n" +
             "   _efk_TestForm AS formKey, \n" +
