@@ -7,7 +7,7 @@
 # ===========
 # This docker-compose file expects the following:
 #
-#   * The sbacoss/tds-config-service is already built.  Typically, the sbacoss/tds-config-service image is built as part
+#   * The fwsbac/tds-config-service is already built.  Typically, the fwsbac/tds-config-service image is built as part
 #     of the Maven build process.  The following command is used to build the .jars and the associated Docker image:
 #
 #       mvn clean package docker:build -f /path/to/service/pom.xml
@@ -29,7 +29,7 @@
 version: '2'
 services:
   config:
-    image: sbacoss/tds-config-service
+    image: fwsbac/tds-config-service
     ports:
       - "32843:8080"
     env_file: config-service.env
