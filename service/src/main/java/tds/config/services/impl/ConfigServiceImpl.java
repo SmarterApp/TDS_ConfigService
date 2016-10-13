@@ -20,9 +20,9 @@ import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
 import tds.config.model.AssessmentProperties;
 import tds.config.model.ExamWindowProperties;
+import tds.config.repositories.AssessmentWindowQueryRepository;
 import tds.config.repositories.ClientTestPropertyQueryRepository;
 import tds.config.repositories.ConfigRepository;
-import tds.config.repositories.ExamWindowQueryRepository;
 import tds.config.services.ConfigService;
 import tds.config.services.StudentService;
 import tds.student.RtsStudentPackageAttribute;
@@ -31,17 +31,17 @@ import tds.student.RtsStudentPackageAttribute;
 public class ConfigServiceImpl implements ConfigService {
     private final ConfigRepository configRepository;
     private final ClientTestPropertyQueryRepository clientTestPropertyQueryRepository;
-    private final ExamWindowQueryRepository examWindowQueryRepository;
+    private final AssessmentWindowQueryRepository assessmentWindowQueryRepository;
     private final StudentService studentService;
 
     @Autowired
     public ConfigServiceImpl(ConfigRepository configRepository,
                              ClientTestPropertyQueryRepository clientTestPropertyQueryRepository,
-                             ExamWindowQueryRepository examWindowQueryRepository,
+                             AssessmentWindowQueryRepository assessmentWindowQueryRepository,
                              StudentService studentService) {
         this.configRepository = configRepository;
         this.clientTestPropertyQueryRepository = clientTestPropertyQueryRepository;
-        this.examWindowQueryRepository = examWindowQueryRepository;
+        this.assessmentWindowQueryRepository = assessmentWindowQueryRepository;
         this.studentService = studentService;
 
     }
@@ -68,7 +68,7 @@ public class ConfigServiceImpl implements ConfigService {
         String windowList = examWindowProperties.getWindowList();
 
         //Lines StudentDLL 5955 - 5975
-        List<AssessmentWindow> examFormWindows = examWindowQueryRepository.findCurrentExamFormWindows(clientName,
+        List<AssessmentWindow> examFormWindows = assessmentWindowQueryRepository.findCurrentAssessmentFormWindows(clientName,
             assessmentId,
             examWindowProperties.getSessionType(),
             examWindowProperties.getShiftWindowStart(),
@@ -84,7 +84,7 @@ public class ConfigServiceImpl implements ConfigService {
         }
 
         //Lines 5871-5880 StudentDLL._GetTestteeTestWindows_SP()
-        List<AssessmentWindow> assessmentWindows = examWindowQueryRepository.findCurrentExamWindows(clientName,
+        List<AssessmentWindow> assessmentWindows = assessmentWindowQueryRepository.findCurrentAssessmentWindows(clientName,
             assessmentId,
             examWindowProperties.getShiftWindowStart(),
             examWindowProperties.getShiftWindowEnd(),
@@ -147,7 +147,7 @@ public class ConfigServiceImpl implements ConfigService {
         boolean requireFormWindow = false, requireForm = false, ifExists = false;
 
         //Lines 3712 - 3730 in StudentDLL._GetTesteeTestForms_SP
-        Optional<AssessmentProperties> maybeAssessmentProperties = examWindowQueryRepository.findExamFormWindowProperties(examWindowProperties.getClientName(), examWindowProperties.getAssessmentId(), examWindowProperties.getSessionType());
+        Optional<AssessmentProperties> maybeAssessmentProperties = assessmentWindowQueryRepository.findAssessmentFormWindowProperties(examWindowProperties.getClientName(), examWindowProperties.getAssessmentId(), examWindowProperties.getSessionType());
 
         if (maybeAssessmentProperties.isPresent()) {
             AssessmentProperties properties = maybeAssessmentProperties.get();

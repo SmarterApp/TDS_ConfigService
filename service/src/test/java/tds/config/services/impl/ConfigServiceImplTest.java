@@ -17,9 +17,9 @@ import tds.config.AssessmentWindow;
 import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
 import tds.config.model.ExamWindowProperties;
+import tds.config.repositories.AssessmentWindowQueryRepository;
 import tds.config.repositories.ClientTestPropertyQueryRepository;
 import tds.config.repositories.ConfigRepository;
-import tds.config.repositories.ExamWindowQueryRepository;
 import tds.config.services.ConfigService;
 import tds.config.services.StudentService;
 import tds.student.RtsStudentPackageAttribute;
@@ -41,10 +41,10 @@ public class ConfigServiceImplTest {
     private ClientTestPropertyQueryRepository mockClientTestPropertyQueryRepository;
 
     @Mock
-    private ExamWindowQueryRepository mockExamWindowQueryRepository;
+    private AssessmentWindowQueryRepository mockAssessmentWindowQueryRepository;
 
     @Mock
-    private ExamWindowQueryRepository mockExamQueryRepository;
+    private AssessmentWindowQueryRepository mockExamQueryRepository;
 
     @Mock
     private StudentService mockStudentService;
@@ -54,7 +54,7 @@ public class ConfigServiceImplTest {
         configService = new ConfigServiceImpl(
             mockConfigRepository,
             mockClientTestPropertyQueryRepository,
-            mockExamWindowQueryRepository,
+            mockAssessmentWindowQueryRepository,
             mockStudentService
         );
     }
@@ -136,7 +136,7 @@ public class ConfigServiceImplTest {
     @Test
     public void shouldReturnEmptyWindowWhenNoResultsAreFoundForGuest() {
         ExamWindowProperties properties = new ExamWindowProperties.Builder(-1, "test", "assessment", 0).build();
-        when(mockExamWindowQueryRepository.findCurrentExamWindows("test", "assessment", 0, 0, 0)).thenReturn(Collections.emptyList());
+        when(mockAssessmentWindowQueryRepository.findCurrentAssessmentWindows("test", "assessment", 0, 0, 0)).thenReturn(Collections.emptyList());
         assertThat(configService.getExamWindow(properties)).isEmpty();
     }
 
@@ -145,9 +145,9 @@ public class ConfigServiceImplTest {
         AssessmentWindow window = new AssessmentWindow.Builder().withWindowId("id").build();
         ExamWindowProperties properties = new ExamWindowProperties.Builder(-1, "test", "assessment", 0).build();
 
-        when(mockExamWindowQueryRepository.findCurrentExamWindows("test", "assessment", 0, 0, 0)).thenReturn(Collections.singletonList(window));
+        when(mockAssessmentWindowQueryRepository.findCurrentAssessmentWindows("test", "assessment", 0, 0, 0)).thenReturn(Collections.singletonList(window));
         assertThat(configService.getExamWindow(properties).get(0)).isEqualTo(window);
-        verify(mockExamWindowQueryRepository).findCurrentExamWindows("test", "assessment", 0, 0, 0);
+        verify(mockAssessmentWindowQueryRepository).findCurrentAssessmentWindows("test", "assessment", 0, 0, 0);
     }
 
     @Test
@@ -162,7 +162,7 @@ public class ConfigServiceImplTest {
 
         RtsStudentPackageAttribute rtsStudentPackageAttribute = new RtsStudentPackageAttribute("windowField", "tide:id;tide:id4");
 
-        when(mockExamWindowQueryRepository.findCurrentExamWindows("SBAC_PT", "SBAC-Mathematics-8", 0, 0, 0)).thenReturn(Arrays.asList(window, window2, window3, window4));
+        when(mockAssessmentWindowQueryRepository.findCurrentAssessmentWindows("SBAC_PT", "SBAC-Mathematics-8", 0, 0, 0)).thenReturn(Arrays.asList(window, window2, window3, window4));
         when(mockClientTestPropertyQueryRepository.findClientTestProperty("SBAC_PT", "SBAC-Mathematics-8")).thenReturn(Optional.of(property));
         when(mockStudentService.findRtsStudentPackageAttribute("SBAC_PT", 23, "windowField")).thenReturn(Optional.of(rtsStudentPackageAttribute));
         List<AssessmentWindow> windows = configService.getExamWindow(properties);
@@ -184,7 +184,7 @@ public class ConfigServiceImplTest {
 
         ClientTestProperty property = new ClientTestProperty.Builder().withTideId("tide").withRtsWindowField("windowField").build();
 
-        when(mockExamWindowQueryRepository.findCurrentExamWindows("SBAC_PT", "SBAC-Mathematics-8", 0, 0, 0)).thenReturn(Arrays.asList(window, window2, window3, window4));
+        when(mockAssessmentWindowQueryRepository.findCurrentAssessmentWindows("SBAC_PT", "SBAC-Mathematics-8", 0, 0, 0)).thenReturn(Arrays.asList(window, window2, window3, window4));
         when(mockClientTestPropertyQueryRepository.findClientTestProperty("SBAC_PT", "SBAC-Mathematics-8")).thenReturn(Optional.of(property));
 
         List<AssessmentWindow> windows = configService.getExamWindow(properties);
@@ -205,7 +205,7 @@ public class ConfigServiceImplTest {
         ExamWindowProperties properties = new ExamWindowProperties.Builder(23, "SBAC_PT", "SBAC-Mathematics-8", 0).build();
         ClientTestProperty property = new ClientTestProperty.Builder().withTideId("tide").build();
 
-        when(mockExamWindowQueryRepository.findCurrentExamWindows("SBAC_PT", "SBAC-Mathematics-8", 0, 0, 0)).thenReturn(Arrays.asList(window, window2, window3, window4));
+        when(mockAssessmentWindowQueryRepository.findCurrentAssessmentWindows("SBAC_PT", "SBAC-Mathematics-8", 0, 0, 0)).thenReturn(Arrays.asList(window, window2, window3, window4));
         when(mockClientTestPropertyQueryRepository.findClientTestProperty("SBAC_PT", "SBAC-Mathematics-8")).thenReturn(Optional.of(property));
         List<AssessmentWindow> windows = configService.getExamWindow(properties);
 
@@ -225,7 +225,7 @@ public class ConfigServiceImplTest {
 
         RtsStudentPackageAttribute rtsStudentPackageAttribute = new RtsStudentPackageAttribute("windowField", "tide:id;tide:id4");
 
-        when(mockExamWindowQueryRepository.findCurrentExamWindows("SBAC_PT", "SBAC-Mathematics-8", 0, 0, 0)).thenReturn(Arrays.asList(window, window2, window3, window4));
+        when(mockAssessmentWindowQueryRepository.findCurrentAssessmentWindows("SBAC_PT", "SBAC-Mathematics-8", 0, 0, 0)).thenReturn(Arrays.asList(window, window2, window3, window4));
         when(mockClientTestPropertyQueryRepository.findClientTestProperty("SBAC_PT", "SBAC-Mathematics-8")).thenReturn(Optional.of(property));
         when(mockStudentService.findRtsStudentPackageAttribute("SBAC_PT", 23, "windowField")).thenReturn(Optional.of(rtsStudentPackageAttribute));
         List<AssessmentWindow> windows = configService.getExamWindow(properties);

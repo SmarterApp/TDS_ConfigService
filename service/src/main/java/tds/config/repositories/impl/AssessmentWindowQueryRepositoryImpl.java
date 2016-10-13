@@ -16,22 +16,22 @@ import java.util.Optional;
 import tds.common.data.mapping.ResultSetMapperUtility;
 import tds.config.AssessmentWindow;
 import tds.config.model.AssessmentProperties;
-import tds.config.repositories.ExamWindowQueryRepository;
+import tds.config.repositories.AssessmentWindowQueryRepository;
 
 import static tds.common.data.mapping.ResultSetMapperUtility.mapTimeStampToInstant;
 
 @Repository
-class ExamWindowQueryRepositoryImpl implements ExamWindowQueryRepository {
-    private static final Logger LOG = LoggerFactory.getLogger(ExamWindowQueryRepositoryImpl.class);
+class AssessmentWindowQueryRepositoryImpl implements AssessmentWindowQueryRepository {
+    private static final Logger LOG = LoggerFactory.getLogger(AssessmentWindowQueryRepositoryImpl.class);
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
-    public ExamWindowQueryRepositoryImpl(final DataSource dataSource) {
+    public AssessmentWindowQueryRepositoryImpl(final DataSource dataSource) {
         jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
     @Override
-    public List<AssessmentWindow> findCurrentExamWindows(String clientName, String assessmentId, int shiftWindowStart, int shiftWindowEnd, int sessionType) {
+    public List<AssessmentWindow> findCurrentAssessmentWindows(String clientName, String assessmentId, int shiftWindowStart, int shiftWindowEnd, int sessionType) {
         final MapSqlParameterSource parameters = new MapSqlParameterSource("clientName", clientName)
             .addValue("assessmentId", assessmentId)
             .addValue("sessionType", sessionType)
@@ -93,7 +93,7 @@ class ExamWindowQueryRepositoryImpl implements ExamWindowQueryRepository {
     }
 
     @Override
-    public List<AssessmentWindow> findCurrentExamFormWindows(String clientName, String assessmentId, int sessionType, int shiftWindowStart, int shiftWindowEnd, int shiftFormStart, int shiftFormEnd) {
+    public List<AssessmentWindow> findCurrentAssessmentFormWindows(String clientName, String assessmentId, int sessionType, int shiftWindowStart, int shiftWindowEnd, int shiftFormStart, int shiftFormEnd) {
         final MapSqlParameterSource parameters = new MapSqlParameterSource("clientName", clientName)
             .addValue("assessmentId", assessmentId)
             .addValue("sessionType", sessionType)
@@ -188,7 +188,7 @@ class ExamWindowQueryRepositoryImpl implements ExamWindowQueryRepository {
     }
 
     @Override
-    public Optional<AssessmentProperties> findExamFormWindowProperties(String clientName, String assessmentId, int sessionType) {
+    public Optional<AssessmentProperties> findAssessmentFormWindowProperties(String clientName, String assessmentId, int sessionType) {
         final MapSqlParameterSource parameters = new MapSqlParameterSource("clientName", clientName)
             .addValue("sessionType", sessionType)
             .addValue("assessmentId", assessmentId);
