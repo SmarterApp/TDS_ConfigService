@@ -6,11 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.List;
 import java.util.Optional;
 
 import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
-import tds.config.model.CurrentExamWindow;
+import tds.config.model.AssessmentWindow;
 import tds.config.model.ExamWindowProperties;
 import tds.config.services.ConfigService;
 
@@ -104,24 +105,23 @@ public class ConfigServiceImplIntegrationTests {
             .withWindowList("")
             .withFormList("")
             .build();
-        assertThat(configService.getExamWindow(properties)).isNotPresent();
+        assertThat(configService.getExamWindow(properties)).isEmpty();
     }
 
     @Test
     public void shouldReturnEmptyWindowWhenNotFound() {
         ExamWindowProperties properties = new ExamWindowProperties.Builder(-1, "clientName", "assessment", 0).build();
-        Optional<CurrentExamWindow> maybeWindow = configService.getExamWindow(properties);
-        assertThat(maybeWindow).isEmpty();
+        assertThat(configService.getExamWindow(properties)).isEmpty();
     }
 
     @Test
     public void shouldReturnWindowWhenFound() {
         ExamWindowProperties properties = new ExamWindowProperties.Builder(-1, "SBAC_PT", "SBAC-IRP-CAT-ELA-11", 0).build();
 
-        Optional<CurrentExamWindow> maybeWindow = configService.getExamWindow(properties);
-        assertThat(maybeWindow).isPresent();
+        List<AssessmentWindow> windows = configService.getExamWindow(properties);
+        assertThat(windows).isNotEmpty();
 
-        CurrentExamWindow window = maybeWindow.get();
+        AssessmentWindow window = windows.get(0);
         assertThat(window.getMode()).isEqualTo("online");
         assertThat(window.getWindowId()).isEqualTo("ANNUAL");
         assertThat(window.getModeMaxAttempts()).isEqualTo(999);

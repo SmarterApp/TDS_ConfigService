@@ -8,14 +8,14 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
-import tds.config.model.CurrentExamWindow;
+import tds.config.model.AssessmentWindow;
 import tds.config.model.ExamWindowProperties;
-import tds.config.repositories.ClientTestFormPropertiesQueryRepository;
 import tds.config.repositories.ClientTestPropertyQueryRepository;
 import tds.config.repositories.ConfigRepository;
 import tds.config.repositories.ExamWindowQueryRepository;
@@ -41,9 +41,6 @@ public class ConfigServiceImplTest {
     private ExamWindowQueryRepository mockExamWindowQueryRepository;
 
     @Mock
-    private ClientTestFormPropertiesQueryRepository mockClientTestFormPropertiesRepository;
-
-    @Mock
     private ExamWindowQueryRepository mockExamQueryRepository;
 
     @Mock
@@ -55,7 +52,6 @@ public class ConfigServiceImplTest {
             mockConfigRepository,
             mockClientTestPropertyQueryRepository,
             mockExamWindowQueryRepository,
-            mockClientTestFormPropertiesRepository,
             mockStudentService
         );
     }
@@ -137,18 +133,18 @@ public class ConfigServiceImplTest {
     @Test
     public void shouldReturnEmptyWindowWhenNoResultsAreFoundForGuest() {
         ExamWindowProperties properties = new ExamWindowProperties.Builder(-1, "test", "assessment", 0).build();
-        when(mockExamWindowQueryRepository.findCurrentTestWindowsForGuest("test", "assessment", 0, 0)).thenReturn(Optional.empty());
-        assertThat(configService.getExamWindow(properties)).isNotPresent();
+        when(mockExamWindowQueryRepository.findCurrentExamWindows("test", "assessment", 0, 0, 0)).thenReturn(Collections.emptyList());
+        assertThat(configService.getExamWindow(properties)).isEmpty();
     }
 
     @Test
     public void shouldReturnWindowForGuestWhenFound() {
-        CurrentExamWindow window = new CurrentExamWindow.Builder().withWindowId("id").build();
+        AssessmentWindow window = new AssessmentWindow.Builder().withWindowId("id").build();
         ExamWindowProperties properties = new ExamWindowProperties.Builder(-1, "test", "assessment", 0).build();
 
-        when(mockExamWindowQueryRepository.findCurrentTestWindowsForGuest("test", "assessment", 0, 0)).thenReturn(Optional.of(window));
-        assertThat(configService.getExamWindow(properties).get()).isEqualTo(window);
-        verify(mockExamWindowQueryRepository).findCurrentTestWindowsForGuest("test", "assessment", 0, 0);
+        when(mockExamWindowQueryRepository.findCurrentExamWindows("test", "assessment", 0, 0, 0)).thenReturn(Collections.singletonList(window));
+        assertThat(configService.getExamWindow(properties).get(0)).isEqualTo(window);
+        verify(mockExamWindowQueryRepository).findCurrentExamWindows("test", "assessment", 0, 0, 0);
     }
 
     private Optional<ClientTestProperty> getMockClientTestProperty() {

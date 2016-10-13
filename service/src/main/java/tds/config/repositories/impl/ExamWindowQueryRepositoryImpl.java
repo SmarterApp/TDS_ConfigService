@@ -4,21 +4,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import tds.common.data.mapping.ResultSetMapperUtility;
 import tds.config.model.AssessmentProperties;
-import tds.config.model.CurrentExamWindow;
-import tds.config.model.ExamFormWindow;
+import tds.config.model.AssessmentWindow;
 import tds.config.repositories.ExamWindowQueryRepository;
 
 import static tds.common.data.mapping.ResultSetMapperUtility.mapTimeStampToInstant;
@@ -34,9 +31,10 @@ class ExamWindowQueryRepositoryImpl implements ExamWindowQueryRepository {
     }
 
     @Override
-    public Optional<CurrentExamWindow> findCurrentTestWindowsForGuest(String clientName, String assessmentId, int shiftWindowStart, int shiftWindowEnd) {
+    public List<AssessmentWindow> findCurrentExamWindows(String clientName, String assessmentId, int shiftWindowStart, int shiftWindowEnd, int sessionType) {
         final MapSqlParameterSource parameters = new MapSqlParameterSource("clientName", clientName)
             .addValue("assessmentId", assessmentId)
+            .addValue("sessionType", sessionType)
             .addValue("shiftWindowStart", shiftWindowStart)
             .addValue("shiftWindowEnd", shiftWindowEnd);
 
@@ -69,13 +67,13 @@ class ExamWindowQueryRepositoryImpl implements ExamWindowQueryRepository {
             "        THEN NOW() \n" +
             "        ELSE ( W.endDate + INTERVAL :shiftWindowEnd DAY) \n" +
             "    END    \n" +
-            "AND (M.sessionType = -1 OR M.sessionType = 0) \n" +
-            "AND (W.sessionType = -1 OR W.sessionType = 0);";
+            "AND (M.sessionType = -1 OR M.sessionType = :sessionType) \n" +
+            "AND (W.sessionType = -1 OR W.sessionType = :sessionType);";
 
-        Optional<CurrentExamWindow> maybeCurrentExamWindow;
+        List<AssessmentWindow> assessmentWindows;
         try {
-            CurrentExamWindow cew = jdbcTemplate.queryForObject(SQL, parameters, (rs, rowNum) ->
-                new CurrentExamWindow.Builder()
+            assessmentWindows = jdbcTemplate.query(SQL, parameters, (rs, rowNum) ->
+                new AssessmentWindow.Builder()
                     .withWindowId(rs.getString("windowID"))
                     .withMode(rs.getString("mode"))
                     .withWindowMaxAttempts(rs.getInt("windowMax"))
@@ -87,17 +85,15 @@ class ExamWindowQueryRepositoryImpl implements ExamWindowQueryRepository {
                     .withModeSessionType(rs.getInt("modeSession"))
                     .build()
             );
-
-            maybeCurrentExamWindow = Optional.of(cew);
         } catch (EmptyResultDataAccessException erd) {
-            maybeCurrentExamWindow = Optional.empty();
+            assessmentWindows = Collections.emptyList();
         }
 
-        return maybeCurrentExamWindow;
+        return assessmentWindows;
     }
 
     @Override
-    public List<ExamFormWindow> findExamFormWindows(String clientName, String assessmentId, int sessionType, int shiftWindowStart, int shiftWindowEnd, int shiftFormStart, int shiftFormEnd) {
+    public List<AssessmentWindow> findCurrentExamFormWindows(String clientName, String assessmentId, int sessionType, int shiftWindowStart, int shiftWindowEnd, int shiftFormStart, int shiftFormEnd) {
         final MapSqlParameterSource parameters = new MapSqlParameterSource("clientName", clientName)
             .addValue("assessmentId", assessmentId)
             .addValue("sessionType", sessionType)
@@ -178,15 +174,15 @@ class ExamWindowQueryRepositoryImpl implements ExamWindowQueryRepository {
             ");";
 
 
-        return jdbcTemplate.query(SQL, parameters, (rs, rowNum) -> new ExamFormWindow.Builder(
-            rs.getString("windowId"),
-            rs.getString("testkey"),
-            rs.getString("formID"))
+        return jdbcTemplate.query(SQL, parameters, (rs, rowNum) -> new AssessmentWindow.Builder()
+            .withWindowId(rs.getString("windowId"))
+            .withAssessmentId(rs.getString("testkey"))
+            .withFormKey(rs.getString("formKey"))
             .withMode(rs.getString("mode"))
-            .withWindowMax(rs.getInt("windowMax"))
-            .withModeMax(rs.getInt("modeMax"))
-            .withStartDate(ResultSetMapperUtility.mapTimeStampToInstant(rs, "startDate"))
-            .withStartDate(ResultSetMapperUtility.mapTimeStampToInstant(rs, "endDate"))
+            .withWindowMaxAttempts(rs.getInt("windowMax"))
+            .withModeMaxAttempts(rs.getInt("modeMax"))
+            .withStartTime(ResultSetMapperUtility.mapTimeStampToInstant(rs, "startDate"))
+            .withEndTime(ResultSetMapperUtility.mapTimeStampToInstant(rs, "endDate"))
             .build()
         );
     }
@@ -215,18 +211,13 @@ class ExamWindowQueryRepositoryImpl implements ExamWindowQueryRepository {
         Optional<AssessmentProperties> maybeAssessmentProperties = Optional.empty();
 
         try {
-            final AssessmentProperties properties = jdbcTemplate.queryForObject(SQL, parameters, new RowMapper<AssessmentProperties>() {
-                @Override
-                public AssessmentProperties mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    return new AssessmentProperties(
-                        rs.getBoolean("requireForm"),
-                        rs.getBoolean("ifexists"),
-                        rs.getString("formField"),
-                        rs.getBoolean("requireFormWindow"),
-                        rs.getString("tideId")
-                    );
-                }
-            });
+            final AssessmentProperties properties = jdbcTemplate.queryForObject(SQL, parameters, (rs, rowNum) -> new AssessmentProperties(
+                rs.getBoolean("requireForm"),
+                rs.getBoolean("ifexists"),
+                rs.getString("formField"),
+                rs.getBoolean("requireFormWindow"),
+                rs.getString("tideId")
+            ));
 
             maybeAssessmentProperties = Optional.of(properties);
         } catch (EmptyResultDataAccessException e) {

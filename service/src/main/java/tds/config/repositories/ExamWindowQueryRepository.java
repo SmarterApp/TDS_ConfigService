@@ -4,13 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import tds.config.model.AssessmentProperties;
-import tds.config.model.CurrentExamWindow;
-import tds.config.model.ExamFormWindow;
+import tds.config.model.AssessmentWindow;
 
 public interface ExamWindowQueryRepository {
-    Optional<CurrentExamWindow> findCurrentTestWindowsForGuest(String clientName, String assessmentId, int shiftWindowStart, int shiftWindowEnd);
+    List<AssessmentWindow> findCurrentExamWindows(String clientName, String assessmentId, int shiftWindowStart, int shiftWindowEnd, int sessionType);
 
-    List<ExamFormWindow> findExamFormWindows(String clientName, String assessmentId, int sessionType, int shiftWindowStart, int shiftWindowEnd, int shiftFormStart, int shiftFormEnd);
+    List<AssessmentWindow> findCurrentExamFormWindows(String clientName, String assessmentId, int sessionType, int shiftWindowStart, int shiftWindowEnd, int shiftFormStart, int shiftFormEnd);
 
     Optional<AssessmentProperties> findExamFormWindowProperties(String clientName, String assessmentId, int sessionType);
 }

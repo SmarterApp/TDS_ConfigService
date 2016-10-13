@@ -2,7 +2,7 @@ package tds.config.model;
 
 import java.time.Instant;
 
-public class CurrentExamWindow {
+public class AssessmentWindow {
     private String windowId;
     private int windowMaxAttempts;
     private String mode;
@@ -14,7 +14,7 @@ public class CurrentExamWindow {
     private String formKey;
     private String assessmentId;
 
-    private CurrentExamWindow(CurrentExamWindow.Builder builder) {
+    private AssessmentWindow(AssessmentWindow.Builder builder) {
         windowId = builder.windowId;
         windowMaxAttempts = builder.windowMaxAttempts;
         mode = builder.mode;
@@ -30,7 +30,7 @@ public class CurrentExamWindow {
     /**
      * Empty constructor for frameworks
      */
-    private CurrentExamWindow(){}
+    private AssessmentWindow(){}
 
     public String getWindowId() {
         return windowId;
@@ -134,8 +134,8 @@ public class CurrentExamWindow {
             return this;
         }
 
-        public CurrentExamWindow build() {
-            return new CurrentExamWindow(this);
+        public AssessmentWindow build() {
+            return new AssessmentWindow(this);
         }
     }
 }

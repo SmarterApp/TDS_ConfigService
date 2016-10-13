@@ -1,10 +1,11 @@
 package tds.config.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
-import tds.config.model.CurrentExamWindow;
+import tds.config.model.AssessmentWindow;
 import tds.config.model.ExamWindowProperties;
 
 /**
@@ -35,5 +36,5 @@ public interface ConfigService {
      */
     Optional<ClientSystemFlag> findClientSystemFlag(String clientName, String auditObject);
 
-    Optional<CurrentExamWindow> getExamWindow(ExamWindowProperties examWindowProperties);
+    List<AssessmentWindow> getExamWindow(ExamWindowProperties examWindowProperties);
 }

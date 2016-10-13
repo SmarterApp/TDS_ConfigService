@@ -5,17 +5,21 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
 import tds.config.model.AssessmentProperties;
-import tds.config.model.CurrentExamWindow;
-import tds.config.model.ExamFormWindow;
+import tds.config.model.AssessmentWindow;
 import tds.config.model.ExamWindowProperties;
-import tds.config.repositories.ClientTestFormPropertiesQueryRepository;
 import tds.config.repositories.ClientTestPropertyQueryRepository;
 import tds.config.repositories.ConfigRepository;
 import tds.config.repositories.ExamWindowQueryRepository;
@@ -28,19 +32,16 @@ public class ConfigServiceImpl implements ConfigService {
     private final ConfigRepository configRepository;
     private final ClientTestPropertyQueryRepository clientTestPropertyQueryRepository;
     private final ExamWindowQueryRepository examWindowQueryRepository;
-    private final ClientTestFormPropertiesQueryRepository clientTestFormPropertiesQueryRepository;
     private final StudentService studentService;
 
     @Autowired
     public ConfigServiceImpl(ConfigRepository configRepository,
                              ClientTestPropertyQueryRepository clientTestPropertyQueryRepository,
                              ExamWindowQueryRepository examWindowQueryRepository,
-                             ClientTestFormPropertiesQueryRepository clientTestFormPropertiesQueryRepository,
                              StudentService studentService) {
         this.configRepository = configRepository;
         this.clientTestPropertyQueryRepository = clientTestPropertyQueryRepository;
         this.examWindowQueryRepository = examWindowQueryRepository;
-        this.clientTestFormPropertiesQueryRepository = clientTestFormPropertiesQueryRepository;
         this.studentService = studentService;
 
     }
@@ -60,36 +61,39 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
-    public Optional<CurrentExamWindow> getExamWindow(ExamWindowProperties examWindowProperties)  {
+    public List<AssessmentWindow> getExamWindow(ExamWindowProperties examWindowProperties)  {
         long studentId = examWindowProperties.getStudentId();
         String clientName = examWindowProperties.getClientName();
         String assessmentId = examWindowProperties.getAssessmentId();
         String windowList = examWindowProperties.getWindowList();
 
+        //Lines 5871-5880 StudentDLL._GetTestteeTestWindows_SP()
+        List<AssessmentWindow> assessmentWindows = examWindowQueryRepository.findCurrentExamWindows(clientName,
+            assessmentId,
+            examWindowProperties.getShiftWindowStart(),
+            examWindowProperties.getShiftWindowEnd(),
+            examWindowProperties.getSessionType());
+
         if (studentId < 0) {
-            //Lines 5871-5880 StudentDLL._GetTestteeTestWindows_SP()
-            return examWindowQueryRepository.findCurrentTestWindowsForGuest(clientName, assessmentId, examWindowProperties.getShiftWindowStart(), examWindowProperties.getShiftWindowEnd());
+            return assessmentWindows;
         }
 
         //Lines 5881-5893 StudentDLL._GetTestteeTestWindows_SP()
-        boolean requireWindow = false;
+        boolean requireWindow;
         String windowField = null;
         String tideId = null;
 
         Optional<ClientTestProperty> maybeClientTestPropertyProperties = clientTestPropertyQueryRepository.findClientTestProperty(clientName, assessmentId);
         if (maybeClientTestPropertyProperties.isPresent()) {
             ClientTestProperty clientTestProperty = maybeClientTestPropertyProperties.get();
-            requireWindow = clientTestProperty.getRequireRtsWindow();
             windowField = clientTestProperty.getRtsWindowField();
             tideId = clientTestProperty.getTideId();
         }
 
-        //Lines 5894-5898 StudentDLL._GetTestteeTestWindows_SP()
-        boolean isFormTest = clientTestFormPropertiesQueryRepository.findClientTestFormProperty(clientName, assessmentId).isPresent();
-
         //Lines 5908-5911 StudentDLL._GetTestteeTestWindows_SP()
         requireWindow = windowList != null || windowField != null;
 
+        Set<String> windowListIds = new HashSet<>();
         if (requireWindow) {
             if (windowList == null) {
                 Optional<RtsStudentPackageAttribute> maybeAttribute = studentService.findRtsStudentPackageAttribute(clientName, studentId, windowField);
@@ -98,14 +102,13 @@ public class ConfigServiceImpl implements ConfigService {
                 }
             }
 
-            List<Map<String, String>> windows = new ArrayList<>();
             if(tideId != null && windowList != null) {
-                windows = createWindowsList(windowList, tideId);
+                windowListIds = createWindowsSet(windowList, tideId);
             }
         }
 
         //Lines StudentDLL 5955 - 5975
-        List<ExamFormWindow> formWindows = examWindowQueryRepository.findExamFormWindows(clientName,
+        List<AssessmentWindow> examFormWindows = examWindowQueryRepository.findCurrentExamFormWindows(clientName,
             assessmentId,
             examWindowProperties.getSessionType(),
             examWindowProperties.getShiftWindowStart(),
@@ -114,27 +117,39 @@ public class ConfigServiceImpl implements ConfigService {
             examWindowProperties.getShiftFormEnd()
         );
 
-        if (!formWindows.isEmpty()) {
+        if (!examFormWindows.isEmpty()) {
             //Logic in StudentDLL lines 5963
             //The first call in the StudentDLL._GetTesteeTestForms_SP is to get the window for the guest which is duplication from earlier code
-
-            return findCurrentExamWindowFromFormWindows(examWindowProperties, formWindows);
+            return findCurrentExamWindowFromFormWindows(examWindowProperties, examFormWindows);
         }
 
+        //Lines 5989 - 6011 in StudentDLL._GetTesteeTestWindows_SP - Comments below from original code
+        //NOT A FIXED FORM TEST. Determine if the WINDOW has been assigned to the student
+        //test windows are recorded by TIDE_ID (in lieu of testID), which is not necessarily unique.
+        if (requireWindow) {
+            //Lines 5989 - 5999 in StudentDLL._GetTesteeTestWindows_SP
+            final Set<String> windowIdJoinSet = windowListIds;
+            return assessmentWindows.stream().filter(assessmentWindow ->
+                windowIdJoinSet.contains(assessmentWindow.getWindowId()))
+                .filter(assessmentWindow -> false)
+                .collect(Collectors.toList());
+        }
 
-
-        return Optional.empty();
+        //Lines 6001-6011 in StudentDLL._GetTesteeTestWindows_SP
+        return assessmentWindows.stream()
+            .filter(distinctByKey(AssessmentWindow::getWindowId))
+            .collect(Collectors.toList());
     }
 
-    private Optional<CurrentExamWindow> findCurrentExamWindowFromFormWindows(ExamWindowProperties examWindowProperties, List<ExamFormWindow> formWindows) {
+    private List<AssessmentWindow> findCurrentExamWindowFromFormWindows(ExamWindowProperties examWindowProperties, List<AssessmentWindow> formWindows) {
         String tideId = null, formField = null;
         boolean requireFormWindow = false, requireForm = false, ifExists = false;
 
         //Lines 3712 - 3730 in StudentDLL._GetTesteeTestForms_SP
-        Optional<AssessmentProperties> maybeAsessmentProperties = examWindowQueryRepository.findExamFormWindowProperties(examWindowProperties.getClientName(), examWindowProperties.getAssessmentId(), examWindowProperties.getSessionType());
+        Optional<AssessmentProperties> maybeAssessmentProperties = examWindowQueryRepository.findExamFormWindowProperties(examWindowProperties.getClientName(), examWindowProperties.getAssessmentId(), examWindowProperties.getSessionType());
 
-        if (maybeAsessmentProperties.isPresent()) {
-            AssessmentProperties properties = maybeAsessmentProperties.get();
+        if (maybeAssessmentProperties.isPresent()) {
+            AssessmentProperties properties = maybeAssessmentProperties.get();
             tideId = properties.getTideId();
             formField = properties.getFormField();
             ifExists = properties.isRequireIfFormExists();
@@ -162,6 +177,7 @@ public class ConfigServiceImpl implements ConfigService {
         //Key is a the form key and the value is the list of window ids associated with the form key
         Map<String, List<String>> studentPackageForms = new HashMap<>();
 
+        //TODO - review this logic
         //Lines 3753 - 3781 in StudentDLL._GetTesteeTestForms_SP
         String[] forms = formList.split(";");
         for (String formValue : forms) {
@@ -188,56 +204,40 @@ public class ConfigServiceImpl implements ConfigService {
 
         //Lines 2786 - 2815 in StudentDLL._GetTesteeTestForms_SP
         if(requireFormWindow) {
-            for (ExamFormWindow formWindow : formWindows) {
-                String formKey = formWindow.getFormKey();
-                if (studentPackageForms.containsKey(formKey) &&
-                    studentPackageForms.get(formKey).contains(formWindow.getWindowId())) {
-
-                    return Optional.of(convert(formWindow));
-                }
-            }
+            return formWindows.stream().filter(assessmentWindow -> {
+                String formKey = assessmentWindow.getFormKey();
+                return studentPackageForms.containsKey(formKey) &&
+                studentPackageForms.get(formKey).contains(assessmentWindow.getWindowId());
+            }).filter(distinctByKey(AssessmentWindow::getWindowId)).collect(Collectors.toList());
         } else if (requireForm || (ifExists && !studentPackageForms.isEmpty())) {
-            for (ExamFormWindow formWindow : formWindows) {
-                String formKey = formWindow.getFormKey();
-                if (studentPackageForms.containsKey(formKey)) {
-                    return Optional.of(convert(formWindow));
-                }
-            }
-        } else {
-            return Optional.of(convert(formWindows.get(0)));
+            return formWindows.stream().filter(assessmentWindow ->
+                studentPackageForms.containsKey(assessmentWindow.getFormKey()))
+                .filter(distinctByKey(AssessmentWindow::getWindowId))
+                .collect(Collectors.toList());
         }
 
-        return Optional.empty();
+        return formWindows.stream()
+            .filter(distinctByKey(AssessmentWindow::getWindowId))
+            .collect(Collectors.toList());
     }
 
     //StudentDLL._GetTesteeTestWindows_SP Lines 5926 - 5951
-    private List<Map<String, String>> createWindowsList(String windowList, String tideId) {
+    private Set<String> createWindowsSet(String windowList, String tideId) {
         String[] windowNames = windowList.split(";");
-        List<Map<String, String>> windows = new ArrayList<>();
+        Set<String> windows = new HashSet<>();
         for (String windowName : windowNames) {
-            String likeRec1 = String.format("%s:", tideId);
-            Map<String, String> record = new HashMap<>();
+            String tideIdFormat = String.format("%s:", tideId);
             int idx;
-            if (windowName.startsWith(likeRec1) && (idx = windowName.indexOf(':')) != -1) {
-                String win = windowName.substring(idx + 1);
-                record.put("win", win);
-                windows.add(record);
+            if (windowName.startsWith(tideIdFormat) && (idx = windowName.indexOf(':')) != -1) {
+                windows.add(windowName.substring(idx + 1));
             }
         }
 
         return windows;
     }
 
-    private CurrentExamWindow convert(ExamFormWindow formWindow) {
-        return new CurrentExamWindow.Builder()
-            .withWindowId(formWindow.getWindowId())
-            .withWindowMaxAttempts(formWindow.getWindowMax())
-            .withStartTime(formWindow.getStartDate())
-            .withEndTime(formWindow.getEndDate())
-            .withFormKey(formWindow.getFormKey())
-            .withMode(formWindow.getMode())
-            //TODO - look into assessment id instead of test key
-            .withAssessmentId(formWindow.getAssessmentKey())
-            .build();
+    private static <T> Predicate<T> distinctByKey(Function<? super T,Object> keyExtractor) {
+        Map<Object,Boolean> seen = new ConcurrentHashMap<>();
+        return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
 }
