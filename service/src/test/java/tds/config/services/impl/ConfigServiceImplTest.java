@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -21,9 +22,11 @@ import tds.config.repositories.ConfigRepository;
 import tds.config.repositories.ExamWindowQueryRepository;
 import tds.config.services.ConfigService;
 import tds.config.services.StudentService;
+import tds.student.RtsStudentPackageAttribute;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -145,6 +148,90 @@ public class ConfigServiceImplTest {
         when(mockExamWindowQueryRepository.findCurrentExamWindows("test", "assessment", 0, 0, 0)).thenReturn(Collections.singletonList(window));
         assertThat(configService.getExamWindow(properties).get(0)).isEqualTo(window);
         verify(mockExamWindowQueryRepository).findCurrentExamWindows("test", "assessment", 0, 0, 0);
+    }
+
+    @Test
+    public void shouldReturnDistinctWindowsForStudentPackageWindowListWhenWindowIsRequired() {
+        AssessmentWindow window = new AssessmentWindow.Builder().withWindowId("id").withAssessmentId("SBAC-Mathematics-8").build();
+        AssessmentWindow window2 = new AssessmentWindow.Builder().withWindowId("id").withAssessmentId("SBAC-Mathematics-8-2018").build();
+        AssessmentWindow window3 = new AssessmentWindow.Builder().withWindowId("id3").withAssessmentId("SBAC-Mathematics-8-2018").build();
+        AssessmentWindow window4 = new AssessmentWindow.Builder().withWindowId("id4").withAssessmentId("SBAC-Mathematics-3").build();
+
+        ExamWindowProperties properties = new ExamWindowProperties.Builder(23, "SBAC_PT", "SBAC-Mathematics-8", 0).build();
+        ClientTestProperty property = new ClientTestProperty.Builder().withTideId("tide").withRtsWindowField("windowField").build();
+
+        RtsStudentPackageAttribute rtsStudentPackageAttribute = new RtsStudentPackageAttribute("windowField", "tide:id;tide:id4");
+
+        when(mockExamWindowQueryRepository.findCurrentExamWindows("SBAC_PT", "SBAC-Mathematics-8", 0, 0, 0)).thenReturn(Arrays.asList(window, window2, window3, window4));
+        when(mockClientTestPropertyQueryRepository.findClientTestProperty("SBAC_PT", "SBAC-Mathematics-8")).thenReturn(Optional.of(property));
+        when(mockStudentService.findRtsStudentPackageAttribute("SBAC_PT", 23, "windowField")).thenReturn(Optional.of(rtsStudentPackageAttribute));
+        List<AssessmentWindow> windows = configService.getExamWindow(properties);
+
+        assertThat(windows).isNotEmpty();
+        assertThat(windows).containsExactly(window, window4);
+    }
+
+    @Test
+    public void shouldReturnDistinctWindowsForProvidedWindowListWhenWindowIsRequired() {
+        AssessmentWindow window = new AssessmentWindow.Builder().withWindowId("id").withAssessmentId("SBAC-Mathematics-8").build();
+        AssessmentWindow window2 = new AssessmentWindow.Builder().withWindowId("id").withAssessmentId("SBAC-Mathematics-8-2018").build();
+        AssessmentWindow window3 = new AssessmentWindow.Builder().withWindowId("id3").withAssessmentId("SBAC-Mathematics-8-2018").build();
+        AssessmentWindow window4 = new AssessmentWindow.Builder().withWindowId("id4").withAssessmentId("SBAC-Mathematics-3").build();
+
+        ExamWindowProperties properties = new ExamWindowProperties.Builder(23, "SBAC_PT", "SBAC-Mathematics-8", 0)
+            .withWindowList("tide:id;tide:id3")
+            .build();
+
+        ClientTestProperty property = new ClientTestProperty.Builder().withTideId("tide").withRtsWindowField("windowField").build();
+
+        when(mockExamWindowQueryRepository.findCurrentExamWindows("SBAC_PT", "SBAC-Mathematics-8", 0, 0, 0)).thenReturn(Arrays.asList(window, window2, window3, window4));
+        when(mockClientTestPropertyQueryRepository.findClientTestProperty("SBAC_PT", "SBAC-Mathematics-8")).thenReturn(Optional.of(property));
+
+        List<AssessmentWindow> windows = configService.getExamWindow(properties);
+
+        verifyZeroInteractions(mockStudentService);
+
+        assertThat(windows).isNotEmpty();
+        assertThat(windows).containsExactly(window, window3);
+    }
+
+    @Test
+    public void shouldReturnDistinctWindowsWhenWindowIsNotRequired() {
+        AssessmentWindow window = new AssessmentWindow.Builder().withWindowId("id").withAssessmentId("SBAC-Mathematics-8").build();
+        AssessmentWindow window2 = new AssessmentWindow.Builder().withWindowId("id").withAssessmentId("SBAC-Mathematics-8-2018").build();
+        AssessmentWindow window3 = new AssessmentWindow.Builder().withWindowId("id3").withAssessmentId("SBAC-Mathematics-8-2018").build();
+        AssessmentWindow window4 = new AssessmentWindow.Builder().withWindowId("id4").withAssessmentId("SBAC-Mathematics-3").build();
+
+        ExamWindowProperties properties = new ExamWindowProperties.Builder(23, "SBAC_PT", "SBAC-Mathematics-8", 0).build();
+        ClientTestProperty property = new ClientTestProperty.Builder().withTideId("tide").build();
+
+        when(mockExamWindowQueryRepository.findCurrentExamWindows("SBAC_PT", "SBAC-Mathematics-8", 0, 0, 0)).thenReturn(Arrays.asList(window, window2, window3, window4));
+        when(mockClientTestPropertyQueryRepository.findClientTestProperty("SBAC_PT", "SBAC-Mathematics-8")).thenReturn(Optional.of(property));
+        List<AssessmentWindow> windows = configService.getExamWindow(properties);
+
+        assertThat(windows).isNotEmpty();
+        assertThat(windows).containsExactly(window, window3, window4);
+    }
+
+    @Test
+    public void shouldReturnDistinctWindowsWhenTideIdIsNotProvided() {
+        AssessmentWindow window = new AssessmentWindow.Builder().withWindowId("id").withAssessmentId("SBAC-Mathematics-8").build();
+        AssessmentWindow window2 = new AssessmentWindow.Builder().withWindowId("id").withAssessmentId("SBAC-Mathematics-8-2018").build();
+        AssessmentWindow window3 = new AssessmentWindow.Builder().withWindowId("id3").withAssessmentId("SBAC-Mathematics-8-2018").build();
+        AssessmentWindow window4 = new AssessmentWindow.Builder().withWindowId("id4").withAssessmentId("SBAC-Mathematics-3").build();
+
+        ExamWindowProperties properties = new ExamWindowProperties.Builder(23, "SBAC_PT", "SBAC-Mathematics-8", 0).build();
+        ClientTestProperty property = new ClientTestProperty.Builder().withRtsWindowField("windowField").build();
+
+        RtsStudentPackageAttribute rtsStudentPackageAttribute = new RtsStudentPackageAttribute("windowField", "tide:id;tide:id4");
+
+        when(mockExamWindowQueryRepository.findCurrentExamWindows("SBAC_PT", "SBAC-Mathematics-8", 0, 0, 0)).thenReturn(Arrays.asList(window, window2, window3, window4));
+        when(mockClientTestPropertyQueryRepository.findClientTestProperty("SBAC_PT", "SBAC-Mathematics-8")).thenReturn(Optional.of(property));
+        when(mockStudentService.findRtsStudentPackageAttribute("SBAC_PT", 23, "windowField")).thenReturn(Optional.of(rtsStudentPackageAttribute));
+        List<AssessmentWindow> windows = configService.getExamWindow(properties);
+
+        assertThat(windows).isNotEmpty();
+        assertThat(windows).containsExactly(window, window3, window4);
     }
 
     private Optional<ClientTestProperty> getMockClientTestProperty() {
