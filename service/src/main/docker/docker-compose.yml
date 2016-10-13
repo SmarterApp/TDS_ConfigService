@@ -1,7 +1,7 @@
 #-----------------------------------------------------------------------------------------------------------------------
 # File:  docker-compose.yml
 #
-# Desc:  Create a Docker container that hosts the Config Support Service listening on 23571.
+# Desc:  Create a Docker container that hosts the Config Support Service listening on 32843.
 #
 # Usage Notes
 # ===========
@@ -15,12 +15,12 @@
 #   * An enivronment file named config-service.env exists in the same directory as this docker-compose file.  The
 #     following environment variables should be configured:
 #
-#       CONFIGS_DB_HOST=IP address or FQDN of the MySQL database server that hosts the TDS configs and session databases
-#       CONFIGS_DB_PORT=The port on which the MySQL database server listens
-#       CONFIGS_DB_NAME=The name of the TDS configs database (typically "configs")
-#       CONFIGS_DB_USER=The MySQL user account with sufficient privileges to read from the configs and session
+#       CONFIG_DB_HOST=IP address or FQDN of the MySQL database server that hosts the TDS configs and session databases
+#       CONFIG_DB_PORT=The port on which the MySQL database server listens
+#       CONFIG_DB_NAME=The name of the TDS configs database (typically "configs")
+#       CONFIG_DB_USER=The MySQL user account with sufficient privileges to read from the configs and session
 #                       databases
-#       CONFIGS_DB_PASSWORD=The password for the MySQL user account
+#       CONFIG_DB_PASSWORD=The password for the MySQL user account
 #
 #     Due to the sensitive content contained within the config-service.env file, it is not (and should not be) checked
 #     into source control.
@@ -31,6 +31,5 @@ services:
   config:
     image: sbacoss/tds-config-service
     ports:
-      - "23571:8080"
-    env_file:
-      - ./config-service.env
+      - "32843:8080"
+    env_file: config-service.env
