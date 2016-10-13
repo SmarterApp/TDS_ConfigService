@@ -186,6 +186,7 @@ public class ClientTestProperty {
         this.abilityIntercept = builder.abilityIntercept;
         this.validateCompleteness = builder.validateCompleteness;
         this.gradeText = builder.gradeText;
+        this.rtsWindowField = builder.rtsWindowField;
     }
 
     /**
