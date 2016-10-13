@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Optional;
 
 import tds.common.data.mapping.ResultSetMapperUtility;
+import tds.config.AssessmentWindow;
 import tds.config.model.AssessmentProperties;
-import tds.config.model.AssessmentWindow;
 import tds.config.repositories.ExamWindowQueryRepository;
 
 import static tds.common.data.mapping.ResultSetMapperUtility.mapTimeStampToInstant;

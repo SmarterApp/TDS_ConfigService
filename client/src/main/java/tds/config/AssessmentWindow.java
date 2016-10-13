@@ -1,4 +1,4 @@
-package tds.config.model;
+package tds.config;
 
 import java.time.Instant;
 

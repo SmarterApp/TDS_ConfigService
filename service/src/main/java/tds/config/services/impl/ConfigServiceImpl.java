@@ -15,10 +15,10 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import tds.config.AssessmentWindow;
 import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
 import tds.config.model.AssessmentProperties;
-import tds.config.model.AssessmentWindow;
 import tds.config.model.ExamWindowProperties;
 import tds.config.repositories.ClientTestPropertyQueryRepository;
 import tds.config.repositories.ConfigRepository;

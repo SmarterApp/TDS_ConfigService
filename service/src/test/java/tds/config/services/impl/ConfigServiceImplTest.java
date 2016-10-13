@@ -13,9 +13,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import tds.config.AssessmentWindow;
 import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
-import tds.config.model.AssessmentWindow;
 import tds.config.model.ExamWindowProperties;
 import tds.config.repositories.ClientTestPropertyQueryRepository;
 import tds.config.repositories.ConfigRepository;
