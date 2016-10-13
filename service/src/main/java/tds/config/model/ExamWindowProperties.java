@@ -74,8 +74,8 @@ public class ExamWindowProperties {
         private int shiftWindowEnd = 0;
         private int shiftFormStart = 0;
         private int shiftFormEnd = 0;
-        private String windowList = "";
-        private String formList = "";
+        private String windowList;
+        private String formList;
 
         public Builder(long studentId, String clientName, String assessmentId, int sessionType) {
             this.studentId = studentId;
