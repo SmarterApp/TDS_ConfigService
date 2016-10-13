@@ -6,13 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.List;
 import java.util.Optional;
 
-import tds.config.AssessmentWindow;
 import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
-import tds.config.model.ExamWindowProperties;
 import tds.config.services.ConfigService;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -94,39 +91,5 @@ public class ConfigServiceImplIntegrationTests {
         Optional<ClientSystemFlag> result = configService.findClientSystemFlag(clientName, auditObject);
 
         assertThat(result.isPresent()).isFalse();
-    }
-
-    /*
-    Exam Window Tests
-     */
-    @Test
-    public void shouldReturnEmptyWindowWhenNoResultsAreFoundForGuest() {
-        ExamWindowProperties properties = new ExamWindowProperties.Builder(-1, "clientName", "assessment", 0)
-            .withWindowList("")
-            .withFormList("")
-            .build();
-        assertThat(configService.getExamWindow(properties)).isEmpty();
-    }
-
-    @Test
-    public void shouldReturnEmptyWindowWhenNotFound() {
-        ExamWindowProperties properties = new ExamWindowProperties.Builder(-1, "clientName", "assessment", 0).build();
-        assertThat(configService.getExamWindow(properties)).isEmpty();
-    }
-
-    @Test
-    public void shouldReturnWindowWhenFound() {
-        ExamWindowProperties properties = new ExamWindowProperties.Builder(-1, "SBAC_PT", "SBAC-IRP-CAT-ELA-11", 0).build();
-
-        List<AssessmentWindow> windows = configService.getExamWindow(properties);
-        assertThat(windows).isNotEmpty();
-
-        AssessmentWindow window = windows.get(0);
-        assertThat(window.getMode()).isEqualTo("online");
-        assertThat(window.getWindowId()).isEqualTo("ANNUAL");
-        assertThat(window.getModeMaxAttempts()).isEqualTo(999);
-        assertThat(window.getModeSessionType()).isEqualTo(0);
-        assertThat(window.getWindowMaxAttempts()).isEqualTo(999);
-        assertThat(window.getWindowSessionType()).isEqualTo(-1);
     }
 }
