@@ -1,103 +1,114 @@
 package tds.config.web.endpoints;
 
-import com.jayway.restassured.http.ContentType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import tds.config.ConfigServiceApplication;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import static com.jayway.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.*;
+import java.util.Optional;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = ConfigServiceApplication.class)
-@WebAppConfiguration
-@IntegrationTest("server.port:8080")
+import tds.config.ClientSystemFlag;
+import tds.config.ClientTestProperty;
+import tds.config.services.ConfigService;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@RunWith(SpringRunner.class)
+@WebMvcTest(ConfigController.class)
 public class ConfigEndpointIntegrationTests {
-    private static final String CONFIG_RESOURCE = "/config";
+    @Autowired
+    private MockMvc http;
 
-    @Test
-    public void shouldRespondToIsAlive() {
-        given()
-            .accept(ContentType.JSON)
-        .when()
-            .get("/isAlive")
-        .then()
-            .contentType(ContentType.JSON)
-            .statusCode(200);
-    }
+    @MockBean
+    private ConfigService mockConfigService;
 
     // -----------------------------------------------------------------------------------------------------------------
     // ClientSystemProperty Tests
     // -----------------------------------------------------------------------------------------------------------------
     @Test
-    public void shouldGetAClientTestProperty() {
+    public void shouldGetAClientTestProperty() throws Exception {
         final String clientName = "SBAC_PT";
         final String testId = "SBAC Math 3-MATH-3";
+        ClientTestProperty prop = new ClientTestProperty.Builder()
+            .withClientName(clientName)
+            .withAssessmentId(testId)
+            .withMaxOpportunities(3)
+            .build();
 
-        given()
-            .accept(ContentType.JSON)
-        .when()
-            .get(CONFIG_RESOURCE + "/client-test-properties/" + clientName + "/" + testId)
-        .then()
-            .contentType(ContentType.JSON)
-            .statusCode(200)
-            .body("clientTestProperty.clientName", equalTo(clientName))
-            .body("clientTestProperty.assessmentId", equalTo(testId))
-            .body("clientTestProperty.maxOpportunities", equalTo(3))
-            .body("_links.self.href", equalTo("http://localhost:8080/config/client-test-properties/SBAC_PT/SBAC%20Math%203-MATH-3"));
+        when(mockConfigService.findClientTestProperty(clientName, testId)).thenReturn(Optional.of(prop));
+
+        String requestUri = UriComponentsBuilder.fromUriString("/config/client-test-properties/" + clientName + "/" + testId)
+            .build()
+            .toUriString();
+
+        http.perform(get(requestUri)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("clientName", is(clientName)))
+            .andExpect(jsonPath("assessmentId", is(testId)))
+            .andExpect(jsonPath("maxOpportunities", is(3)));
     }
 
     @Test
-    public void shouldReturn404WhenGettingClientTestPropertyWithInvalidClientName() {
+    public void shouldReturn404WhenGettingClientTestPropertyWithInvalidClientName() throws Exception{
         final String clientName = "foo";
         final String testId = "SBAC Math 3-MATH-3";
 
-        given()
-            .accept(ContentType.JSON)
-        .when()
-            .get(CONFIG_RESOURCE + "/client-test-properties/" + clientName + "/" + testId)
-        .then()
-            .contentType(ContentType.JSON)
-            .statusCode(404);
+        when(mockConfigService.findClientTestProperty(clientName, testId)).thenReturn(Optional.empty());
+
+        String requestUri = UriComponentsBuilder.fromUriString("/config/client-test-properties/" + clientName + "/" + testId)
+            .build()
+            .toUriString();
+
+        http.perform(get(requestUri)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound());
     }
 
     // -----------------------------------------------------------------------------------------------------------------
     // ClientSystemFlag Tests
     // -----------------------------------------------------------------------------------------------------------------
     @Test
-    public void shouldGetAClientSystemFlag() {
+    public void shouldGetAClientSystemFlag() throws Exception {
         final String clientName = "SBAC_PT";
         final String auditObject = "accommodations";
 
-        given()
-            .accept(ContentType.JSON)
-        .when()
-            .get(CONFIG_RESOURCE + "/client-system-flags/" + clientName + "/" + auditObject)
-        .then()
-            .contentType(ContentType.JSON)
-            .statusCode(200)
-            .body("clientSystemFlag.clientName", equalTo(clientName))
-            .body("clientSystemFlag.auditObject", equalTo(auditObject))
-            .body("clientSystemFlag.isPracticeTest", equalTo(true))
-            .body("clientSystemFlag.isOn", equalTo(true))
-            .body("_links.self.href", equalTo("http://localhost:8080/config/client-system-flags/SBAC_PT/accommodations"));
+        ClientSystemFlag flag = new ClientSystemFlag.Builder()
+            .withAuditObject(auditObject)
+            .withClientName(clientName)
+            .withIsOn(true)
+            .withIsPracticeTest(true)
+            .build();
+
+        when(mockConfigService.findClientSystemFlag(clientName, auditObject)).thenReturn(Optional.of(flag));
+
+        http.perform(get("/config/client-system-flags/" + clientName + "/" + auditObject)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("clientName", is(clientName)))
+            .andExpect(jsonPath("auditObject", is(auditObject)))
+            .andExpect(jsonPath("isOn", is(true)))
+            .andExpect(jsonPath("isPracticeTest", is(true)));
     }
 
     @Test
-    public void shouldReturn404WhenGettingClientSystemFlagWithAnInvalidAuditObject() {
+    public void shouldReturn404WhenGettingClientSystemFlagWithAnInvalidAuditObject() throws Exception {
         final String clientName = "SBAC_PT";
-        final String auditObject = "foo";
+        final String auditObject = "accommodations";
 
-        given()
-            .accept(ContentType.JSON)
-        .when()
-            .get(CONFIG_RESOURCE + "/client-system-flags/" + clientName + "/" + auditObject)
-        .then()
-            .contentType(ContentType.JSON)
-            .statusCode(404);
+        when(mockConfigService.findClientSystemFlag(clientName, auditObject)).thenReturn(Optional.empty());
+
+        http.perform(get("/config/client-system-flags/" + clientName + "/" + auditObject)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound());
     }
 }

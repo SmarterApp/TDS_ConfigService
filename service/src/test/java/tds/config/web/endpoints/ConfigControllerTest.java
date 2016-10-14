@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
 import tds.common.web.exceptions.NotFoundException;
+import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
 import tds.config.services.ConfigService;
 
@@ -20,18 +21,51 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class ClientTestPropertyControllerTest {
-    private ClientTestPropertyController clientTestPropertyController;
+public class ConfigControllerTest {
+    private ConfigController configController;
     private ConfigService mockConfigService;
 
     @Before
-    public void setUp() {
+    public void Setup() {
         HttpServletRequest request = new MockHttpServletRequest();
         ServletRequestAttributes requestAttributes = new ServletRequestAttributes(request);
         RequestContextHolder.setRequestAttributes(requestAttributes);
 
         mockConfigService = mock(ConfigService.class);
-        clientTestPropertyController = new ClientTestPropertyController(mockConfigService);
+        configController = new ConfigController(mockConfigService);
+    }
+
+    @Test
+    public void shouldGetClientSystemFlag() {
+        String clientName = "UNIT_TEST";
+        String auditObject = "unit test";
+        ClientSystemFlag mockClientSystemFlag = new ClientSystemFlag.Builder()
+                .withClientName(clientName)
+                .withAuditObject(auditObject)
+                .withDescription("mock client system flag")
+                .build();
+        when(mockConfigService.findClientSystemFlag(clientName, auditObject))
+                .thenReturn(Optional.of(mockClientSystemFlag));
+
+        ResponseEntity<ClientSystemFlag> response = configController.getClientSystemFlag(clientName, auditObject);
+
+        verify(mockConfigService).findClientSystemFlag(clientName, auditObject);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody().getClientName()).isEqualTo(clientName);
+        assertThat(response.getBody().getAuditObject()).isEqualTo(auditObject);
+        assertThat(response.getBody().getDescription()).isEqualTo("mock client system flag");
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void shouldGetNotFoundExceptionWhenForInvalidClientNameAndAuditObject() {
+        String clientName = "UNIT_TEST";
+        String auditObject = "unit_test";
+
+        when(mockConfigService.findClientSystemFlag(clientName, auditObject))
+                .thenReturn(Optional.empty());
+
+        configController.getClientSystemFlag(clientName, auditObject);
     }
 
     @Test
@@ -49,7 +83,7 @@ public class ClientTestPropertyControllerTest {
         when(mockConfigService.findClientTestProperty(clientName, assessmentId))
             .thenReturn(Optional.of(mockClientTestProperty));
 
-        ResponseEntity<ClientTestProperty> response = clientTestPropertyController.getClientTestProperty(clientName, assessmentId);
+        ResponseEntity<ClientTestProperty> response = configController.getClientTestProperty(clientName, assessmentId);
 
         verify(mockConfigService).findClientTestProperty(clientName, assessmentId);
 
@@ -70,6 +104,6 @@ public class ClientTestPropertyControllerTest {
         when(mockConfigService.findClientTestProperty(clientName, assessmentId))
             .thenReturn(Optional.empty());
 
-        clientTestPropertyController.getClientTestProperty(clientName, assessmentId);
+        configController.getClientTestProperty(clientName, assessmentId);
     }
 }
