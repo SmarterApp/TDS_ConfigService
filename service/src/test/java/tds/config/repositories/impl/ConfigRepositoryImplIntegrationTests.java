@@ -3,20 +3,18 @@ package tds.config.repositories.impl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import tds.config.ClientSystemFlag;
-import tds.config.ClientTestProperty;
-import tds.config.ConfigServiceApplication;
-import tds.config.repositories.ConfigRepository;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
-import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import tds.config.ClientSystemFlag;
+import tds.config.repositories.ConfigRepository;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = ConfigServiceApplication.class)
+import static org.assertj.core.api.Assertions.assertThat;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class ConfigRepositoryImplIntegrationTests {
 
     @Autowired
