@@ -7,29 +7,30 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import java.util.Optional;
+
 import tds.config.TimeLimitConfiguration;
 import tds.config.repositories.TimeLimitConfigurationRepository;
 import tds.config.services.TimeLimitConfigurationService;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TimeLimitsServiceUnitTests {
+public class TimeLimitsServiceImplTest {
     private TimeLimitConfigurationService timeLimitConfigurationService;
 
     @Mock
     private TimeLimitConfigurationRepository mockTimeLimitConfigurationRepository;
 
     @Before
-    public void Setup() {
+    public void setUp() {
         this.timeLimitConfigurationService = new TimeLimitConfigurationServiceImpl(mockTimeLimitConfigurationRepository);
     }
 
     @After
-    public void Teardown() {
+    public void tearDown() {
         this.timeLimitConfigurationService = null;
         this.mockTimeLimitConfigurationRepository = null;
     }
