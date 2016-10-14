@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import tds.common.web.exceptions.NotFoundException;
 import tds.config.ClientTestProperty;
 import tds.config.services.ConfigService;
-import tds.config.web.resources.ClientTestPropertyResource;
 
 @RestController
 @RequestMapping("/config/client-test-properties")
@@ -26,10 +25,10 @@ public class ClientTestPropertyController {
 
     @RequestMapping(value = "/{clientName}/{assessmentId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<ClientTestPropertyResource> getClientTestProperty(@PathVariable final String clientName, @PathVariable final String assessmentId) {
+    public ResponseEntity<ClientTestProperty> getClientTestProperty(@PathVariable final String clientName, @PathVariable final String assessmentId) {
         final ClientTestProperty clientTestProperty = configService.findClientTestProperty(clientName, assessmentId)
             .orElseThrow(() -> new NotFoundException("Could not find ClientTestProperty for client name %s and assessment id %s", clientName, assessmentId));
 
-        return ResponseEntity.ok(new ClientTestPropertyResource(clientTestProperty));
+        return ResponseEntity.ok(clientTestProperty);
     }
 }
