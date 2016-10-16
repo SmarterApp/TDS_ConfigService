@@ -8,12 +8,13 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
-import tds.config.TimeLimitConfiguration;
-import tds.config.repositories.TimeLimitConfigurationRepository;
-import tds.config.repositories.impl.mappers.TimeLimitsRowMapper;
 
 import javax.sql.DataSource;
 import java.util.Optional;
+
+import tds.config.TimeLimitConfiguration;
+import tds.config.repositories.TimeLimitConfigurationRepository;
+import tds.config.repositories.impl.mappers.TimeLimitsRowMapper;
 
 @Repository
 public class TimeLimitConfigurationRepositoryImpl implements TimeLimitConfigurationRepository {
@@ -40,7 +41,7 @@ public class TimeLimitConfigurationRepositoryImpl implements TimeLimitConfigurat
                 "   requestinterfacetimeout AS requestInterfaceTimeoutMinutes, \n" +
                 "   tacheckintime AS taCheckinTimeMinutes \n" +
                 "FROM \n" +
-                "   session.timelimits \n" +
+                "   client_timelimits \n" +
                 "WHERE \n" +
                 "   clientname = :clientName \n" +
                 "   AND _efk_testid IS NULL";
@@ -69,23 +70,19 @@ public class TimeLimitConfigurationRepositoryImpl implements TimeLimitConfigurat
         // it should always come from the Client Name level).
         final String SQL =
                 "SELECT \n" +
-                "   t.clientname, \n" +
-                "   t._efk_testid AS assessmentId, \n" +
-                "   t.environment, \n" +
-                "   t.opprestart AS examRestartWindowMinutes, \n" +
-                "   t.oppdelay AS examDelayDays, \n" +
-                "   t.interfacetimeout AS interfaceTimeoutMinutes, \n" +
-                "   t.requestinterfacetimeout AS requestInterfaceTimeoutMinutes, \n" +
-                "   c.tacheckintime AS taCheckinTimeMinutes \n" +
+                "   clientname, \n" +
+                "   _efk_testid AS assessmentId, \n" +
+                "   environment, \n" +
+                "   opprestart AS examRestartWindowMinutes, \n" +
+                "   oppdelay AS examDelayDays, \n" +
+                "   interfacetimeout AS interfaceTimeoutMinutes, \n" +
+                "   requestinterfacetimeout AS requestInterfaceTimeoutMinutes, \n" +
+                "   tacheckintime AS taCheckinTimeMinutes \n" +
                 "FROM \n" +
-                "   session.timelimits t \n" +
-                "JOIN" +
-                "   session.timelimits c \n" +
-                "   ON (t.clientname = c.clientname \n" +
-                "       AND c._efk_testid IS NULL) \n" +
+                "   client_timelimits \n" +
                 "WHERE \n" +
-                "   t.clientname = :clientName \n" +
-                "   AND t._efk_testid = :assessmentId";
+                "   clientname = :clientName" +
+                "   AND _efk_testid = :assessmentId";
 
         Optional<TimeLimitConfiguration> maybeTimeLimitConfig;
         try {
