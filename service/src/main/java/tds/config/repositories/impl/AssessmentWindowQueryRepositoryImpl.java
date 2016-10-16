@@ -204,7 +204,7 @@ class AssessmentWindowQueryRepositoryImpl implements AssessmentWindowQueryReposi
             "JOIN configs.client_testmode M ON \n" +
             "   T.clientname = M.clientname AND \n" +
             "   T.testid = M.testid \n" +
-            "WHERE T.clientname = :clientname \n" +
+            "WHERE T.clientname = :clientName \n" +
             "   AND T.TestID = :assessmentId \n" +
             "   AND (M.sessionType = -1 OR M.sessionType = :sessionType);";
 

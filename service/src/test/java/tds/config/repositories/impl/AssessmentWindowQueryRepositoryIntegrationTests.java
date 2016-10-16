@@ -15,8 +15,10 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Optional;
 
 import tds.config.AssessmentWindow;
+import tds.config.model.AssessmentProperties;
 import tds.config.repositories.AssessmentWindowQueryRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -104,5 +106,55 @@ public class AssessmentWindowQueryRepositoryIntegrationTests {
         assertThat(window.getEndTime()).isEqualByComparingTo(LocalDateTime.of(2017, Month.AUGUST, 10, 19, 2, 43).toInstant(ZoneOffset.UTC));
         assertThat(window.getFormKey()).isEqualTo("187-534");
         assertThat(window.getWindowId()).isEqualTo("ANNUAL");
+    }
+
+    @Test
+    public void shouldReturnEmptyListWhenWindowsCannotBeFound() {
+        List<AssessmentWindow> assessmentWindows = repository.findCurrentAssessmentWindows("SBAC_PT", "SBAC-Mathematics-3", 0, 0, 0);
+        assertThat(assessmentWindows).isEmpty();
+    }
+
+    @Test
+    public void shouldReturnAssessmentWindows() {
+        String clientTestModeInsertSQL =
+            "INSERT INTO client_testmode (clientname,testid,mode,algorithm,formtideselectable,issegmented,maxopps,requirertsform,requirertsformwindow,requirertsformifexists,sessiontype,testkey,_key) " +
+                "VALUES ('SBAC_PT','SBAC-Mathematics-3','online','virtual',0,1,50,0,0,1,0,'(SBAC_PT)SBAC-Mathematics-11-Spring-2013-2015',UNHEX('0431F6515F2D11E6B2C80243FCF25EAB'));";
+
+        String clientTestWindowInsertSQL =
+            "INSERT INTO client_testwindow (clientname,testid,window,numopps,startdate,enddate,origin,source,windowid,_key,sessiontype,sortorder)" +
+                "VALUES ('SBAC_PT','SBAC-Mathematics-3',1,3, NULL ,NULL,NULL,NULL,'ANNUAL',UNHEX('043A37525F2D11E6B2C80243FCF25EAB'),-1,1);";
+
+        jdbcTemplate.update(clientTestModeInsertSQL, new MapSqlParameterSource());
+        jdbcTemplate.update(clientTestWindowInsertSQL, new MapSqlParameterSource());
+
+        List<AssessmentWindow> assessmentWindows = repository.findCurrentAssessmentWindows("SBAC_PT", "SBAC-Mathematics-3", 0, 0, 0);
+        assertThat(assessmentWindows).hasSize(1);
+    }
+
+    @Test
+    public void shouldFindAssessmentFormWindowProperties() {
+        String clientTestModeInsertSQL =
+            "INSERT INTO client_testmode (clientname,testid,mode,algorithm,formtideselectable,issegmented,maxopps,requirertsform,requirertsformwindow,requirertsformifexists,sessiontype,testkey,_key) " +
+                "VALUES ('SBAC_PT','SBAC-Mathematics-3','online','virtual',0,1,50,0,0,1,0,'(SBAC_PT)SBAC-Mathematics-11-Spring-2013-2015',UNHEX('0431F6515F2D11E6B2C80243FCF25EAB'));";
+
+        String clientTestPropertiesInsertSQL =
+            "INSERT INTO configs.client_testproperties (clientname,testid,maxopportunities,handscoreproject,prefetch,datechanged,isprintable,isselectable,label,printitemtypes,scorebytds,batchmodereport,subjectname,origin,source,maskitemsbysubject,initialabilitybysubject,startdate,enddate,ftstartdate,ftenddate,accommodationfamily,sortorder,rtsformfield,rtswindowfield,windowtideselectable,requirertswindow,reportinginstrument,tide_id,forcecomplete,rtsmodefield,modetideselectable,requirertsmode,requirertsmodewindow,deleteunanswereditems,abilityslope,abilityintercept,validatecompleteness,gradetext,initialabilitytestid,proctoreligibility,category) \n" +
+                "VALUES ('SBAC_PT','SBAC-Mathematics-3',3,NULL,2,NULL,0,1,'Grade 11 MATH','',1,0,'MATH',NULL,NULL,1,1,NULL,NULL,NULL,NULL,'MATH',NULL,'tds-testform','tds-testwindow',0,1,NULL,NULL,1,'tds-testmode',0,0,0,0,1,0,0,'Grade 11',NULL,0,NULL);";
+
+        jdbcTemplate.update(clientTestModeInsertSQL, new MapSqlParameterSource());
+        jdbcTemplate.update(clientTestPropertiesInsertSQL, new MapSqlParameterSource());
+
+        AssessmentProperties assessmentProperties = repository.findAssessmentFormWindowProperties("SBAC_PT", "SBAC-Mathematics-3", 0).get();
+
+        assertThat(assessmentProperties.getFormField()).isEqualTo("tds-testform");
+        assertThat(assessmentProperties.isRequireForm()).isFalse();
+        assertThat(assessmentProperties.isRequireFormWindow()).isFalse();
+        assertThat(assessmentProperties.isRequireIfFormExists()).isTrue();
+    }
+
+    @Test
+    public void shouldReturnEmptyWhenAssessmentFormWindowPropertiesCannotBeFound() {
+        Optional<AssessmentProperties> maybeAssessmentProperties = repository.findAssessmentFormWindowProperties("SBAC_PT", "SBAC-Mathematics-3", 0);
+        assertThat(maybeAssessmentProperties).isNotPresent();
     }
 }
