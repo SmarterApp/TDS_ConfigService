@@ -57,10 +57,6 @@ public class ExamWindowProperties {
         return shiftFormEnd;
     }
 
-    public String getWindowList() {
-        return windowList;
-    }
-
     public String getFormList() {
         return formList;
     }
