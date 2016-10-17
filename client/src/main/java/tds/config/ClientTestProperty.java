@@ -16,7 +16,6 @@ public class ClientTestProperty {
     private Integer sortOrder;
     private String rtsFormField;
     private boolean requireRtsWindow;
-    private String tideId;
     private String rtsModeField;
     private boolean requireRtsMode;
     private boolean requireRtsModeWindow;
@@ -40,7 +39,6 @@ public class ClientTestProperty {
         private Integer sortOrder;
         private String rtsFormField;
         private boolean requireRtsWindow;
-        private String tideId;
         private String rtsModeField;
         private boolean requireRtsMode;
         private boolean requireRtsModeWindow;
@@ -111,11 +109,6 @@ public class ClientTestProperty {
             return this;
         }
         
-        public Builder withTideId(String newTideId) {
-            this.tideId = newTideId;
-            return this;
-        }
-        
         public Builder withRtsModeField(String newRtsModeField) {
             this.rtsModeField = newRtsModeField;
             return this;
@@ -177,7 +170,6 @@ public class ClientTestProperty {
         this.sortOrder = builder.sortOrder;
         this.rtsFormField = builder.rtsFormField;
         this.requireRtsWindow = builder.requireRtsWindow;
-        this.tideId = builder.tideId;
         this.rtsModeField = builder.rtsModeField;
         this.requireRtsMode = builder.requireRtsMode;
         this.requireRtsModeWindow = builder.requireRtsModeWindow;
@@ -249,10 +241,6 @@ public class ClientTestProperty {
 
     public boolean getRequireRtsWindow() {
         return requireRtsWindow;
-    }
-
-    public String getTideId() {
-        return tideId;
     }
 
     public String getRtsModeField() {

@@ -26,7 +26,6 @@ public class ClientTestPropertyRowMapper implements RowMapper<ClientTestProperty
                 .withSortOrder((Integer)rs.getObject("sortOrder"))
                 .withRtsFormField(rs.getString("rtsFormField"))
                 .withRequireRtsWindow(rs.getBoolean("requireRtsWindow"))
-                .withTideId(rs.getString("tideId"))
                 .withRtsModeField(rs.getString("rtsModeField"))
                 .withRequireRtsMode(rs.getBoolean("requireRtsMode"))
                 .withRequireRtsModeWindow(rs.getBoolean("requireRtsModeWindow"))

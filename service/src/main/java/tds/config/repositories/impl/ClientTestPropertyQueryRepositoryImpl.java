@@ -45,7 +45,6 @@ public class ClientTestPropertyQueryRepositoryImpl implements ClientTestProperty
                 "   sortorder AS sortOrder,\n" +
                 "   rtsformfield AS rtsFormField,\n" +
                 "   requirertswindow AS requireRtsWindow,\n" +
-                "   tide_id AS tideId,\n" +
                 "   rtsmodefield AS rtsModeField,\n" +
                 "   requirertsmode AS requireRtsMode,\n" +
                 "   requirertsmodewindow AS requireRtsModeWindow,\n" +

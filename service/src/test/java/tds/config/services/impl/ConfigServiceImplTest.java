@@ -83,7 +83,6 @@ public class ConfigServiceImplTest {
         assertThat(clientTestProperty.getSortOrder()).isEqualTo(1);
         assertThat(clientTestProperty.getRtsFormField()).isEqualTo("rts form field");
         assertThat(clientTestProperty.getRequireRtsWindow()).isTrue();
-        assertThat(clientTestProperty.getTideId()).isEqualTo("tide id");
         assertThat(clientTestProperty.getRequireRtsModeWindow()).isTrue();
         assertThat(clientTestProperty.getDeleteUnansweredItems()).isTrue();
         assertThat(clientTestProperty.getAbilitySlope()).isEqualTo(5.0D);
@@ -152,7 +151,7 @@ public class ConfigServiceImplTest {
         AssessmentWindow window4 = new AssessmentWindow.Builder().withWindowId("id4").withAssessmentId("SBAC-Mathematics-3").build();
 
         ExamWindowProperties properties = new ExamWindowProperties.Builder(23, "SBAC_PT", "SBAC-Mathematics-8", 0).build();
-        ClientTestProperty property = new ClientTestProperty.Builder().withTideId("tide").build();
+        ClientTestProperty property = new ClientTestProperty.Builder().build();
 
         when(mockAssessmentWindowQueryRepository.findCurrentAssessmentWindows("SBAC_PT", "SBAC-Mathematics-8", 0, 0, 0)).thenReturn(Arrays.asList(window, window2, window3, window4));
         when(mockClientTestPropertyQueryRepository.findClientTestProperty("SBAC_PT", "SBAC-Mathematics-8")).thenReturn(Optional.of(property));
@@ -244,7 +243,6 @@ public class ConfigServiceImplTest {
                 .withSortOrder(1)
                 .withRtsFormField("rts form field")
                 .withRequireRtsWindow(true)
-                .withTideId("tide id")
                 .withRequireRtsMode(true)
                 .withRequireRtsModeWindow(true)
                 .withDeleteUnansweredItems(true)
