@@ -1,6 +1,6 @@
 package tds.config.model;
 
-public class ExamWindowProperties {
+public class AssessmentWindowProperties {
     private long studentId;
     private String clientName;
     private String assessmentId;
@@ -12,7 +12,7 @@ public class ExamWindowProperties {
     private String windowList;
     private String formList;
 
-    private ExamWindowProperties(Builder builder){
+    private AssessmentWindowProperties(Builder builder){
         this.studentId = builder.studentId;
         this.clientName = builder.clientName;
         this.assessmentId = builder.assessmentId;
@@ -110,8 +110,8 @@ public class ExamWindowProperties {
             return this;
         }
 
-        public ExamWindowProperties build() {
-            return new ExamWindowProperties(this);
+        public AssessmentWindowProperties build() {
+            return new AssessmentWindowProperties(this);
         }
     }
 }
