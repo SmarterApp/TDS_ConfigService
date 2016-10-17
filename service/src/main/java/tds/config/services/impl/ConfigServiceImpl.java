@@ -18,7 +18,7 @@ import tds.config.AssessmentWindow;
 import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
 import tds.config.model.AssessmentFormWindowProperties;
-import tds.config.model.AssessmentWindowProperties;
+import tds.config.model.AssessmentWindowParameters;
 import tds.config.repositories.AssessmentWindowQueryRepository;
 import tds.config.repositories.ClientTestPropertyQueryRepository;
 import tds.config.repositories.ConfigRepository;
@@ -54,33 +54,33 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
-    public List<AssessmentWindow> findAssessmentWindows(AssessmentWindowProperties assessmentWindowProperties) {
-        long studentId = assessmentWindowProperties.getStudentId();
-        String clientName = assessmentWindowProperties.getClientName();
-        String assessmentId = assessmentWindowProperties.getAssessmentId();
+    public List<AssessmentWindow> findAssessmentWindows(AssessmentWindowParameters assessmentWindowParameters) {
+        long studentId = assessmentWindowParameters.getStudentId();
+        String clientName = assessmentWindowParameters.getClientName();
+        String assessmentId = assessmentWindowParameters.getAssessmentId();
 
         //Lines StudentDLL 5955 - 5975
         List<AssessmentWindow> examFormWindows = assessmentWindowQueryRepository.findCurrentAssessmentFormWindows(clientName,
             assessmentId,
-            assessmentWindowProperties.getSessionType(),
-            assessmentWindowProperties.getShiftWindowStart(),
-            assessmentWindowProperties.getShiftWindowEnd(),
-            assessmentWindowProperties.getShiftFormStart(),
-            assessmentWindowProperties.getShiftFormEnd()
+            assessmentWindowParameters.getSessionType(),
+            assessmentWindowParameters.getShiftWindowStart(),
+            assessmentWindowParameters.getShiftWindowEnd(),
+            assessmentWindowParameters.getShiftFormStart(),
+            assessmentWindowParameters.getShiftFormEnd()
         );
 
         if (!examFormWindows.isEmpty()) {
             //Logic in StudentDLL lines 5963
             //The first call in the StudentDLL._GetTesteeTestForms_SP is to get the window for the guest which is duplication from earlier code
-            return findCurrentExamWindowFromFormWindows(assessmentWindowProperties, examFormWindows);
+            return findCurrentExamWindowFromFormWindows(assessmentWindowParameters, examFormWindows);
         }
 
         //Lines 5871-5880 StudentDLL._GetTestteeTestWindows_SP()
         List<AssessmentWindow> assessmentWindows = assessmentWindowQueryRepository.findCurrentAssessmentWindows(clientName,
             assessmentId,
-            assessmentWindowProperties.getShiftWindowStart(),
-            assessmentWindowProperties.getShiftWindowEnd(),
-            assessmentWindowProperties.getSessionType());
+            assessmentWindowParameters.getShiftWindowStart(),
+            assessmentWindowParameters.getShiftWindowEnd(),
+            assessmentWindowParameters.getSessionType());
 
         if (studentId < 0) {
             return assessmentWindows;
@@ -92,18 +92,18 @@ public class ConfigServiceImpl implements ConfigService {
             .collect(Collectors.toList());
     }
 
-    private List<AssessmentWindow> findCurrentExamWindowFromFormWindows(AssessmentWindowProperties assessmentWindowProperties, List<AssessmentWindow> formWindows) {
+    private List<AssessmentWindow> findCurrentExamWindowFromFormWindows(AssessmentWindowParameters assessmentWindowParameters, List<AssessmentWindow> formWindows) {
         boolean requireFormWindow = false, requireForm = false, ifExists = false;
 
         //Lines 3712 - 3730 in StudentDLL._GetTesteeTestForms_SP
-        Optional<AssessmentFormWindowProperties> maybeAssessmentProperties = assessmentWindowQueryRepository.findAssessmentFormWindowProperties(assessmentWindowProperties.getClientName(), assessmentWindowProperties.getAssessmentId(), assessmentWindowProperties.getSessionType());
+        Optional<AssessmentFormWindowProperties> maybeAssessmentProperties = assessmentWindowQueryRepository.findAssessmentFormWindowProperties(assessmentWindowParameters.getClientName(), assessmentWindowParameters.getAssessmentId(), assessmentWindowParameters.getSessionType());
 
         if (maybeAssessmentProperties.isPresent()) {
             AssessmentFormWindowProperties properties = maybeAssessmentProperties.get();
             ifExists = properties.isRequireIfFormExists();
         }
 
-        String formList = assessmentWindowProperties.getFormList();
+        String formList = assessmentWindowParameters.getFormList();
         if (formList != null) {
             if (formList.indexOf(':') > -1)
                 requireFormWindow = true;

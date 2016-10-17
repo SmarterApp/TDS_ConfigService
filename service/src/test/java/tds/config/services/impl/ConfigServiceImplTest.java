@@ -17,7 +17,7 @@ import tds.config.AssessmentWindow;
 import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
 import tds.config.model.AssessmentFormWindowProperties;
-import tds.config.model.AssessmentWindowProperties;
+import tds.config.model.AssessmentWindowParameters;
 import tds.config.repositories.AssessmentWindowQueryRepository;
 import tds.config.repositories.ClientTestPropertyQueryRepository;
 import tds.config.repositories.ConfigRepository;
@@ -128,7 +128,7 @@ public class ConfigServiceImplTest {
 
     @Test
     public void shouldReturnEmptyWindowWhenNoResultsAreFoundForGuest() {
-        AssessmentWindowProperties properties = new AssessmentWindowProperties.Builder(-1, "test", "assessment", 0).build();
+        AssessmentWindowParameters properties = new AssessmentWindowParameters.Builder(-1, "test", "assessment", 0).build();
         when(mockAssessmentWindowQueryRepository.findCurrentAssessmentWindows("test", "assessment", 0, 0, 0)).thenReturn(Collections.emptyList());
         assertThat(configService.findAssessmentWindows(properties)).isEmpty();
     }
@@ -136,7 +136,7 @@ public class ConfigServiceImplTest {
     @Test
     public void shouldReturnWindowForGuestWhenFound() {
         AssessmentWindow window = new AssessmentWindow.Builder().withWindowId("id").build();
-        AssessmentWindowProperties properties = new AssessmentWindowProperties.Builder(-1, "test", "assessment", 0).build();
+        AssessmentWindowParameters properties = new AssessmentWindowParameters.Builder(-1, "test", "assessment", 0).build();
 
         when(mockAssessmentWindowQueryRepository.findCurrentAssessmentWindows("test", "assessment", 0, 0, 0)).thenReturn(Collections.singletonList(window));
         assertThat(configService.findAssessmentWindows(properties).get(0)).isEqualTo(window);
@@ -150,7 +150,7 @@ public class ConfigServiceImplTest {
         AssessmentWindow window3 = new AssessmentWindow.Builder().withWindowId("id3").withAssessmentId("SBAC-Mathematics-8-2018").build();
         AssessmentWindow window4 = new AssessmentWindow.Builder().withWindowId("id4").withAssessmentId("SBAC-Mathematics-3").build();
 
-        AssessmentWindowProperties properties = new AssessmentWindowProperties.Builder(23, "SBAC_PT", "SBAC-Mathematics-8", 0).build();
+        AssessmentWindowParameters properties = new AssessmentWindowParameters.Builder(23, "SBAC_PT", "SBAC-Mathematics-8", 0).build();
         ClientTestProperty property = new ClientTestProperty.Builder().build();
 
         when(mockAssessmentWindowQueryRepository.findCurrentAssessmentWindows("SBAC_PT", "SBAC-Mathematics-8", 0, 0, 0)).thenReturn(Arrays.asList(window, window2, window3, window4));
@@ -167,7 +167,7 @@ public class ConfigServiceImplTest {
         AssessmentWindow window3 = new AssessmentWindow.Builder().withWindowId("id3").withAssessmentId("SBAC-Mathematics-8-2018").build();
         AssessmentWindow window4 = new AssessmentWindow.Builder().withWindowId("id4").withAssessmentId("SBAC-Mathematics-3").build();
 
-        AssessmentWindowProperties properties = new AssessmentWindowProperties.Builder(23, "SBAC_PT", "SBAC-Mathematics-8", 0).build();
+        AssessmentWindowParameters properties = new AssessmentWindowParameters.Builder(23, "SBAC_PT", "SBAC-Mathematics-8", 0).build();
         AssessmentFormWindowProperties assessmentFormWindowProperties = new AssessmentFormWindowProperties(true, true, "formField", true);
 
         when(mockAssessmentWindowQueryRepository.findCurrentAssessmentFormWindows("SBAC_PT", "SBAC-Mathematics-8", 0, 0, 0, 0, 0)).thenReturn(Arrays.asList(window, window2, window3, window4));
@@ -191,7 +191,7 @@ public class ConfigServiceImplTest {
             .withAssessmentId("SBAC-Mathematics-8-2018")
             .build();
 
-        AssessmentWindowProperties properties = new AssessmentWindowProperties.Builder(23, "SBAC_PT", "SBAC-Mathematics-8", 0)
+        AssessmentWindowParameters properties = new AssessmentWindowParameters.Builder(23, "SBAC_PT", "SBAC-Mathematics-8", 0)
             .withFormList("formKey2")
             .build();
         AssessmentFormWindowProperties assessmentFormWindowProperties = new AssessmentFormWindowProperties(true, true, "formField", true);
@@ -217,7 +217,7 @@ public class ConfigServiceImplTest {
             .withAssessmentId("SBAC-Mathematics-8-2018")
             .build();
 
-        AssessmentWindowProperties properties = new AssessmentWindowProperties.Builder(23, "SBAC_PT", "SBAC-Mathematics-8", 0)
+        AssessmentWindowParameters properties = new AssessmentWindowParameters.Builder(23, "SBAC_PT", "SBAC-Mathematics-8", 0)
             .withFormList("id:formKey")
             .build();
         AssessmentFormWindowProperties assessmentFormWindowProperties = new AssessmentFormWindowProperties(true, true, "formField", true);

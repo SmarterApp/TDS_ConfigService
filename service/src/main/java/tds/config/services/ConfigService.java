@@ -6,7 +6,7 @@ import java.util.Optional;
 import tds.config.AssessmentWindow;
 import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
-import tds.config.model.AssessmentWindowProperties;
+import tds.config.model.AssessmentWindowParameters;
 
 /**
  * Provide an interface for interacting with the {@code configs} database and providing configuration information.
@@ -37,10 +37,10 @@ public interface ConfigService {
     Optional<ClientSystemFlag> findClientSystemFlag(String clientName, String auditObject);
 
     /**
-     * Finds the {@link tds.config.AssessmentWindow AssessmentWindow} for the given {@link tds.config.model.AssessmentWindowProperties}
+     * Finds the {@link tds.config.AssessmentWindow AssessmentWindow} for the given {@link tds.config.model.AssessmentWindowParameters}
      *
-     * @param assessmentWindowProperties {@link tds.config.model.AssessmentWindowProperties} propeties for the assessment window
+     * @param assessmentWindowParameters {@link tds.config.model.AssessmentWindowParameters} propeties for the assessment window
      * @return list of {@link tds.config.AssessmentWindow} that fit the parameters
      */
-    List<AssessmentWindow> findAssessmentWindows(AssessmentWindowProperties assessmentWindowProperties);
+    List<AssessmentWindow> findAssessmentWindows(AssessmentWindowParameters assessmentWindowParameters);
 }

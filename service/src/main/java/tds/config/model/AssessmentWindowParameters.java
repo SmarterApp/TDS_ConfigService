@@ -3,7 +3,7 @@ package tds.config.model;
 /**
  * Contains the parameters for the assessment window lookup
  */
-public class AssessmentWindowProperties {
+public class AssessmentWindowParameters {
     private long studentId;
     private String clientName;
     private String assessmentId;
@@ -14,7 +14,7 @@ public class AssessmentWindowProperties {
     private int shiftFormEnd;
     private String formList;
 
-    private AssessmentWindowProperties(Builder builder){
+    private AssessmentWindowParameters(Builder builder){
         this.studentId = builder.studentId;
         this.clientName = builder.clientName;
         this.assessmentId = builder.assessmentId;
@@ -132,8 +132,8 @@ public class AssessmentWindowProperties {
             return this;
         }
 
-        public AssessmentWindowProperties build() {
-            return new AssessmentWindowProperties(this);
+        public AssessmentWindowParameters build() {
+            return new AssessmentWindowParameters(this);
         }
     }
 }
