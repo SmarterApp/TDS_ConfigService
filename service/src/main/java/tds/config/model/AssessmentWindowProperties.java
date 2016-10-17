@@ -9,7 +9,6 @@ public class AssessmentWindowProperties {
     private int shiftWindowEnd;
     private int shiftFormStart;
     private int shiftFormEnd;
-    private String windowList;
     private String formList;
 
     private AssessmentWindowProperties(Builder builder){
@@ -20,43 +19,69 @@ public class AssessmentWindowProperties {
         this.shiftWindowEnd = builder.shiftWindowEnd;
         this.shiftFormStart = builder.shiftFormStart;
         this.shiftFormEnd = builder.shiftFormEnd;
-        this.windowList = builder.windowList;
         this.formList = builder.formList;
         this.sessionType = builder.sessionType;
     }
 
+    /**
+     * @return The unique id for the student
+     */
     public long getStudentId() {
         return studentId;
     }
 
+    /**
+     * @return the client name
+     */
     public String getClientName() {
         return clientName;
     }
 
+    /**
+     * @return the id for the assessment
+     */
     public String getAssessmentId() {
         return assessmentId;
     }
 
+    /**
+     * @return the session type
+     */
     public int getSessionType() {
         return sessionType;
     }
 
+    /**
+     * @return the days to shift the assessment window start
+     */
     public int getShiftWindowStart() {
         return shiftWindowStart;
     }
 
+    /**
+     * @return the days to shift the assessment window end
+     */
     public int getShiftWindowEnd() {
         return shiftWindowEnd;
     }
 
+    /**
+     * @return the days to shift the assessment form start
+     */
     public int getShiftFormStart() {
         return shiftFormStart;
     }
 
+    /**
+     * @return the days to shift the assessment form end
+     */
     public int getShiftFormEnd() {
         return shiftFormEnd;
     }
 
+    /**
+     * @return the form list containing form and window information
+     */
     public String getFormList() {
         return formList;
     }
@@ -70,7 +95,6 @@ public class AssessmentWindowProperties {
         private int shiftWindowEnd = 0;
         private int shiftFormStart = 0;
         private int shiftFormEnd = 0;
-        private String windowList;
         private String formList;
 
         public Builder(long studentId, String clientName, String assessmentId, int sessionType) {
@@ -97,11 +121,6 @@ public class AssessmentWindowProperties {
 
         public Builder withShiftFormEnd(int shiftFormEnd) {
             this.shiftFormEnd = shiftFormEnd;
-            return this;
-        }
-
-        public Builder withWindowList(String windowList) {
-            this.windowList = windowList;
             return this;
         }
 
