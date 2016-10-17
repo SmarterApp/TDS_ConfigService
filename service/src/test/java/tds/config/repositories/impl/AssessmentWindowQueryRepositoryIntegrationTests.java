@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import tds.config.AssessmentWindow;
-import tds.config.model.AssessmentProperties;
+import tds.config.model.AssessmentFormWindowProperties;
 import tds.config.repositories.AssessmentWindowQueryRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -144,17 +144,17 @@ public class AssessmentWindowQueryRepositoryIntegrationTests {
         jdbcTemplate.update(clientTestModeInsertSQL, new MapSqlParameterSource());
         jdbcTemplate.update(clientTestPropertiesInsertSQL, new MapSqlParameterSource());
 
-        AssessmentProperties assessmentProperties = repository.findAssessmentFormWindowProperties("SBAC_PT", "SBAC-Mathematics-3", 0).get();
+        AssessmentFormWindowProperties assessmentFormWindowProperties = repository.findAssessmentFormWindowProperties("SBAC_PT", "SBAC-Mathematics-3", 0).get();
 
-        assertThat(assessmentProperties.getFormField()).isEqualTo("tds-testform");
-        assertThat(assessmentProperties.isRequireForm()).isFalse();
-        assertThat(assessmentProperties.isRequireFormWindow()).isFalse();
-        assertThat(assessmentProperties.isRequireIfFormExists()).isTrue();
+        assertThat(assessmentFormWindowProperties.getFormField()).isEqualTo("tds-testform");
+        assertThat(assessmentFormWindowProperties.isRequireForm()).isFalse();
+        assertThat(assessmentFormWindowProperties.isRequireFormWindow()).isFalse();
+        assertThat(assessmentFormWindowProperties.isRequireIfFormExists()).isTrue();
     }
 
     @Test
     public void shouldReturnEmptyWhenAssessmentFormWindowPropertiesCannotBeFound() {
-        Optional<AssessmentProperties> maybeAssessmentProperties = repository.findAssessmentFormWindowProperties("SBAC_PT", "SBAC-Mathematics-3", 0);
+        Optional<AssessmentFormWindowProperties> maybeAssessmentProperties = repository.findAssessmentFormWindowProperties("SBAC_PT", "SBAC-Mathematics-3", 0);
         assertThat(maybeAssessmentProperties).isNotPresent();
     }
 }

@@ -1,5 +1,8 @@
 package tds.config.model;
 
+/**
+ * Contains the parameters for the assessment window lookup
+ */
 public class AssessmentWindowProperties {
     private long studentId;
     private String clientName;

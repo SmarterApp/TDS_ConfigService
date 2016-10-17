@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 import tds.config.AssessmentWindow;
 import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
-import tds.config.model.AssessmentProperties;
+import tds.config.model.AssessmentFormWindowProperties;
 import tds.config.model.AssessmentWindowProperties;
 import tds.config.repositories.AssessmentWindowQueryRepository;
 import tds.config.repositories.ClientTestPropertyQueryRepository;
@@ -96,10 +96,10 @@ public class ConfigServiceImpl implements ConfigService {
         boolean requireFormWindow = false, requireForm = false, ifExists = false;
 
         //Lines 3712 - 3730 in StudentDLL._GetTesteeTestForms_SP
-        Optional<AssessmentProperties> maybeAssessmentProperties = assessmentWindowQueryRepository.findAssessmentFormWindowProperties(assessmentWindowProperties.getClientName(), assessmentWindowProperties.getAssessmentId(), assessmentWindowProperties.getSessionType());
+        Optional<AssessmentFormWindowProperties> maybeAssessmentProperties = assessmentWindowQueryRepository.findAssessmentFormWindowProperties(assessmentWindowProperties.getClientName(), assessmentWindowProperties.getAssessmentId(), assessmentWindowProperties.getSessionType());
 
         if (maybeAssessmentProperties.isPresent()) {
-            AssessmentProperties properties = maybeAssessmentProperties.get();
+            AssessmentFormWindowProperties properties = maybeAssessmentProperties.get();
             ifExists = properties.isRequireIfFormExists();
         }
 

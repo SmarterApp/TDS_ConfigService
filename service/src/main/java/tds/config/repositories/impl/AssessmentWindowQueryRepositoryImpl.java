@@ -15,7 +15,7 @@ import java.util.Optional;
 
 import tds.common.data.mapping.ResultSetMapperUtility;
 import tds.config.AssessmentWindow;
-import tds.config.model.AssessmentProperties;
+import tds.config.model.AssessmentFormWindowProperties;
 import tds.config.repositories.AssessmentWindowQueryRepository;
 
 import static tds.common.data.mapping.ResultSetMapperUtility.mapTimeStampToInstant;
@@ -188,7 +188,7 @@ class AssessmentWindowQueryRepositoryImpl implements AssessmentWindowQueryReposi
     }
 
     @Override
-    public Optional<AssessmentProperties> findAssessmentFormWindowProperties(String clientName, String assessmentId, int sessionType) {
+    public Optional<AssessmentFormWindowProperties> findAssessmentFormWindowProperties(String clientName, String assessmentId, int sessionType) {
         final MapSqlParameterSource parameters = new MapSqlParameterSource("clientName", clientName)
             .addValue("sessionType", sessionType)
             .addValue("assessmentId", assessmentId);
@@ -207,10 +207,10 @@ class AssessmentWindowQueryRepositoryImpl implements AssessmentWindowQueryReposi
             "   AND T.TestID = :assessmentId \n" +
             "   AND (M.sessionType = -1 OR M.sessionType = :sessionType);";
 
-        Optional<AssessmentProperties> maybeAssessmentProperties = Optional.empty();
+        Optional<AssessmentFormWindowProperties> maybeAssessmentProperties = Optional.empty();
 
         try {
-            final AssessmentProperties properties = jdbcTemplate.queryForObject(SQL, parameters, (rs, rowNum) -> new AssessmentProperties(
+            final AssessmentFormWindowProperties properties = jdbcTemplate.queryForObject(SQL, parameters, (rs, rowNum) -> new AssessmentFormWindowProperties(
                 rs.getBoolean("requireForm"),
                 rs.getBoolean("ifexists"),
                 rs.getString("formField"),

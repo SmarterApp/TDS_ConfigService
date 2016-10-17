@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import tds.config.AssessmentWindow;
-import tds.config.model.AssessmentProperties;
+import tds.config.model.AssessmentFormWindowProperties;
 
 /**
  * Handles data access dealing with assessment windows
@@ -42,7 +42,7 @@ public interface AssessmentWindowQueryRepository {
      * @param clientName   client name of the installation
      * @param assessmentId assessment id
      * @param sessionType  the type of session
-     * @return {@link tds.config.model.AssessmentProperties} if found otherwise empty
+     * @return {@link tds.config.model.AssessmentFormWindowProperties} if found otherwise empty
      */
-    Optional<AssessmentProperties> findAssessmentFormWindowProperties(String clientName, String assessmentId, int sessionType);
+    Optional<AssessmentFormWindowProperties> findAssessmentFormWindowProperties(String clientName, String assessmentId, int sessionType);
 }
