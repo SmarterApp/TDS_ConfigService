@@ -150,4 +150,35 @@ public class ConfigControllerTest {
         assertThat(parameters.getShiftFormEnd()).isEqualTo(100);
         assertThat(parameters.getFormList()).isEqualTo("wid:formKey");
     }
+
+    @Test
+    public void shouldFindListOfAssessmentWindowsWithNullArguments() {
+        AssessmentWindow window = new AssessmentWindow.Builder()
+            .build();
+
+        when(mockConfigService.findAssessmentWindows(isA(AssessmentWindowParameters.class))).thenReturn(Collections.singletonList(window));
+
+        ResponseEntity<List<AssessmentWindow>> response = configController.findAssessmentWindows("SBAC",
+            "assessment",
+            0,
+            1,
+            null,
+            null,
+            null,
+            null,
+            null);
+
+        ArgumentCaptor<AssessmentWindowParameters> assessmentWindowParametersArgumentCaptor = ArgumentCaptor.forClass(AssessmentWindowParameters.class);
+        verify(mockConfigService).findAssessmentWindows(assessmentWindowParametersArgumentCaptor.capture());
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).containsExactly(window);
+
+        AssessmentWindowParameters parameters = assessmentWindowParametersArgumentCaptor.getValue();
+        assertThat(parameters.getShiftWindowStart()).isEqualTo(0);
+        assertThat(parameters.getShiftWindowEnd()).isEqualTo(0);
+        assertThat(parameters.getShiftFormStart()).isEqualTo(0);
+        assertThat(parameters.getShiftFormEnd()).isEqualTo(0);
+        assertThat(parameters.getFormList()).isNull();
+    }
 }

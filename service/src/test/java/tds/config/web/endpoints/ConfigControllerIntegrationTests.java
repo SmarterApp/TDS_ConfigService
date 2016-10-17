@@ -10,13 +10,19 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Collections;
 import java.util.Optional;
 
+import tds.config.AssessmentWindow;
 import tds.config.ClientSystemFlag;
 import tds.config.ClientTestProperty;
+import tds.config.model.AssessmentWindowParameters;
 import tds.config.services.ConfigService;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -110,5 +116,44 @@ public class ConfigControllerIntegrationTests {
         http.perform(get("/config/client-system-flags/" + clientName + "/" + auditObject)
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound());
+    }
+
+    /*
+    Assessment Windows Endpoint Tests
+     */
+    @Test
+    public void shouldReturnAssessmentWindows() throws Exception {
+        Instant startTime = Instant.now();
+        Instant endTime = Instant.now().plus(20, ChronoUnit.DAYS);
+        AssessmentWindow window = new AssessmentWindow.Builder()
+            .withWindowId("windowId")
+            .withAssessmentId("assessmentId")
+            .withMode("mode")
+            .withWindowMaxAttempts(3)
+            .withWindowSessionType(0)
+            .withStartTime(startTime)
+            .withEndTime(endTime)
+            .withFormKey("formKey")
+            .withModeMaxAttempts(5)
+            .withModeSessionType(-1)
+            .build();
+
+
+        when(mockConfigService.findAssessmentWindows(isA(AssessmentWindowParameters.class))).
+            thenReturn(Collections.singletonList(window));
+
+        String url = "/config/assessment-windows/SBAC_PT/math11/0/23";
+
+        http.perform(get(url)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.length()", is(1)))
+            .andExpect(jsonPath("[0].windowId", is("windowId")))
+            .andExpect(jsonPath("[0].assessmentId", is("assessmentId")))
+            .andExpect(jsonPath("[0].windowMaxAttempts", is(3)))
+            .andExpect(jsonPath("[0].windowSessionType", is(0)))
+            .andExpect(jsonPath("[0].formKey", is("formKey")))
+            .andExpect(jsonPath("[0].modeMaxAttempts", is(5)))
+            .andExpect(jsonPath("[0].modeSessionType", is(-1)));
     }
 }

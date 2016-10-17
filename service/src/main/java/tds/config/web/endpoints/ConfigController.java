@@ -53,18 +53,18 @@ class ConfigController {
                                                                  @PathVariable final String assessmentId,
                                                                  @PathVariable final int sessionType,
                                                                  @PathVariable final long studentId,
-                                                                 @RequestParam(required = false) final int shiftWindowStart,
-                                                                 @RequestParam(required = false) final int shiftWindowEnd,
-                                                                 @RequestParam(required = false) final int shiftFormStart,
-                                                                 @RequestParam(required = false) final int shiftFormEnd,
+                                                                 @RequestParam(required = false) final Integer shiftWindowStart,
+                                                                 @RequestParam(required = false) final Integer shiftWindowEnd,
+                                                                 @RequestParam(required = false) final Integer shiftFormStart,
+                                                                 @RequestParam(required = false) final Integer shiftFormEnd,
                                                                  @RequestParam(required = false) final String formList
                                                                 ) {
         AssessmentWindowParameters assessmentWindowParameters = new AssessmentWindowParameters
             .Builder(studentId, clientName, assessmentId, sessionType)
-            .withShiftWindowStart(shiftWindowStart)
-            .withShiftWindowEnd(shiftWindowEnd)
-            .withShiftFormStart(shiftFormStart)
-            .withShiftFormEnd(shiftFormEnd)
+            .withShiftWindowStart(shiftWindowStart == null ? 0 : shiftWindowStart)
+            .withShiftWindowEnd(shiftWindowEnd == null ? 0 : shiftWindowEnd)
+            .withShiftFormStart(shiftFormStart == null ? 0 : shiftFormStart)
+            .withShiftFormEnd(shiftFormEnd == null ? 0 : shiftFormEnd)
             .withFormList(formList)
             .build();
 
