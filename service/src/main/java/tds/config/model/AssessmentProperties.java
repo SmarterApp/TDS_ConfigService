@@ -5,18 +5,15 @@ public class AssessmentProperties {
     private boolean requireIfFormExists;
     private String formField;
     private boolean requireFormWindow;
-    private String tideId;
 
     public AssessmentProperties(boolean requireForm,
                                 boolean requireIfFormExists,
                                 String formField,
-                                boolean requireFormWindow,
-                                String tideId) {
+                                boolean requireFormWindow) {
         this.requireForm = requireForm;
         this.requireIfFormExists = requireIfFormExists;
         this.formField = formField;
         this.requireFormWindow = requireFormWindow;
-        this.tideId = tideId;
     }
 
     public boolean isRequireForm() {
@@ -33,9 +30,5 @@ public class AssessmentProperties {
 
     public boolean isRequireFormWindow() {
         return requireFormWindow;
-    }
-
-    public String getTideId() {
-        return tideId;
     }
 }

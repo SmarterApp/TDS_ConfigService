@@ -195,7 +195,6 @@ class AssessmentWindowQueryRepositoryImpl implements AssessmentWindowQueryReposi
 
 
         String SQL = "SELECT " +
-            "   TIDE_ID AS tideId, \n" +
             "   requireRTSFormWindow AS requireFormWindow, \n" +
             "   RTSFormField AS formField, \n" +
             "   requireRTSForm AS requireForm, \n" +
@@ -215,8 +214,7 @@ class AssessmentWindowQueryRepositoryImpl implements AssessmentWindowQueryReposi
                 rs.getBoolean("requireForm"),
                 rs.getBoolean("ifexists"),
                 rs.getString("formField"),
-                rs.getBoolean("requireFormWindow"),
-                rs.getString("tideId")
+                rs.getBoolean("requireFormWindow")
             ));
 
             maybeAssessmentProperties = Optional.of(properties);

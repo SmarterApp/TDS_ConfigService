@@ -3,11 +3,12 @@ package tds.config.services.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -113,7 +114,7 @@ public class ConfigServiceImpl implements ConfigService {
         }
 
         //Key is a the form key and the value is the list of window ids associated with the form key
-        Map<String, List<String>> studentPackageForms = new HashMap<>();
+        Map<String, Set<String>> studentPackageForms = new HashMap<>();
 
         if(formList != null) {
             //Lines 3753 - 3781 in StudentDLL._GetTesteeTestForms_SP
@@ -132,7 +133,7 @@ public class ConfigServiceImpl implements ConfigService {
                 }
 
                 if (!studentPackageForms.containsKey(form)) {
-                    studentPackageForms.put(form, new ArrayList<>());
+                    studentPackageForms.put(form, new HashSet<>());
                 }
 
                 if (wid != null) {
