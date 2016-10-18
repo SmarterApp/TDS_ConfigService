@@ -41,8 +41,8 @@ class AssessmentWindowQueryRepositoryImpl implements AssessmentWindowQueryReposi
         String SQL = "SELECT \n" +
             "      DISTINCT W.numopps AS windowMax, \n" +
             "      W.windowID,\n" +
-            "      CASE WHEN W.startDate IS NULL THEN NOW() ELSE ( W.startDate + INTERVAL :shiftWindowStart DAY) END AS startDate,\n" +
-            "      CASE WHEN W.endDate IS NULL THEN NOW() ELSE ( W.endDate + INTERVAL :shiftWindowEnd DAY) END AS endDate,\n" +
+            "      CASE WHEN W.startDate IS NULL THEN UTC_TIMESTAMP() ELSE ( W.startDate + INTERVAL :shiftWindowStart DAY) END AS startDate,\n" +
+            "      CASE WHEN W.endDate IS NULL THEN UTC_TIMESTAMP() ELSE ( W.endDate + INTERVAL :shiftWindowEnd DAY) END AS endDate,\n" +
             "      M.mode, \n" +
             "      M.testkey, \n" +
             "      M.maxopps AS modeMax,\n" +
@@ -55,16 +55,16 @@ class AssessmentWindowQueryRepositoryImpl implements AssessmentWindowQueryReposi
             "WHERE \n" +
             "    W.clientname = :clientName AND W.testID = :assessmentId \n" +
             "AND \n" +
-            "    NOW() BETWEEN\n" +
+            "    UTC_TIMESTAMP() BETWEEN\n" +
             "    CASE\n" +
             "        WHEN W.startDate IS NULL \n" +
-            "        THEN NOW() \n" +
+            "        THEN UTC_TIMESTAMP() \n" +
             "        ELSE ( W.startDate + INTERVAL :shiftWindowStart DAY)\n" +
             "    END\n" +
             "AND \n" +
             "    CASE \n" +
             "        WHEN W.endDate IS NULL \n" +
-            "        THEN NOW() \n" +
+            "        THEN UTC_TIMESTAMP() \n" +
             "        ELSE ( W.endDate + INTERVAL :shiftWindowEnd DAY) \n" +
             "    END    \n" +
             "AND (M.sessionType = -1 OR M.sessionType = :sessionType) \n" +
@@ -106,10 +106,10 @@ class AssessmentWindowQueryRepositoryImpl implements AssessmentWindowQueryReposi
             "   windowID, \n" +
             "   W.numopps AS windowMax, \n" +
             "   M.maxopps AS modeMax, \n" +
-            "   CASE WHEN W.startDate IS NULL THEN NOW() ELSE (W.startDate + INTERVAL :shiftWindowStart DAY) END AS startDate,\n" +
-            "   CASE WHEN W.endDate IS NULL THEN NOW() ELSE (W.endDate + INTERVAL :shiftWindowEnd DAY) END  AS endDate,\n" +
-            "   CASE WHEN F.startDate IS NULL THEN NOW() ELSE ( F.startdate + INTERVAL :shiftFormStart DAY) END AS formStart,\n" +
-            "   CASE WHEN F.enddate IS NULL THEN NOW() ELSE (F.enddate + INTERVAL :shiftFormEnd DAY ) END AS formEnd,\n" +
+            "   CASE WHEN W.startDate IS NULL THEN UTC_TIMESTAMP() ELSE (W.startDate + INTERVAL :shiftWindowStart DAY) END AS startDate,\n" +
+            "   CASE WHEN W.endDate IS NULL THEN UTC_TIMESTAMP() ELSE (W.endDate + INTERVAL :shiftWindowEnd DAY) END  AS endDate,\n" +
+            "   CASE WHEN F.startDate IS NULL THEN UTC_TIMESTAMP() ELSE ( F.startdate + INTERVAL :shiftFormStart DAY) END AS formStart,\n" +
+            "   CASE WHEN F.enddate IS NULL THEN UTC_TIMESTAMP() ELSE (F.enddate + INTERVAL :shiftFormEnd DAY ) END AS formEnd,\n" +
             "   _efk_TestForm AS formKey, \n" +
             "   FormID, \n" +
             "   F.Language, \n" +
@@ -126,22 +126,22 @@ class AssessmentWindowQueryRepositoryImpl implements AssessmentWindowQueryReposi
             "   M.testkey = F.testkey AND\n" +
             "   F.testid = W.testid AND\n" +
             "   F.clientname = W.clientname AND\n" +
-            "   NOW() BETWEEN CASE WHEN F.startDate IS NULL THEN NOW() ELSE (F.startdate + INTERVAL :shiftFormStart DAY) END\n" +
-            "   AND CASE WHEN F.enddate IS NULL THEN NOW() ELSE (F.enddate + INTERVAL :shiftFormEnd DAY) END      \n" +
+            "   UTC_TIMESTAMP() BETWEEN CASE WHEN F.startDate IS NULL THEN UTC_TIMESTAMP() ELSE (F.startdate + INTERVAL :shiftFormStart DAY) END\n" +
+            "   AND CASE WHEN F.enddate IS NULL THEN UTC_TIMESTAMP() ELSE (F.enddate + INTERVAL :shiftFormEnd DAY) END      \n" +
             "WHERE W.clientname = :clientName AND \n" +
             "      W.testid = :assessmentId AND \n" +
             "      (W.sessionType = -1 OR W.sessionType = :sessionType) AND \n" +
-            "      NOW() BETWEEN CASE WHEN W.startDate IS NULL THEN NOW() ELSE (W.startDate + INTERVAL :shiftWindowStart DAY) END\n" +
-            "    AND CASE WHEN W.endDate IS NULL THEN NOW() ELSE (W.endDate + INTERVAL :shiftWindowEnd DAY ) END \n" +
+            "      UTC_TIMESTAMP() BETWEEN CASE WHEN W.startDate IS NULL THEN UTC_TIMESTAMP() ELSE (W.startDate + INTERVAL :shiftWindowStart DAY) END\n" +
+            "    AND CASE WHEN W.endDate IS NULL THEN UTC_TIMESTAMP() ELSE (W.endDate + INTERVAL :shiftWindowEnd DAY ) END \n" +
             "UNION (\n" +
             "SELECT\n" +
             "   windowID, \n" +
             "   W.numopps AS windowMax, \n" +
             "   M.maxopps AS modeMax,\n" +
-            "   CASE WHEN W.startDate IS NULL THEN NOW() ELSE  (W.startDate + INTERVAL :shiftWindowStart DAY) END  AS startDate ,\n" +
-            "   CASE WHEN W.endDate IS NULL THEN NOW() ELSE (W.endDate + INTERVAL :shiftWindowEnd DAY) END  AS endDate ,\n" +
-            "   CASE WHEN F.startDate IS NULL THEN NOW() ELSE ( F.startdate + INTERVAL :shiftFormStart DAY) END AS formStart ,\n" +
-            "   CASE WHEN F.enddate IS NULL THEN NOW() ELSE (F.enddate + INTERVAL :shiftFormEnd DAY ) END AS formEnd,\n" +
+            "   CASE WHEN W.startDate IS NULL THEN UTC_TIMESTAMP() ELSE  (W.startDate + INTERVAL :shiftWindowStart DAY) END  AS startDate ,\n" +
+            "   CASE WHEN W.endDate IS NULL THEN UTC_TIMESTAMP() ELSE (W.endDate + INTERVAL :shiftWindowEnd DAY) END  AS endDate ,\n" +
+            "   CASE WHEN F.startDate IS NULL THEN UTC_TIMESTAMP() ELSE ( F.startdate + INTERVAL :shiftFormStart DAY) END AS formStart ,\n" +
+            "   CASE WHEN F.enddate IS NULL THEN UTC_TIMESTAMP() ELSE (F.enddate + INTERVAL :shiftFormEnd DAY ) END AS formEnd,\n" +
             "   _efk_TestForm AS formKey, \n" +
             "   FormID, \n" +
             "   F.Language, \n" +
@@ -155,9 +155,9 @@ class AssessmentWindowQueryRepositoryImpl implements AssessmentWindowQueryReposi
             "            S.clientname = :clientName\n" +
             "            AND S.parentTest = :assessmentId \n" +
             "            AND S.clientname = F.clientname\n" +
-            "            AND NOW() BETWEEN \n" +
-            "               ( CASE WHEN F.startDate IS NULL THEN NOW() ELSE (F.startdate + INTERVAL :shiftFormStart DAY) END )\n" +
-            "               AND ( CASE WHEN F.enddate IS NULL THEN NOW() ELSE (F.enddate + INTERVAL :shiftFormEnd DAY) END )\n" +
+            "            AND UTC_TIMESTAMP() BETWEEN \n" +
+            "               ( CASE WHEN F.startDate IS NULL THEN UTC_TIMESTAMP() ELSE (F.startdate + INTERVAL :shiftFormStart DAY) END )\n" +
+            "               AND ( CASE WHEN F.enddate IS NULL THEN UTC_TIMESTAMP() ELSE (F.enddate + INTERVAL :shiftFormEnd DAY) END )\n" +
             "            AND S.segmentid = F.testid\n" +
             "   JOIN configs.client_testmode M ON\n" +
             "            F.clientname = M.clientname\n" +
@@ -168,9 +168,9 @@ class AssessmentWindowQueryRepositoryImpl implements AssessmentWindowQueryReposi
             "            M.clientname = W.clientname\n" +
             "            AND W.testID = S.parentTest \n" +
             "            AND (W.sessionType = -1 OR W.sessionType = :sessionType)\n" +
-            "            AND NOW() BETWEEN\n" +
-            "               ( CASE WHEN W.startDate IS NULL THEN NOW() ELSE (W.startDate + INTERVAL :shiftWindowStart DAY) END )\n" +
-            "               AND ( CASE WHEN W.endDate IS NULL THEN NOW() ELSE (W.endDate + INTERVAL :shiftWindowEnd DAY ) END )\n" +
+            "            AND UTC_TIMESTAMP() BETWEEN\n" +
+            "               ( CASE WHEN W.startDate IS NULL THEN UTC_TIMESTAMP() ELSE (W.startDate + INTERVAL :shiftWindowStart DAY) END )\n" +
+            "               AND ( CASE WHEN W.endDate IS NULL THEN UTC_TIMESTAMP() ELSE (W.endDate + INTERVAL :shiftWindowEnd DAY ) END )\n" +
             ");";
 
 
