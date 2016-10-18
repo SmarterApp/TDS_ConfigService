@@ -93,14 +93,17 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     private List<AssessmentWindow> findCurrentExamWindowFromFormWindows(AssessmentWindowParameters assessmentWindowParameters, List<AssessmentWindow> formWindows) {
-        boolean requireFormWindow = false, requireForm = false, ifExists = false;
+        boolean requireFormWindow = false, requireForm = false;
+
+        //Lines 3703 - 3710 in StudentDLL._GetTesteeTestForms_SP
+        if (assessmentWindowParameters.getStudentId() < 0) {
+            return formWindows;
+        }
 
         //Lines 3712 - 3730 in StudentDLL._GetTesteeTestForms_SP
         Optional<AssessmentFormWindowProperties> maybeAssessmentProperties = assessmentWindowQueryRepository.findAssessmentFormWindowProperties(assessmentWindowParameters.getClientName(), assessmentWindowParameters.getAssessmentId(), assessmentWindowParameters.getSessionType());
-
         if (maybeAssessmentProperties.isPresent()) {
             AssessmentFormWindowProperties properties = maybeAssessmentProperties.get();
-            ifExists = properties.isRequireIfFormExists();
         }
 
         String formList = assessmentWindowParameters.getFormList();
@@ -142,23 +145,21 @@ public class ConfigServiceImpl implements ConfigService {
             }
         }
 
-        //Lines 2786 - 2815 in StudentDLL._GetTesteeTestForms_SP
+        //Lines 3786 - 3815 in StudentDLL._GetTesteeTestForms_SP
         if (requireFormWindow) {
             return formWindows.stream().filter(assessmentWindow -> {
                 String formKey = assessmentWindow.getFormKey();
                 return studentPackageForms.containsKey(formKey) &&
                     studentPackageForms.get(formKey).contains(assessmentWindow.getWindowId());
             }).filter(distinctByKey(AssessmentWindow::getWindowId)).collect(Collectors.toList());
-        } else if (requireForm || (ifExists && !studentPackageForms.isEmpty())) {
+        } else if (requireForm) {
             return formWindows.stream().filter(assessmentWindow ->
                 studentPackageForms.containsKey(assessmentWindow.getFormKey()))
                 .filter(distinctByKey(AssessmentWindow::getWindowId))
                 .collect(Collectors.toList());
         }
 
-        return formWindows.stream()
-            .filter(distinctByKey(AssessmentWindow::getWindowId))
-            .collect(Collectors.toList());
+        return formWindows;
     }
 
     private static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {

@@ -161,7 +161,7 @@ public class ConfigServiceImplTest {
     }
 
     @Test
-    public void shouldReturnDistinctFormWindowsByWindowId() {
+    public void shouldReturnAllFormWindowsByDefault() {
         AssessmentWindow window = new AssessmentWindow.Builder().withWindowId("id").withAssessmentId("SBAC-Mathematics-8").build();
         AssessmentWindow window2 = new AssessmentWindow.Builder().withWindowId("id").withAssessmentId("SBAC-Mathematics-8-2018").build();
         AssessmentWindow window3 = new AssessmentWindow.Builder().withWindowId("id3").withAssessmentId("SBAC-Mathematics-8-2018").build();
@@ -174,7 +174,7 @@ public class ConfigServiceImplTest {
         when(mockAssessmentWindowQueryRepository.findAssessmentFormWindowProperties("SBAC_PT", "SBAC-Mathematics-8", 0)).thenReturn(Optional.of(assessmentFormWindowProperties));
         List<AssessmentWindow> windows = configService.findAssessmentWindows(properties);
 
-        assertThat(windows).containsExactly(window, window3, window4);
+        assertThat(windows).containsExactly(window, window2, window3, window4);
     }
 
     @Test
@@ -258,11 +258,11 @@ public class ConfigServiceImplTest {
     private List<ClientSystemFlag> getMockClientSystemFlag() {
         List<ClientSystemFlag> clientSystemFlags = new ArrayList<>();
 
-        for (Integer i = 0; i < 5; i++) {
+        for (int i = 0; i < 5; i++) {
             ClientSystemFlag clientSystemFlag = new ClientSystemFlag.Builder()
                     .withClientName("SBAC_PT")
-                    .withAuditObject("AUDIT_OBJECT " + i.toString())
-                    .withDescription("unit test description " + i.toString())
+                    .withAuditObject("AUDIT_OBJECT " + i)
+                    .withDescription("unit test description " + i)
                     .withIsOn(true)
                     .withIsPracticeTest(true)
                     .build();
