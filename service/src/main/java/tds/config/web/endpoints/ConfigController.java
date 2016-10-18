@@ -47,7 +47,7 @@ class ConfigController {
         return ResponseEntity.ok(clientTestProperty);
     }
 
-    @GetMapping(value = "/assessment-windows/{clientName}/{assessmentId}/{sessionType}/{studentId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/assessment-windows/{clientName}/{assessmentId}/session-type/{sessionType}/student/{studentId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<List<AssessmentWindow>> findAssessmentWindows(@PathVariable final String clientName,
                                                                  @PathVariable final String assessmentId,
