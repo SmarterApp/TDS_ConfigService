@@ -176,7 +176,7 @@ class AssessmentWindowQueryRepositoryImpl implements AssessmentWindowQueryReposi
 
         return jdbcTemplate.query(SQL, parameters, (rs, rowNum) -> new AssessmentWindow.Builder()
             .withWindowId(rs.getString("windowId"))
-            .withAssessmentId(rs.getString("testkey"))
+            .withAssessmentKey(rs.getString("testkey"))
             .withFormKey(rs.getString("formKey"))
             .withMode(rs.getString("mode"))
             .withWindowMaxAttempts(rs.getInt("windowMax"))

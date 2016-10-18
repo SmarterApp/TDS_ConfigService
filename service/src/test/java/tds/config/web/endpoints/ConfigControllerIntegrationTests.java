@@ -127,7 +127,7 @@ public class ConfigControllerIntegrationTests {
         Instant endTime = Instant.now().plus(20, ChronoUnit.DAYS);
         AssessmentWindow window = new AssessmentWindow.Builder()
             .withWindowId("windowId")
-            .withAssessmentId("assessmentId")
+            .withAssessmentKey("SLA 11")
             .withMode("mode")
             .withWindowMaxAttempts(3)
             .withWindowSessionType(0)
@@ -149,7 +149,7 @@ public class ConfigControllerIntegrationTests {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.length()", is(1)))
             .andExpect(jsonPath("[0].windowId", is("windowId")))
-            .andExpect(jsonPath("[0].assessmentId", is("assessmentId")))
+            .andExpect(jsonPath("[0].assessmentKey", is("SLA 11")))
             .andExpect(jsonPath("[0].windowMaxAttempts", is(3)))
             .andExpect(jsonPath("[0].windowSessionType", is(0)))
             .andExpect(jsonPath("[0].formKey", is("formKey")))

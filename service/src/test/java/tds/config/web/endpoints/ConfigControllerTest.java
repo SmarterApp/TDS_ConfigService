@@ -116,7 +116,7 @@ public class ConfigControllerTest {
     @Test
     public void shouldFindListOfAssessmentWindows() {
         AssessmentWindow window = new AssessmentWindow.Builder()
-            .withAssessmentId("assessment")
+            .withAssessmentKey("assessment")
             .withWindowId("windowId")
             .build();
 

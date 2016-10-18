@@ -2,6 +2,9 @@ package tds.config;
 
 import java.time.Instant;
 
+/**
+ * Contains information for the assessment time windows
+ */
 public class AssessmentWindow {
     private String windowId;
     private int windowMaxAttempts;
@@ -12,7 +15,7 @@ public class AssessmentWindow {
     private int windowSessionType;
     private int modeSessionType;
     private String formKey;
-    private String assessmentId;
+    private String assessmentKey;
 
     private AssessmentWindow(AssessmentWindow.Builder builder) {
         windowId = builder.windowId;
@@ -24,7 +27,7 @@ public class AssessmentWindow {
         windowSessionType = builder.windowSessionType;
         modeSessionType = builder.modeSessionType;
         formKey = builder.formKey;
-        assessmentId = builder.assessmentId;
+        assessmentKey = builder.assessmentKey;
     }
 
     /**
@@ -32,44 +35,74 @@ public class AssessmentWindow {
      */
     private AssessmentWindow(){}
 
+    /**
+     * @return the window id
+     */
     public String getWindowId() {
         return windowId;
     }
 
+    /**
+     * @return the max number of attempts allowed for the window
+     */
     public int getWindowMaxAttempts() {
         return windowMaxAttempts;
     }
 
+    /**
+     * @return the window mode
+     */
     public String getMode() {
         return mode;
     }
 
+    /**
+     * @return the max number of attempts allowed for the mode
+     */
     public int getModeMaxAttempts() {
         return modeMaxAttempts;
     }
 
+    /**
+     * @return the window start time
+     */
     public Instant getStartTime() {
         return startTime;
     }
 
+    /**
+     * @return the window end time
+     */
     public Instant getEndTime() {
         return endTime;
     }
 
+    /**
+     * @return the session type associated with the window
+     */
     public int getWindowSessionType() {
         return windowSessionType;
     }
 
+    /**
+     * @return the session type associated with the mode
+     */
     public int getModeSessionType() {
         return modeSessionType;
     }
 
+    /**
+     * @return the form key associated with the window.  If the window is a form window
+     */
     public String getFormKey() {
         return formKey;
     }
 
-    public String getAssessmentId() {
-        return assessmentId;
+    /**
+     * @return the assessment key associated with the window
+     */
+    public String getAssessmentKey() {
+        return assessmentKey;
     }
 
     public static class Builder {
@@ -82,7 +115,7 @@ public class AssessmentWindow {
         private int windowSessionType;
         private int modeSessionType;
         private String formKey;
-        private String assessmentId;
+        private String assessmentKey;
 
         public Builder withWindowId(String windowId) {
             this.windowId = windowId;
@@ -129,8 +162,8 @@ public class AssessmentWindow {
             return this;
         }
 
-        public Builder withAssessmentId(String assessmentId) {
-            this.assessmentId = assessmentId;
+        public Builder withAssessmentKey(String assessmentKey) {
+            this.assessmentKey = assessmentKey;
             return this;
         }
 

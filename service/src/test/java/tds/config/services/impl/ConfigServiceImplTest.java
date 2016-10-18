@@ -145,10 +145,10 @@ public class ConfigServiceImplTest {
 
     @Test
     public void shouldReturnDistinctWindowsWhenWindowIsNotRequired() {
-        AssessmentWindow window = new AssessmentWindow.Builder().withWindowId("id").withAssessmentId("SBAC-Mathematics-8").build();
-        AssessmentWindow window2 = new AssessmentWindow.Builder().withWindowId("id").withAssessmentId("SBAC-Mathematics-8-2018").build();
-        AssessmentWindow window3 = new AssessmentWindow.Builder().withWindowId("id3").withAssessmentId("SBAC-Mathematics-8-2018").build();
-        AssessmentWindow window4 = new AssessmentWindow.Builder().withWindowId("id4").withAssessmentId("SBAC-Mathematics-3").build();
+        AssessmentWindow window = new AssessmentWindow.Builder().withWindowId("id").withAssessmentKey("SBAC-Mathematics-8").build();
+        AssessmentWindow window2 = new AssessmentWindow.Builder().withWindowId("id").withAssessmentKey("SBAC-Mathematics-8-2018").build();
+        AssessmentWindow window3 = new AssessmentWindow.Builder().withWindowId("id3").withAssessmentKey("SBAC-Mathematics-8-2018").build();
+        AssessmentWindow window4 = new AssessmentWindow.Builder().withWindowId("id4").withAssessmentKey("SBAC-Mathematics-3").build();
 
         AssessmentWindowParameters properties = new AssessmentWindowParameters.Builder(23, "SBAC_PT", "SBAC-Mathematics-8", 0).build();
         ClientTestProperty property = new ClientTestProperty.Builder().build();
@@ -162,10 +162,10 @@ public class ConfigServiceImplTest {
 
     @Test
     public void shouldReturnAllFormWindowsByDefault() {
-        AssessmentWindow window = new AssessmentWindow.Builder().withWindowId("id").withAssessmentId("SBAC-Mathematics-8").build();
-        AssessmentWindow window2 = new AssessmentWindow.Builder().withWindowId("id").withAssessmentId("SBAC-Mathematics-8-2018").build();
-        AssessmentWindow window3 = new AssessmentWindow.Builder().withWindowId("id3").withAssessmentId("SBAC-Mathematics-8-2018").build();
-        AssessmentWindow window4 = new AssessmentWindow.Builder().withWindowId("id4").withAssessmentId("SBAC-Mathematics-3").build();
+        AssessmentWindow window = new AssessmentWindow.Builder().withWindowId("id").withAssessmentKey("SBAC-Mathematics-8").build();
+        AssessmentWindow window2 = new AssessmentWindow.Builder().withWindowId("id").withAssessmentKey("SBAC-Mathematics-8-2018").build();
+        AssessmentWindow window3 = new AssessmentWindow.Builder().withWindowId("id3").withAssessmentKey("SBAC-Mathematics-8-2018").build();
+        AssessmentWindow window4 = new AssessmentWindow.Builder().withWindowId("id4").withAssessmentKey("SBAC-Mathematics-3").build();
 
         AssessmentWindowParameters properties = new AssessmentWindowParameters.Builder(23, "SBAC_PT", "SBAC-Mathematics-8", 0).build();
         AssessmentFormWindowProperties assessmentFormWindowProperties = new AssessmentFormWindowProperties(true, true, "formField", true);
@@ -182,13 +182,13 @@ public class ConfigServiceImplTest {
         AssessmentWindow window = new AssessmentWindow.Builder()
             .withWindowId("id")
             .withFormKey("formKey1")
-            .withAssessmentId("SBAC-Mathematics-8")
+            .withAssessmentKey("SBAC-Mathematics-8")
             .build();
 
         AssessmentWindow window2 = new AssessmentWindow.Builder()
             .withWindowId("id2")
             .withFormKey("formKey2")
-            .withAssessmentId("SBAC-Mathematics-8-2018")
+            .withAssessmentKey("SBAC-Mathematics-8-2018")
             .build();
 
         AssessmentWindowParameters properties = new AssessmentWindowParameters.Builder(23, "SBAC_PT", "SBAC-Mathematics-8", 0)
@@ -208,13 +208,13 @@ public class ConfigServiceImplTest {
         AssessmentWindow window = new AssessmentWindow.Builder()
             .withWindowId("id")
             .withFormKey("formKey")
-            .withAssessmentId("SBAC-Mathematics-8")
+            .withAssessmentKey("SBAC-Mathematics-8")
             .build();
 
         AssessmentWindow window2 = new AssessmentWindow.Builder()
             .withWindowId("id2")
             .withFormKey("formKey")
-            .withAssessmentId("SBAC-Mathematics-8-2018")
+            .withAssessmentKey("SBAC-Mathematics-8-2018")
             .build();
 
         AssessmentWindowParameters properties = new AssessmentWindowParameters.Builder(23, "SBAC_PT", "SBAC-Mathematics-8", 0)
