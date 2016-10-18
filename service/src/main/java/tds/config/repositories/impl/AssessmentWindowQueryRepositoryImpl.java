@@ -193,7 +193,6 @@ class AssessmentWindowQueryRepositoryImpl implements AssessmentWindowQueryReposi
             .addValue("sessionType", sessionType)
             .addValue("assessmentId", assessmentId);
 
-
         String SQL = "SELECT " +
             "   requireRTSFormWindow AS requireFormWindow, \n" +
             "   RTSFormField AS formField, \n" +
