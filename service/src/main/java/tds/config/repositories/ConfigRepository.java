@@ -10,19 +10,7 @@ import java.util.Optional;
  * Data Access for interacting with the {@code configs} database.
  */
 public interface ConfigRepository {
-    /**
-     * Get the {@link ClientTestProperty} record from {@code configs.client_testproperties} for the specified client name
-     * and test id.
-     * <p>
-     *     Because the {@link ClientTestProperty} values will rarely change, they are strong candidates for caching.
-     * </p>
-     *
-     * @param clientName The client name for which the {@link ClientTestProperty} records should be fetched.
-     * @param assessmentId The ID (which is the name) of the test for which the {@link ClientTestProperty} records
-     *                     should be fetched.
-     * @return A {@link ClientTestProperty} for the specified client name and test id.
-     */
-    Optional<ClientTestProperty> findClientTestProperty(String clientName, String assessmentId);
+
 
     /**
      * Get all the {@link ClientSystemFlag} records from the {@code configs.client_systemflags} database for the

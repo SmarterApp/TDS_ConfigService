@@ -1,103 +1,106 @@
 package tds.config.web.endpoints;
 
-import com.jayway.restassured.http.ContentType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import tds.config.ConfigServiceApplication;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
 
-import static com.jayway.restassured.RestAssured.*;
-import static org.hamcrest.Matchers.*;
+import java.util.Optional;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = ConfigServiceApplication.class)
-@WebAppConfiguration
-@IntegrationTest("server.port:8080")
+import tds.config.TimeLimitConfiguration;
+import tds.config.services.TimeLimitConfigurationService;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@RunWith(SpringRunner.class)
+@WebMvcTest(TimeLimitConfigurationController.class)
 public class TimeLimitsConfigurationControllerIntegrationTests {
     private static final String TIME_LIMITS_RESOURCE = "/config/time-limits/";
 
+    @Autowired
+    private MockMvc http;
+
+    @MockBean
+    private TimeLimitConfigurationService mockTimeLimitConfigurationService;
+
     @Test
-    public void shouldGetTimeLimitsConfigurationForClientNameAndAssessmentId() {
+    public void shouldGetTimeLimitsConfigurationForClientNameAndAssessmentId() throws Exception {
         final String clientName = "SBAC_PT";
         final String assessmentId = "SBAC Math 3-MATH-3";
 
-        given()
-            .accept(ContentType.JSON)
-        .when()
-            .get(TIME_LIMITS_RESOURCE + clientName + "/" + assessmentId)
-        .then()
-            .contentType(ContentType.JSON)
-            .statusCode(200)
-            .body("timeLimitConfiguration.clientName", equalTo(clientName))
-            .body("timeLimitConfiguration.environment", equalTo("Development"))
-            .body("timeLimitConfiguration.assessmentId", equalTo(assessmentId))
-            .body("timeLimitConfiguration.examRestartWindowMinutes", equalTo(10))
-            .body("timeLimitConfiguration.examDelayDays", equalTo(-1))
-            .body("timeLimitConfiguration.interfaceTimeoutMinutes", equalTo(10))
-            .body("timeLimitConfiguration.requestInterfaceTimeoutMinutes", equalTo(15))
-            .body("timeLimitConfiguration.taCheckinTimeMinutes", equalTo(20))
-            .body("_links.self.href", equalTo("http://localhost:8080/config/time-limits/SBAC_PT/SBAC%20Math%203-MATH-3"));
+        TimeLimitConfiguration timeLimitConfiguration = new TimeLimitConfiguration.Builder()
+            .withAssessmentId(assessmentId)
+            .withClientName(clientName)
+            .withEnvironment("Development")
+            .build();
+
+        when(mockTimeLimitConfigurationService.findTimeLimitConfiguration(clientName, assessmentId)).thenReturn(Optional.of(timeLimitConfiguration));
+
+        http.perform(get(String.format("%s/%s/%s", TIME_LIMITS_RESOURCE, clientName, assessmentId))
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("clientName", is(clientName)))
+            .andExpect(jsonPath("assessmentId", is(assessmentId)))
+            .andExpect(jsonPath("environment", is("Development")));
     }
 
     @Test
-    public void shouldGetTimeLimitsConfigurationForClientNameAndNonExistentAssessmentId() {
+    public void shouldGetTimeLimitsConfigurationForClientNameAndNonExistentAssessmentId() throws Exception {
         final String clientName = "SBAC_PT";
         final String assessmentId = "foo";
 
-        given()
-            .accept(ContentType.JSON)
-        .when()
-            .get(TIME_LIMITS_RESOURCE + clientName + "/" + assessmentId)
-        .then()
-            .contentType(ContentType.JSON)
-            .statusCode(200)
-            .body("timeLimitConfiguration.clientName", equalTo(clientName))
-            .body("timeLimitConfiguration.environment", equalTo("Development"))
-            .body("timeLimitConfiguration.assessmentId", is(nullValue()))
-            .body("timeLimitConfiguration.examRestartWindowMinutes", equalTo(10))
-            .body("timeLimitConfiguration.examDelayDays", equalTo(-1))
-            .body("timeLimitConfiguration.interfaceTimeoutMinutes", equalTo(10))
-            .body("timeLimitConfiguration.requestInterfaceTimeoutMinutes", equalTo(15))
-            .body("timeLimitConfiguration.taCheckinTimeMinutes", equalTo(20))
-            .body("_links.self.href", equalTo("http://localhost:8080/config/time-limits/SBAC_PT"));
+        TimeLimitConfiguration timeLimitConfiguration = new TimeLimitConfiguration.Builder()
+            .withClientName(clientName)
+            .withEnvironment("Development")
+            .build();
+
+        when(mockTimeLimitConfigurationService.findTimeLimitConfiguration(clientName, assessmentId)).thenReturn(Optional.of(timeLimitConfiguration));
+
+        http.perform(get(String.format("%s/%s/%s", TIME_LIMITS_RESOURCE, clientName, assessmentId))
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("clientName", is(clientName)))
+            .andExpect(jsonPath("assessmentId", is(nullValue())))
+            .andExpect(jsonPath("environment", is("Development")));
     }
 
     @Test
-    public void shouldGetTimeLimitsConfigurationForClientName() {
+    public void shouldGetTimeLimitsConfigurationForClientName() throws Exception {
         final String clientName = "SBAC_PT";
 
-        given()
-            .accept(ContentType.JSON)
-        .when()
-            .get(TIME_LIMITS_RESOURCE + clientName)
-        .then()
-            .contentType(ContentType.JSON)
-            .statusCode(200)
-            .body("timeLimitConfiguration.clientName", equalTo(clientName))
-            .body("timeLimitConfiguration.environment", equalTo("Development"))
-            .body("timeLimitConfiguration.assessmentId", is(nullValue()))
-            .body("timeLimitConfiguration.examRestartWindowMinutes", equalTo(10))
-            .body("timeLimitConfiguration.examDelayDays", equalTo(-1))
-            .body("timeLimitConfiguration.interfaceTimeoutMinutes", equalTo(10))
-            .body("timeLimitConfiguration.requestInterfaceTimeoutMinutes", equalTo(15))
-            .body("timeLimitConfiguration.taCheckinTimeMinutes", equalTo(20))
-            .body("_links.self.href", equalTo("http://localhost:8080/config/time-limits/SBAC_PT"));
+        TimeLimitConfiguration timeLimitConfiguration = new TimeLimitConfiguration.Builder()
+            .withClientName(clientName)
+            .withEnvironment("Development")
+            .build();
+
+        when(mockTimeLimitConfigurationService.findTimeLimitConfiguration(clientName)).thenReturn(Optional.of(timeLimitConfiguration));
+
+        http.perform(get(String.format("%s/%s", TIME_LIMITS_RESOURCE, clientName))
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("clientName", is(clientName)))
+            .andExpect(jsonPath("assessmentId", is(nullValue())))
+            .andExpect(jsonPath("environment", is("Development")));
     }
 
     @Test
-    public void shouldGet404WhenGettingTimeLimitsConfigurationWithInvalidClientNameAndAssessmentId() {
+    public void shouldGet404WhenGettingTimeLimitsConfigurationWithInvalidClientNameAndAssessmentId() throws Exception {
         final String clientName = "foo";
         final String assessmentId = "bar";
 
-        given()
-            .accept(ContentType.JSON)
-        .when()
-            .get(TIME_LIMITS_RESOURCE + clientName + "/" + assessmentId)
-        .then()
-            .contentType(ContentType.JSON)
-            .statusCode(404);
+        when(mockTimeLimitConfigurationService.findTimeLimitConfiguration(clientName, assessmentId)).thenReturn(Optional.empty());
+
+        http.perform(get(String.format("%s/%s/%s", TIME_LIMITS_RESOURCE, clientName, assessmentId))
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound());
     }
 }

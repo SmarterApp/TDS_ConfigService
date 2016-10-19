@@ -6,17 +6,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.util.UriComponentsBuilder;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
+
 import tds.common.web.exceptions.NotFoundException;
 import tds.config.TimeLimitConfiguration;
 import tds.config.services.TimeLimitConfigurationService;
-import tds.config.web.resources.TimeLimitConfigurationResource;
 
-import javax.servlet.http.HttpServletRequest;
-
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -24,7 +22,6 @@ import static org.mockito.Mockito.when;
 public class TimeLimitsConfigurationControllerUnitTests {
     private TimeLimitConfigurationController timeLimitConfigurationController;
     private TimeLimitConfigurationService mockTimeLimitConfigurationService;
-    private final String LOCALHOST_HREF_ROOT = "http://localhost/config/time-limits";
 
     @Before
     public void Setup() {
@@ -53,22 +50,20 @@ public class TimeLimitsConfigurationControllerUnitTests {
         when(mockTimeLimitConfigurationService.findTimeLimitConfiguration(clientName, assessmentId))
                 .thenReturn(Optional.of(mockTimeLimitConfiguration));
 
-        ResponseEntity<TimeLimitConfigurationResource> response = timeLimitConfigurationController.getTimeLimitConfiguration(clientName, assessmentId);
+        ResponseEntity<TimeLimitConfiguration> response = timeLimitConfigurationController.getTimeLimitConfiguration(clientName, assessmentId);
 
         verify(mockTimeLimitConfigurationService).findTimeLimitConfiguration(clientName, assessmentId);
 
-        assertThat(response.getBody().getTimeLimitConfiguration().getTaCheckinTimeMinutes()).isEqualTo(10);
-        assertThat(response.getBody().getTimeLimitConfiguration().getAssessmentId()).isEqualTo("Unit Test Assessment");
-        assertThat(response.getBody().getTimeLimitConfiguration().getClientName()).isEqualTo("UNIT_TEST");
-        assertThat(response.getBody().getTimeLimitConfiguration().getEnvironment()).isEqualTo("unit test");
-        assertThat(response.getBody().getTimeLimitConfiguration().getExamDelayDays()).isEqualTo(1);
-        assertThat(response.getBody().getTimeLimitConfiguration().getExamRestartWindowMinutes()).isEqualTo(20);
-        assertThat(response.getBody().getTimeLimitConfiguration().getInterfaceTimeoutMinutes()).isEqualTo(10);
-        assertThat(response.getBody().getTimeLimitConfiguration().getRequestInterfaceTimeoutMinutes()).isEqualTo(15);
-
-        UriComponentsBuilder expectedUrl = UriComponentsBuilder.fromHttpUrl(
-                String.format("%s/%s/%s", LOCALHOST_HREF_ROOT, clientName, assessmentId));
-        assertThat(response.getBody().getId().getHref()).isEqualTo(expectedUrl.toUriString());
+        TimeLimitConfiguration timeLimitConfiguration = response.getBody();
+        
+        assertThat(timeLimitConfiguration.getTaCheckinTimeMinutes()).isEqualTo(10);
+        assertThat(timeLimitConfiguration.getAssessmentId()).isEqualTo("Unit Test Assessment");
+        assertThat(timeLimitConfiguration.getClientName()).isEqualTo("UNIT_TEST");
+        assertThat(timeLimitConfiguration.getEnvironment()).isEqualTo("unit test");
+        assertThat(timeLimitConfiguration.getExamDelayDays()).isEqualTo(1);
+        assertThat(timeLimitConfiguration.getExamRestartWindowMinutes()).isEqualTo(20);
+        assertThat(timeLimitConfiguration.getInterfaceTimeoutMinutes()).isEqualTo(10);
+        assertThat(timeLimitConfiguration.getRequestInterfaceTimeoutMinutes()).isEqualTo(15);
     }
 
     @Test
@@ -88,22 +83,20 @@ public class TimeLimitsConfigurationControllerUnitTests {
         when(mockTimeLimitConfigurationService.findTimeLimitConfiguration(clientName, assessmentId))
                 .thenReturn(Optional.of(mockTimeLimitConfiguration));
 
-        ResponseEntity<TimeLimitConfigurationResource> response = timeLimitConfigurationController.getTimeLimitConfiguration(clientName, assessmentId);
+        ResponseEntity<TimeLimitConfiguration> response = timeLimitConfigurationController.getTimeLimitConfiguration(clientName, assessmentId);
 
         verify(mockTimeLimitConfigurationService).findTimeLimitConfiguration(clientName, assessmentId);
 
-        assertThat(response.getBody().getTimeLimitConfiguration().getTaCheckinTimeMinutes()).isEqualTo(10);
-        assertThat(response.getBody().getTimeLimitConfiguration().getAssessmentId()).isNull();
-        assertThat(response.getBody().getTimeLimitConfiguration().getClientName()).isEqualTo("UNIT_TEST");
-        assertThat(response.getBody().getTimeLimitConfiguration().getEnvironment()).isEqualTo("unit test");
-        assertThat(response.getBody().getTimeLimitConfiguration().getExamDelayDays()).isEqualTo(1);
-        assertThat(response.getBody().getTimeLimitConfiguration().getExamRestartWindowMinutes()).isEqualTo(20);
-        assertThat(response.getBody().getTimeLimitConfiguration().getInterfaceTimeoutMinutes()).isEqualTo(10);
-        assertThat(response.getBody().getTimeLimitConfiguration().getRequestInterfaceTimeoutMinutes()).isEqualTo(15);
+        TimeLimitConfiguration timeLimitConfiguration = response.getBody();
 
-        UriComponentsBuilder expectedUrl = UriComponentsBuilder.fromHttpUrl(
-                String.format("%s/%s", LOCALHOST_HREF_ROOT, clientName));
-        assertThat(response.getBody().getId().getHref()).isEqualTo(expectedUrl.toUriString());
+        assertThat(timeLimitConfiguration.getTaCheckinTimeMinutes()).isEqualTo(10);
+        assertThat(timeLimitConfiguration.getAssessmentId()).isNull();
+        assertThat(timeLimitConfiguration.getClientName()).isEqualTo("UNIT_TEST");
+        assertThat(timeLimitConfiguration.getEnvironment()).isEqualTo("unit test");
+        assertThat(timeLimitConfiguration.getExamDelayDays()).isEqualTo(1);
+        assertThat(timeLimitConfiguration.getExamRestartWindowMinutes()).isEqualTo(20);
+        assertThat(timeLimitConfiguration.getInterfaceTimeoutMinutes()).isEqualTo(10);
+        assertThat(timeLimitConfiguration.getRequestInterfaceTimeoutMinutes()).isEqualTo(15);
     }
 
     @Test
@@ -122,22 +115,20 @@ public class TimeLimitsConfigurationControllerUnitTests {
         when(mockTimeLimitConfigurationService.findTimeLimitConfiguration(clientName))
                 .thenReturn(Optional.of(mockTimeLimitConfiguration));
 
-        ResponseEntity<TimeLimitConfigurationResource> response = timeLimitConfigurationController.getTimeLimitConfiguration(clientName);
+        ResponseEntity<TimeLimitConfiguration> response = timeLimitConfigurationController.getTimeLimitConfiguration(clientName);
 
         verify(mockTimeLimitConfigurationService).findTimeLimitConfiguration(clientName);
 
-        assertThat(response.getBody().getTimeLimitConfiguration().getTaCheckinTimeMinutes()).isEqualTo(10);
-        assertThat(response.getBody().getTimeLimitConfiguration().getAssessmentId()).isNull();
-        assertThat(response.getBody().getTimeLimitConfiguration().getClientName()).isEqualTo("UNIT_TEST");
-        assertThat(response.getBody().getTimeLimitConfiguration().getEnvironment()).isEqualTo("unit test");
-        assertThat(response.getBody().getTimeLimitConfiguration().getExamDelayDays()).isEqualTo(1);
-        assertThat(response.getBody().getTimeLimitConfiguration().getExamRestartWindowMinutes()).isEqualTo(20);
-        assertThat(response.getBody().getTimeLimitConfiguration().getInterfaceTimeoutMinutes()).isEqualTo(10);
-        assertThat(response.getBody().getTimeLimitConfiguration().getRequestInterfaceTimeoutMinutes()).isEqualTo(15);
+        TimeLimitConfiguration timeLimitConfiguration = response.getBody();
 
-        UriComponentsBuilder expectedUrl = UriComponentsBuilder.fromHttpUrl(
-                String.format("%s/%s", LOCALHOST_HREF_ROOT, clientName));
-        assertThat(response.getBody().getId().getHref()).isEqualTo(expectedUrl.toUriString());
+        assertThat(timeLimitConfiguration.getTaCheckinTimeMinutes()).isEqualTo(10);
+        assertThat(timeLimitConfiguration.getAssessmentId()).isNull();
+        assertThat(timeLimitConfiguration.getClientName()).isEqualTo("UNIT_TEST");
+        assertThat(timeLimitConfiguration.getEnvironment()).isEqualTo("unit test");
+        assertThat(timeLimitConfiguration.getExamDelayDays()).isEqualTo(1);
+        assertThat(timeLimitConfiguration.getExamRestartWindowMinutes()).isEqualTo(20);
+        assertThat(timeLimitConfiguration.getInterfaceTimeoutMinutes()).isEqualTo(10);
+        assertThat(timeLimitConfiguration.getRequestInterfaceTimeoutMinutes()).isEqualTo(15);
     }
 
     @Test(expected = NotFoundException.class)

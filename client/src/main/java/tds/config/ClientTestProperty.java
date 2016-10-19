@@ -16,7 +16,6 @@ public class ClientTestProperty {
     private Integer sortOrder;
     private String rtsFormField;
     private boolean requireRtsWindow;
-    private String tideId;
     private String rtsModeField;
     private boolean requireRtsMode;
     private boolean requireRtsModeWindow;
@@ -25,6 +24,7 @@ public class ClientTestProperty {
     private Double abilityIntercept;
     private boolean validateCompleteness;
     private String gradeText;
+    private String rtsWindowField;
 
     public static class Builder {
         private String clientName;
@@ -39,7 +39,6 @@ public class ClientTestProperty {
         private Integer sortOrder;
         private String rtsFormField;
         private boolean requireRtsWindow;
-        private String tideId;
         private String rtsModeField;
         private boolean requireRtsMode;
         private boolean requireRtsModeWindow;
@@ -48,6 +47,7 @@ public class ClientTestProperty {
         private Double abilityIntercept;
         private boolean validateCompleteness;
         private String gradeText;
+        private String rtsWindowField;
         
         public Builder withClientName(String newClientName) {
             this.clientName = newClientName;
@@ -109,11 +109,6 @@ public class ClientTestProperty {
             return this;
         }
         
-        public Builder withTideId(String newTideId) {
-            this.tideId = newTideId;
-            return this;
-        }
-        
         public Builder withRtsModeField(String newRtsModeField) {
             this.rtsModeField = newRtsModeField;
             return this;
@@ -153,6 +148,11 @@ public class ClientTestProperty {
             this.gradeText = newGradeText;
             return this;
         }
+
+        public Builder withRtsWindowField(String rtsWindowField) {
+            this.rtsWindowField = rtsWindowField;
+            return this;
+        }
         
         public ClientTestProperty build() { return new ClientTestProperty(this); }
     }
@@ -170,7 +170,6 @@ public class ClientTestProperty {
         this.sortOrder = builder.sortOrder;
         this.rtsFormField = builder.rtsFormField;
         this.requireRtsWindow = builder.requireRtsWindow;
-        this.tideId = builder.tideId;
         this.rtsModeField = builder.rtsModeField;
         this.requireRtsMode = builder.requireRtsMode;
         this.requireRtsModeWindow = builder.requireRtsModeWindow;
@@ -179,6 +178,7 @@ public class ClientTestProperty {
         this.abilityIntercept = builder.abilityIntercept;
         this.validateCompleteness = builder.validateCompleteness;
         this.gradeText = builder.gradeText;
+        this.rtsWindowField = builder.rtsWindowField;
     }
 
     /**
@@ -243,10 +243,6 @@ public class ClientTestProperty {
         return requireRtsWindow;
     }
 
-    public String getTideId() {
-        return tideId;
-    }
-
     public String getRtsModeField() {
         return rtsModeField;
     }
@@ -277,6 +273,10 @@ public class ClientTestProperty {
 
     public String getGradeText() {
         return gradeText;
+    }
+
+    public String getRtsWindowField() {
+        return rtsWindowField;
     }
 }
 
