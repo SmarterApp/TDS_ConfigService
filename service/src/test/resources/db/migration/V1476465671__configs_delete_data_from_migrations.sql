@@ -9,7 +9,6 @@ use configs;
 
 delete from client_systemflags;
 delete from client_testproperties;
-delete from client_externs;
 delete from client_timelimits;
 delete from client_testmode;
 delete from client_testwindow;
