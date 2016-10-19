@@ -6,13 +6,11 @@
 #
 #-----------------------------------------------------------------------------------------------------------------------
 
-# Determine the amount of memory available to the container, for use with setting the Xms and Xmx values when starting
-# the jar (in this case setting both values to 80% of free memory).
-freeMem=`awk '/MemFree/ { print int($2/1024) }' /proc/meminfo`
-s=$(($freeMem/10*8))
-x=$(($freeMem/10*8))
-
-java -Xms${s}m -Xmx${x}m \
+java \
+    -Dspring.datasource.url="jdbc:mysql://${CONFIG_DB_HOST}:${CONFIG_DB_PORT}/${CONFIG_DB_NAME}" \
+    -Dspring.datasource.username="${CONFIG_DB_USER}" \
+    -Dspring.datasource.password="${CONFIG_DB_PASSWORD}" \
+    -Dspring.datasource.type=com.zaxxer.hikari.HikariDataSource \
     -jar /tds-config-service.jar \
     --server-port="8080" \
     --server.undertow.buffer-size=16384 \
@@ -20,7 +18,3 @@ java -Xms${s}m -Xmx${x}m \
     --server.undertow.io-threads=64 \
     --server.undertow.worker-threads=512 \
     --server.undertow.direct-buffers=true \
-    --spring.datasource.url="jdbc:mysql://${CONFIGS_DB_HOST}:${CONFIGS_DB_PORT}/${CONFIGS_DB_NAME}" \
-    --spring.datasource.username="${CONFIGS_DB_USER}" \
-    --spring.datasource.password="${CONFIGS_DB_PASSWORD}" \
-    --spring.datasource.type=com.zaxxer.hikari.HikariDataSource

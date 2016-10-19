@@ -89,8 +89,8 @@ The Docker container can be started via `docker-compose` or `docker run`:
 
 * The command for starting the container via `docker-compose`:  `docker-compose up -d -f /path/to/docker-compose.yml`
   * **NOTE:** If `docker-compose` is run in the same directory where the `docker-compose.yml` file is located, `docker-compose up -d` is sufficient to start the container
-* Alternately, `docker run` can be used to start up the container:  `docker run -d -p [open port on host]:8080 --env-file /path/to/config-service.env sbacoss/tds-config-service`
-  * example:  `docker run -d -p 23571:8080 --env-file config-service.env sbacoss/tds-config-service`
+* Alternately, `docker run` can be used to start up the container:  `docker run -d -p [open port on host]:8080 --env-file /path/to/config-service.env fwsbac/tds-config-service`
+  * example:  `docker run -d -p 23571:8080 --env-file config-service.env fwsbac/tds-config-service`
 
 To see the list of running Docker containers, use the following command:
 
@@ -99,7 +99,7 @@ To see the list of running Docker containers, use the following command:
  
 ```
 CONTAINER ID        IMAGE                        COMMAND                CREATED             STATUS              PORTS                     NAMES
-4b267a450d3b        sbacoss/tds-config-service   "/docker-startup.sh"   2 hours ago         Up 2 hours          0.0.0.0:23571->8080/tcp   docker_config_1
+4b267a450d3b        fwsbac/tds-config-service   "/docker-startup.sh"   2 hours ago         Up 2 hours          0.0.0.0:23571->8080/tcp   docker_config_1
 ```
 To tail the log files for the process(es) running on the Docker container:
 
