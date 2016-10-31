@@ -6,7 +6,7 @@ import java.time.Instant;
  Represents a record in the {@code configs.client_systemflags} table.
  */
 public class ClientSystemFlag {
-    public static final String ANONYMOUS_STUDENT_AUDIT_OBJECT = "AnonymousTestee";
+    public static final String ALLOW_ANONYMOUS_STUDENT_FLAG_TYPE = "AnonymousTestee";
 
     private String auditObject = "";
     private String clientName = "";
