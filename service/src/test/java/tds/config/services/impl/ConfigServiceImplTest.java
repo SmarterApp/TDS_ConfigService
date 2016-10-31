@@ -263,7 +263,7 @@ public class ConfigServiceImplTest {
                     .withClientName("SBAC_PT")
                     .withAuditObject("AUDIT_OBJECT " + i)
                     .withDescription("unit test description " + i)
-                    .withIsOn(true)
+                    .withEnabled(true)
                     .withIsPracticeTest(true)
                     .build();
 

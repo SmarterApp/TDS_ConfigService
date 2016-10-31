@@ -24,17 +24,12 @@ public interface ConfigService {
 
     /**
      * Get the {@link ClientSystemFlag} for the specified client and audit name.
-     * <p>
-     * The audit name is the name/description of the {@link ClientSystemFlag}.  Ideally the source of data for this
-     * method will be an in-memory collection; the {@link ClientSystemFlag} values rarely change, making them a
-     * strong candidate for caching.
-     * </p>
      *
      * @param clientName  The name of the client (typically SBAC or SBAC_PT)
-     * @param auditObject The name of the desired {@link ClientSystemFlag}
+     * @param type The type of the desired {@link ClientSystemFlag}
      * @return The {@link Optional<ClientSystemFlag>} that matches the client and audit name.
      */
-    Optional<ClientSystemFlag> findClientSystemFlag(String clientName, String auditObject);
+    Optional<ClientSystemFlag> findClientSystemFlag(String clientName, String type);
 
     /**
      * Finds the {@link tds.config.AssessmentWindow AssessmentWindow} for the given {@link tds.config.model.AssessmentWindowParameters}
