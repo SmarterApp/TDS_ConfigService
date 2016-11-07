@@ -32,7 +32,7 @@ public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRep
         "  IsSelectable as isSelectable, \n" +
         "  IsVisible as isVisible, \n" +
         "  studentControl as studentControl, \n" +
-        "  (select count(*) from configs.client_testtool TOOL where TOOL.ContextType = 'TEST' and TOOL.Context = MODE.testID and TOOL.clientname = MODE.clientname and TOOL.Type = TT.Type) as ValCount, \n" +
+        "  (select count(*) from configs.client_testtool TOOL where TOOL.ContextType = 'TEST' and TOOL.Context = MODE.testID and TOOL.clientname = MODE.clientname and TOOL.Type = TT.Type) as valCount, \n" +
         "  null as dependsOnToolType, \n" +
         "  IsEntryControl as isEntryControl\n" +
         "FROM \n" +
@@ -47,7 +47,7 @@ public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRep
         "    TType.Context = SEG.segmentID AND\n" +
         "    TT.Context = SEG.segmentId\n" +
         "WHERE \n" +
-        "  parentTest = MODE.testID \n" +
+        "  SEG.parentTest = MODE.testID \n" +
         "  and MODE.testkey = :testKey \n" +
         "  and TType.ContextType = 'SEGMENT' \n" +
         "  and TT.ContextType = 'SEGMENT' \n" +
@@ -71,7 +71,7 @@ public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRep
         "  TType.IsSelectable as isSelectable, \n" +
         "  TType.IsVisible as isVisible, \n" +
         "  TType.studentControl as studentControl,\n" +
-        "  (select count(*) from configs.client_testtool TOOL where TOOL.ContextType = 'TEST' and TOOL.Context = MODE.testID  and TOOL.clientname = MODE.clientname and TOOL.Type = TT.Type) as ValCount,\n" +
+        "  (select count(*) from configs.client_testtool TOOL where TOOL.ContextType = 'TEST' and TOOL.Context = MODE.testID  and TOOL.clientname = MODE.clientname and TOOL.Type = TT.Type) as valCount,\n" +
         "  TType.DependsOnToolType as dependsOnToolType, \n" +
         "  TType.IsEntryControl as isEntryControl\n" +
         "FROM \n" +
@@ -127,7 +127,7 @@ public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRep
             "  IsSelectable as isSelectable, \n" +
             "  IsVisible as isVisible, \n" +
             "  studentControl as studentControl, \n" +
-            "  (select count(*) from configs.client_testtool TOOL where TOOL.ContextType = 'TEST' and TOOL.Context = '*' and TOOL.clientname = MODE.clientname and TOOL.Type = TT.Type) as ValCount, \n" +
+            "  (select count(*) from configs.client_testtool TOOL where TOOL.ContextType = 'TEST' and TOOL.Context = '*' and TOOL.clientname = MODE.clientname and TOOL.Type = TT.Type) as valCount, \n" +
             "  DependsOnToolType as dependsOnToolType, \n" +
             "  IsEntryControl as isEntryControl\n" +
             "FROM  \n" +
@@ -166,7 +166,7 @@ public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRep
                 .withSelectable(rs.getBoolean("isSelectable"))
                 .withVisible(rs.getBoolean("isVisible"))
                 .withStudentControl(rs.getBoolean("studentControl"))
-                .withValueCount(rs.getInt(rs.getInt("ValCount")))
+                .withValueCount(rs.getInt("valCount"))
                 .withDependsOnToolType(rs.getString("dependsOnToolType"))
                 .withEntryControl(rs.getBoolean("isEntryControl"))
                 .build()
