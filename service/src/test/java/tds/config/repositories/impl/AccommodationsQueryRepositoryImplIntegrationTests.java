@@ -62,5 +62,46 @@ public class AccommodationsQueryRepositoryImplIntegrationTests {
         List<Accommodation> accommodationList = repository.findAssessmentAccommodations("(SBAC_PT)SBAC-Mathematics-11-Spring-2013-2015", true, new HashSet<>());
 
         assertThat(accommodationList).hasSize(2);
+
+        Accommodation segmentAccommodation = accommodationList.get(0);
+        Accommodation defaultAccommodation = accommodationList.get(1);
+
+        assertThat(segmentAccommodation.getAccCode()).isEqualTo("toolTypeSegmented");
+        assertThat(segmentAccommodation.getAccType()).isEqualTo("toolTypeSegmented");
+        assertThat(segmentAccommodation.getAccValue()).isEqualTo("segmentValue");
+        assertThat(segmentAccommodation.getDependsOnToolType()).isNull();
+        assertThat(segmentAccommodation.getSegmentPosition()).isEqualTo(99);
+        assertThat(segmentAccommodation.getToolMode()).isEqualTo("ALL");
+        assertThat(segmentAccommodation.getToolTypeSortOrder()).isEqualTo(0);
+        assertThat(segmentAccommodation.getToolValueSortOrder()).isEqualTo(0);
+        assertThat(segmentAccommodation.getTypeMode()).isEqualTo("ALL");
+        assertThat(segmentAccommodation.getValueCount()).isEqualTo(0);
+        assertThat(segmentAccommodation.isAllowChange()).isFalse();
+        assertThat(segmentAccommodation.isAllowCombine()).isFalse();
+        assertThat(segmentAccommodation.isDefaultAccommodation()).isTrue();
+        assertThat(segmentAccommodation.isDisableOnGuestSession()).isFalse();
+        assertThat(segmentAccommodation.isEntryControl()).isFalse();
+        assertThat(segmentAccommodation.isFunctional()).isTrue();
+        assertThat(segmentAccommodation.isSelectable()).isFalse();
+        assertThat(segmentAccommodation.isVisible()).isTrue();
+
+        assertThat(defaultAccommodation.getAccCode()).isEqualTo("toolTypeDefault");
+        assertThat(defaultAccommodation.getAccType()).isEqualTo("toolTypeDefault");
+        assertThat(defaultAccommodation.getAccValue()).isEqualTo("defaultTool");
+        assertThat(defaultAccommodation.getDependsOnToolType()).isNull();
+        assertThat(defaultAccommodation.getSegmentPosition()).isEqualTo(0);
+        assertThat(defaultAccommodation.getToolMode()).isEqualTo("ALL");
+        assertThat(defaultAccommodation.getToolTypeSortOrder()).isEqualTo(0);
+        assertThat(defaultAccommodation.getToolValueSortOrder()).isEqualTo(0);
+        assertThat(defaultAccommodation.getTypeMode()).isEqualTo("ALL");
+        assertThat(defaultAccommodation.getValueCount()).isEqualTo(1);
+        assertThat(defaultAccommodation.isAllowChange()).isFalse();
+        assertThat(defaultAccommodation.isAllowCombine()).isFalse();
+        assertThat(defaultAccommodation.isDefaultAccommodation()).isTrue();
+        assertThat(defaultAccommodation.isDisableOnGuestSession()).isFalse();
+        assertThat(defaultAccommodation.isEntryControl()).isFalse();
+        assertThat(defaultAccommodation.isFunctional()).isTrue();
+        assertThat(defaultAccommodation.isSelectable()).isFalse();
+        assertThat(defaultAccommodation.isVisible()).isTrue();
     }
 }
