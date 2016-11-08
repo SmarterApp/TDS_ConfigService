@@ -30,6 +30,7 @@ public class AccommodationServiceImpl implements AccommodationsService {
 
     @Override
     public List<Accommodation> findAccommodations(String assessmentKey) {
+        //Implements the replacement for CommonDLL.TestKeyAccommodations_FN
         Optional<Assessment> maybeAssessment = assessmentService.findAssessment(assessmentKey);
         if (!maybeAssessment.isPresent()) {
             throw new NotFoundException("Could not find assessment for %s", assessmentKey);
