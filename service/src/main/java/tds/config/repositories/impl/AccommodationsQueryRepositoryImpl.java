@@ -1,10 +1,12 @@
 package tds.config.repositories.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -92,12 +94,22 @@ public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRep
         "  and (TType.TestMode = 'ALL' or TType.TestMode = MODE.mode) \n" +
         "  and (TT.TestMode = 'ALL' or TT.TestMode = MODE.mode)";
 
+    @Autowired
     public AccommodationsQueryRepositoryImpl(DataSource dataSource) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
     @Override
-    public List<Accommodation> findAssessmentAccommodations(String assessmentKey, boolean segmented, Set<String> languageCodes) {
+    public List<Accommodation> findAccommodationsForSegmentedAssessment(String assessmentKey) {
+        return findAssessmentAccommodations(assessmentKey, true, new HashSet<>());
+    }
+
+    @Override
+    public List<Accommodation> findAccommodationsForNonSegmentedAssessment(String assessmentKey, Set<String> languageCodes) {
+        return findAssessmentAccommodations(assessmentKey, false, languageCodes);
+    }
+
+    private List<Accommodation> findAssessmentAccommodations(String assessmentKey, boolean segmented, Set<String> languageCodes) {
         MapSqlParameterSource parameters = new MapSqlParameterSource("testKey", assessmentKey)
             .addValue("languages", languageCodes);
 

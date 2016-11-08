@@ -70,7 +70,7 @@ public class AccommodationsQueryRepositoryImplIntegrationTests {
 
     @Test
     public void shouldFindAccommodationsForSegmentAndDefault() {
-        List<Accommodation> accommodationList = repository.findAssessmentAccommodations("(SBAC_PT)SBAC-Mathematics-11-Spring-2013-2015", true, new HashSet<>());
+        List<Accommodation> accommodationList = repository.findAccommodationsForSegmentedAssessment("(SBAC_PT)SBAC-Mathematics-11-Spring-2013-2015");
 
         assertThat(accommodationList).hasSize(2);
 
@@ -120,7 +120,7 @@ public class AccommodationsQueryRepositoryImplIntegrationTests {
     public void shouldFindAccommodationsForNonSegmentAndDefault() {
         Set<String> languages = new HashSet<>();
         languages.add("ENU");
-        List<Accommodation> accommodationList = repository.findAssessmentAccommodations("(SBAC_PT)SBAC-Mathematics-11-Spring-2013-2015", false, languages);
+        List<Accommodation> accommodationList = repository.findAccommodationsForNonSegmentedAssessment("(SBAC_PT)SBAC-Mathematics-11-Spring-2013-2015", languages);
 
         assertThat(accommodationList).hasSize(2);
 
