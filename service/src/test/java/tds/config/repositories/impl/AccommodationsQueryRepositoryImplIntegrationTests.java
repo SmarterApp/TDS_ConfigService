@@ -15,6 +15,7 @@ import javax.sql.DataSource;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import tds.common.data.mapping.ResultSetMapperUtility;
 import tds.config.Accommodation;
@@ -47,6 +48,13 @@ public class AccommodationsQueryRepositoryImplIntegrationTests {
         String defaultToolTypeInsertSQL = "INSERT INTO client_testtooltype (clientname, toolname, allowchange, rtsfieldname, isrequired, isselectable, dateentered, contexttype, context, testmode) VALUES ('SBAC_PT', 'toolTypeDefault', 0, 'rts', 1, 0, :dateentered, 'TEST', '*', 'ALL')  ";
         String defaultTestToolInsertSQL = "INSERT INTO client_testtool (clientname, type, code, value, isdefault, allowcombine, context, contexttype, testmode) VALUES ('SBAC_PT', 'toolTypeDefault', 'toolTypeDefault', 'defaultTool', 1, 0, '*', 'TEST', 'ALL');";
 
+        String nonSegmentTestToolTypeInsertSQL = "INSERT INTO client_testtooltype (clientname, context, contexttype, toolname, allowchange, rtsfieldname, isrequired, isselectable, dateentered, testmode) " +
+            "VALUES ('SBAC_PT', 'SBAC-Mathematics-11', 'TEST', 'Language', 0, 'rts', 1, 0, :dateentered, 'ALL');";
+        String noSegmentTestToolInsertEnglishSQL = "INSERT INTO client_testtool (clientname, context, contexttype, type, code, value, isdefault, allowcombine, testmode) " +
+            "VALUES ('SBAC_PT', 'SBAC-Mathematics-11', 'TEST', 'Language', 'ENU', 'ENU', 1, 0, 'ALL');";
+        String noSegmentTestToolInsertFrenchSQL = "INSERT INTO client_testtool (clientname, context, contexttype, type, code, value, isdefault, allowcombine, testmode) " +
+            "VALUES ('SBAC_PT', 'SBAC-Mathematics-11', 'TEST', 'Language', 'FRN', 'FRN', 1, 0, 'ALL');";
+
         SqlParameterSource parameters = new MapSqlParameterSource("dateentered", ResultSetMapperUtility.mapInstantToTimestamp(now));
 
         jdbcTemplate.update(testModeInsertSQL, parameters);
@@ -55,6 +63,9 @@ public class AccommodationsQueryRepositoryImplIntegrationTests {
         jdbcTemplate.update(segmentPropertiesInsertSQL, parameters);
         jdbcTemplate.update(defaultToolTypeInsertSQL, parameters);
         jdbcTemplate.update(defaultTestToolInsertSQL, parameters);
+        jdbcTemplate.update(nonSegmentTestToolTypeInsertSQL, parameters);
+        jdbcTemplate.update(noSegmentTestToolInsertEnglishSQL, parameters);
+        jdbcTemplate.update(noSegmentTestToolInsertFrenchSQL, parameters);
     }
 
     @Test
@@ -84,6 +95,56 @@ public class AccommodationsQueryRepositoryImplIntegrationTests {
         assertThat(segmentAccommodation.isFunctional()).isTrue();
         assertThat(segmentAccommodation.isSelectable()).isFalse();
         assertThat(segmentAccommodation.isVisible()).isTrue();
+
+        assertThat(defaultAccommodation.getAccCode()).isEqualTo("toolTypeDefault");
+        assertThat(defaultAccommodation.getAccType()).isEqualTo("toolTypeDefault");
+        assertThat(defaultAccommodation.getAccValue()).isEqualTo("defaultTool");
+        assertThat(defaultAccommodation.getDependsOnToolType()).isNull();
+        assertThat(defaultAccommodation.getSegmentPosition()).isEqualTo(0);
+        assertThat(defaultAccommodation.getToolMode()).isEqualTo("ALL");
+        assertThat(defaultAccommodation.getToolTypeSortOrder()).isEqualTo(0);
+        assertThat(defaultAccommodation.getToolValueSortOrder()).isEqualTo(0);
+        assertThat(defaultAccommodation.getTypeMode()).isEqualTo("ALL");
+        assertThat(defaultAccommodation.getValueCount()).isEqualTo(1);
+        assertThat(defaultAccommodation.isAllowChange()).isFalse();
+        assertThat(defaultAccommodation.isAllowCombine()).isFalse();
+        assertThat(defaultAccommodation.isDefaultAccommodation()).isTrue();
+        assertThat(defaultAccommodation.isDisableOnGuestSession()).isFalse();
+        assertThat(defaultAccommodation.isEntryControl()).isFalse();
+        assertThat(defaultAccommodation.isFunctional()).isTrue();
+        assertThat(defaultAccommodation.isSelectable()).isFalse();
+        assertThat(defaultAccommodation.isVisible()).isTrue();
+    }
+
+    @Test
+    public void shouldFindAccommodationsForNonSegmentAndDefault() {
+        Set<String> languages = new HashSet<>();
+        languages.add("ENU");
+        List<Accommodation> accommodationList = repository.findAssessmentAccommodations("(SBAC_PT)SBAC-Mathematics-11-Spring-2013-2015", false, languages);
+
+        assertThat(accommodationList).hasSize(2);
+
+        Accommodation englishAccommodation = accommodationList.get(0);
+        Accommodation defaultAccommodation = accommodationList.get(1);
+
+        assertThat(englishAccommodation.getAccCode()).isEqualTo("ENU");
+        assertThat(englishAccommodation.getAccType()).isEqualTo("Language");
+        assertThat(englishAccommodation.getAccValue()).isEqualTo("ENU");
+        assertThat(englishAccommodation.getDependsOnToolType()).isNull();
+        assertThat(englishAccommodation.getSegmentPosition()).isEqualTo(0);
+        assertThat(englishAccommodation.getToolMode()).isEqualTo("ALL");
+        assertThat(englishAccommodation.getToolTypeSortOrder()).isEqualTo(0);
+        assertThat(englishAccommodation.getToolValueSortOrder()).isEqualTo(0);
+        assertThat(englishAccommodation.getTypeMode()).isEqualTo("ALL");
+        assertThat(englishAccommodation.getValueCount()).isEqualTo(2);
+        assertThat(englishAccommodation.isAllowChange()).isFalse();
+        assertThat(englishAccommodation.isAllowCombine()).isFalse();
+        assertThat(englishAccommodation.isDefaultAccommodation()).isTrue();
+        assertThat(englishAccommodation.isDisableOnGuestSession()).isFalse();
+        assertThat(englishAccommodation.isEntryControl()).isFalse();
+        assertThat(englishAccommodation.isFunctional()).isTrue();
+        assertThat(englishAccommodation.isSelectable()).isFalse();
+        assertThat(englishAccommodation.isVisible()).isTrue();
 
         assertThat(defaultAccommodation.getAccCode()).isEqualTo("toolTypeDefault");
         assertThat(defaultAccommodation.getAccType()).isEqualTo("toolTypeDefault");
