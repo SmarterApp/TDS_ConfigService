@@ -1,5 +1,8 @@
 package tds.config;
 
+/**
+ * Represents an Assessment accommodation
+ */
 public class Accommodation {
     private int valueCount;
     private int segmentPosition;
@@ -7,9 +10,9 @@ public class Accommodation {
     private int toolTypeSortOrder;
     private int toolValueSortOrder;
     private String toolMode;
-    private String accType;
-    private String accValue;
-    private String accCode;
+    private String accommodationType;
+    private String accommodationValue;
+    private String accommodationCode;
     private boolean defaultAccommodation;
     private boolean allowCombine;
     private boolean allowChange;
@@ -21,78 +24,135 @@ public class Accommodation {
     private String dependsOnToolType;
     private String typeMode;
 
+    /**
+     * @return the count of tools associated with the accommodation
+     */
     public int getValueCount() {
         return valueCount;
     }
 
+    /**
+     * @return the segment position which relates to this accommodation.  Zero if non segmented assessment
+     */
     public int getSegmentPosition() {
         return segmentPosition;
     }
 
+    /**
+     * @return {@code true} if accommodation should be disabled during guest session
+     */
     public boolean isDisableOnGuestSession() {
         return disableOnGuestSession;
     }
 
+    /**
+     * @return used to sort by type
+     */
     public int getToolTypeSortOrder() {
         return toolTypeSortOrder;
     }
 
+    /**
+     * @return used to sort by value
+     */
     public int getToolValueSortOrder() {
         return toolValueSortOrder;
     }
 
+    /**
+     * @return the tool mode
+     */
     public String getToolMode() {
         return toolMode;
     }
 
-    public String getAccType() {
-        return accType;
+    /**
+     * @return the type of the accommodation
+     */
+    public String getAccommodationType() {
+        return accommodationType;
     }
 
-    public String getAccValue() {
-        return accValue;
+    /**
+     * @return the value of the accommodation
+     */
+    public String getAccommodationValue() {
+        return accommodationValue;
     }
 
-    public String getAccCode() {
-        return accCode;
+    /**
+     * @return the code of the accommodation
+     */
+    public String getAccommodationCode() {
+        return accommodationCode;
     }
 
+    /**
+     * @return {@code true} if it can be combined
+     */
     public boolean isAllowCombine() {
         return allowCombine;
     }
 
+    /**
+     * @return {@code true} if the accommodation is functional
+     */
     public boolean isFunctional() {
         return functional;
     }
 
+    /**
+     * @return {@code true} if the accommodation can be selected
+     */
     public boolean isSelectable() {
         return selectable;
     }
 
+    /**
+     * @return {@code true} if the accommodation is visible
+     */
     public boolean isVisible() {
         return visible;
     }
 
+    /**
+     * @return {@code true} if the student can control the accommodation
+     */
     public boolean isStudentControl() {
         return studentControl;
     }
 
+    /**
+     * @return {@code true} if the entry can be controlled
+     */
     public boolean isEntryControl() {
         return entryControl;
     }
 
+    /**
+     * @return the tool type that this accommodation depends on
+     */
     public String getDependsOnToolType() {
         return dependsOnToolType;
     }
 
+    /**
+     * @return {@code true} if this is the default accommodation
+     */
     public boolean isDefaultAccommodation() {
         return defaultAccommodation;
     }
 
+    /**
+     * @return the type mode
+     */
     public String getTypeMode() {
         return typeMode;
     }
 
+    /**
+     * @return {@code true} allow changes
+     */
     public boolean isAllowChange() {
         return allowChange;
     }
@@ -104,9 +164,9 @@ public class Accommodation {
         private int toolTypeSortOrder;
         private int toolValueSortOrder;
         private String toolMode;
-        private String accType;
-        private String accValue;
-        private String accCode;
+        private String accommodationType;
+        private String accommodationValue;
+        private String accommodationCode;
         private boolean allowCombine;
         private boolean functional;
         private boolean selectable;
@@ -117,10 +177,6 @@ public class Accommodation {
         private boolean defaultAccommodation;
         private String typeMode;
         private boolean allowChange;
-
-        public static Builder anAccommodationa() {
-            return new Builder();
-        }
 
         public Builder withValueCount(int valueCount) {
             this.valueCount = valueCount;
@@ -152,18 +208,18 @@ public class Accommodation {
             return this;
         }
 
-        public Builder withAccType(String accType) {
-            this.accType = accType;
+        public Builder withAccommodationType(String accType) {
+            this.accommodationType = accType;
             return this;
         }
 
-        public Builder withAccValue(String accValue) {
-            this.accValue = accValue;
+        public Builder withAccommodationValue(String accValue) {
+            this.accommodationValue = accValue;
             return this;
         }
 
-        public Builder withAccCode(String accCode) {
-            this.accCode = accCode;
+        public Builder withAccommodationCode(String accCode) {
+            this.accommodationCode = accCode;
             return this;
         }
 
@@ -222,7 +278,7 @@ public class Accommodation {
             accommodation.valueCount = this.valueCount;
             accommodation.toolValueSortOrder = this.toolValueSortOrder;
             accommodation.segmentPosition = this.segmentPosition;
-            accommodation.accValue = this.accValue;
+            accommodation.accommodationValue = this.accommodationValue;
             accommodation.selectable = this.selectable;
             accommodation.dependsOnToolType = this.dependsOnToolType;
             accommodation.functional = this.functional;
@@ -230,11 +286,11 @@ public class Accommodation {
             accommodation.studentControl = this.studentControl;
             accommodation.disableOnGuestSession = this.disableOnGuestSession;
             accommodation.toolMode = this.toolMode;
-            accommodation.accCode = this.accCode;
+            accommodation.accommodationCode = this.accommodationCode;
             accommodation.toolTypeSortOrder = this.toolTypeSortOrder;
             accommodation.visible = this.visible;
             accommodation.allowCombine = this.allowCombine;
-            accommodation.accType = this.accType;
+            accommodation.accommodationType = this.accommodationType;
             accommodation.defaultAccommodation = this.defaultAccommodation;
             accommodation.typeMode = this.typeMode;
             accommodation.allowChange = this.allowChange;
