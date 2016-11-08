@@ -34,7 +34,7 @@ public class AssessmentServiceImplTest {
     }
 
     @Test
-    public void shouldFindSetOfAdminSubjectsByKey() {
+    public void shouldFindAssessmentByKey() {
         List<Segment> segments = new ArrayList<>();
         segments.add(new Segment.Builder("segkey")
             .withSegmentId("segid")
@@ -60,7 +60,7 @@ public class AssessmentServiceImplTest {
     }
 
     @Test
-    public void shouldReturnEmptyWhenSetOfAdminSubjectNotFound() {
+    public void shouldReturnEmptyWhenAssessmentNotFound() {
         when(restTemplate.getForObject("http://localhost:8080/assessments/key", Assessment.class)).thenThrow(new HttpClientErrorException(HttpStatus.NOT_FOUND));
         Optional<Assessment> maybeAssessment = assessmentService.findAssessment("key");
         verify(restTemplate).getForObject("http://localhost:8080/assessments/key", Assessment.class);
@@ -69,7 +69,7 @@ public class AssessmentServiceImplTest {
     }
 
     @Test (expected = RestClientException.class)
-    public void shouldThrowIfStatusNotNotFoundWhenUnexpectedErrorFindingSetOfAdminSubject() {
+    public void shouldThrowIfStatusNotNotFoundWhenUnexpectedErrorFindingAssessment() {
         when(restTemplate.getForObject("http://localhost:8080/assessments/key", Assessment.class)).thenThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST));
         assessmentService.findAssessment("key");
     }

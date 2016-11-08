@@ -25,10 +25,10 @@ public class AssessmentServiceImpl implements AssessmentService {
     }
 
     @Override
-    public Optional<Assessment> findAssessment(String assessmentId) {
+    public Optional<Assessment> findAssessment(String assessmentKey) {
         UriComponentsBuilder builder =
             UriComponentsBuilder
-                .fromHttpUrl(String.format("%s/%s", properties.getAssessmentUrl(), assessmentId));
+                .fromHttpUrl(String.format("%s/%s", properties.getAssessmentUrl(), assessmentKey));
 
         Optional<Assessment> maybeAssessment = Optional.empty();
         try {
