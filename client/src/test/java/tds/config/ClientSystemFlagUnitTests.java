@@ -5,7 +5,7 @@ import org.junit.Test;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class ClientSystemFlagUnitTests {
     @Test
@@ -15,7 +15,7 @@ public class ClientSystemFlagUnitTests {
         ClientSystemFlag clientSystemFlag = new ClientSystemFlag.Builder()
                 .withClientName("SBAC_PT")
                 .withIsPracticeTest(true)
-                .withIsOn(true)
+                .withEnabled(true)
                 .withDescription("Unit test description")
                 .withAuditObject("Unit test audit object")
                 .withDateChanged(utcNow.minus(5, ChronoUnit.MINUTES))
@@ -24,7 +24,7 @@ public class ClientSystemFlagUnitTests {
 
         assertThat(clientSystemFlag.getClientName()).isEqualTo("SBAC_PT");
         assertThat(clientSystemFlag.getIsPracticeTest()).isTrue();
-        assertThat(clientSystemFlag.getIsOn()).isTrue();
+        assertThat(clientSystemFlag.isEnabled()).isTrue();
         assertThat(clientSystemFlag.getDescription()).isEqualTo("Unit test description");
         assertThat(clientSystemFlag.getAuditObject()).isEqualTo("Unit test audit object");
         assertThat(clientSystemFlag.getDateChanged()).isEqualTo(utcNow.minus(5, ChronoUnit.MINUTES));

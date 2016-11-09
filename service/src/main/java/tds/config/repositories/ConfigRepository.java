@@ -1,10 +1,8 @@
 package tds.config.repositories;
 
-import tds.config.ClientSystemFlag;
-import tds.config.ClientTestProperty;
-
 import java.util.List;
-import java.util.Optional;
+
+import tds.config.ClientSystemFlag;
 
 /**
  * Data Access for interacting with the {@code configs} database.

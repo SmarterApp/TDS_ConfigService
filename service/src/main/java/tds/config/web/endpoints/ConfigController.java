@@ -29,11 +29,11 @@ class ConfigController {
         this.configService = configService;
     }
 
-    @GetMapping(value = "/client-system-flags/{clientName}/{auditObject}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/client-system-flags/{clientName}/{type}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<ClientSystemFlag> getClientSystemFlag(@PathVariable final String clientName, @PathVariable final String auditObject) {
-        final ClientSystemFlag clientSystemFlag = configService.findClientSystemFlag(clientName, auditObject)
-                .orElseThrow(() -> new NotFoundException("Could not find ClientSystemFlag for client name %s and audit object %s", clientName, auditObject));
+    ResponseEntity<ClientSystemFlag> getClientSystemFlag(@PathVariable final String clientName, @PathVariable final String type) {
+        final ClientSystemFlag clientSystemFlag = configService.findClientSystemFlag(clientName, type)
+                .orElseThrow(() -> new NotFoundException("Could not find ClientSystemFlag for client name %s and type %s", clientName, type));
 
         return ResponseEntity.ok(clientSystemFlag);
     }

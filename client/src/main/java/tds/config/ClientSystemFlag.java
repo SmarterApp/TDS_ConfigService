@@ -6,10 +6,12 @@ import java.time.Instant;
  Represents a record in the {@code configs.client_systemflags} table.
  */
 public class ClientSystemFlag {
+    public static final String ALLOW_ANONYMOUS_STUDENT_FLAG_TYPE = "AnonymousTestee";
+
     private String auditObject = "";
     private String clientName = "";
     private boolean isPracticeTest;
-    private boolean isOn;
+    private boolean enabled;
     private String description;
     private Instant dateChanged;
     private Instant datePublished;
@@ -18,7 +20,7 @@ public class ClientSystemFlag {
         private String auditObject = "";
         private String clientName = "";
         private boolean isPracticeTest;
-        private boolean isOn;
+        private boolean enabled;
         private String description;
         private Instant dateChanged;
         private Instant datePublished;
@@ -38,8 +40,8 @@ public class ClientSystemFlag {
             return this;
         }
 
-        public Builder withIsOn(boolean isOn) {
-            this.isOn = isOn;
+        public Builder withEnabled(boolean enabled) {
+            this.enabled = enabled;
             return this;
         }
 
@@ -67,7 +69,7 @@ public class ClientSystemFlag {
         this.auditObject = builder.auditObject;
         this.clientName = builder.clientName;
         this.isPracticeTest = builder.isPracticeTest;
-        this.isOn = builder.isOn;
+        this.enabled = builder.enabled;
         this.description = builder.description;
         this.dateChanged = builder.dateChanged;
         this.datePublished = builder.datePublished;
@@ -115,8 +117,8 @@ public class ClientSystemFlag {
      *
      * @return {@code True} if the {@link ClientSystemFlag} is enabled; otherwise {@code False}.
      */
-    public boolean getIsOn() {
-        return isOn;
+    public boolean isEnabled() {
+        return enabled;
     }
 
     /**

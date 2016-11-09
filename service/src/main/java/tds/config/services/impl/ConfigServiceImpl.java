@@ -45,11 +45,17 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
-    public Optional<ClientSystemFlag> findClientSystemFlag(String clientName, String auditObject) {
+    public Optional<ClientSystemFlag> findClientSystemFlag(String clientName, String type) {
+        /*
+            The type is the name of the ClientSystemFlag.  Ideally the source of data for this
+            method will be an in-memory collection; ClientSystemFlag values rarely change, making them a
+            strong candidate for caching.
+        */
+
         List<ClientSystemFlag> clientSystemFlags = configRepository.findClientSystemFlags(clientName);
 
         return clientSystemFlags.stream()
-            .filter(f -> f.getAuditObject().equals(auditObject))
+            .filter(f -> f.getAuditObject().equals(type))
             .findFirst();
     }
 

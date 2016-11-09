@@ -91,7 +91,7 @@ public class ConfigControllerIntegrationTests {
         ClientSystemFlag flag = new ClientSystemFlag.Builder()
             .withAuditObject(auditObject)
             .withClientName(clientName)
-            .withIsOn(true)
+            .withEnabled(true)
             .withIsPracticeTest(true)
             .build();
 
@@ -102,7 +102,7 @@ public class ConfigControllerIntegrationTests {
             .andExpect(status().isOk())
             .andExpect(jsonPath("clientName", is(clientName)))
             .andExpect(jsonPath("auditObject", is(auditObject)))
-            .andExpect(jsonPath("isOn", is(true)))
+            .andExpect(jsonPath("enabled", is(true)))
             .andExpect(jsonPath("isPracticeTest", is(true)));
     }
 

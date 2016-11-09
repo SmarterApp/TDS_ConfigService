@@ -19,7 +19,7 @@ public class ClientSystemFlagRowMapper implements RowMapper<ClientSystemFlag> {
                 .withAuditObject(rs.getString("auditObject"))
                 .withClientName(rs.getString("clientName"))
                 .withIsPracticeTest(rs.getBoolean("isPracticeTest"))
-                .withIsOn(rs.getInt("isOn") == 1)
+                .withEnabled(rs.getInt("isOn") == 1)
                 .withDescription(rs.getString("description"))
                 .withDateChanged(mapTimeStampToInstant(rs, "dateChanged"))
                 .withDatePublished(mapTimeStampToInstant(rs, "datePublished"))
