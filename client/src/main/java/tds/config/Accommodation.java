@@ -23,6 +23,7 @@ public class Accommodation {
     private boolean entryControl;
     private String dependsOnToolType;
     private String typeMode;
+    private String segmentKey;
 
     /**
      * @return the count of tools associated with the accommodation
@@ -157,6 +158,13 @@ public class Accommodation {
         return allowChange;
     }
 
+    /**
+     * @return the segment key if segmented accommodation otherwise null
+     */
+    public String getSegmentKey() {
+        return segmentKey;
+    }
+
     public static final class Builder {
         private int valueCount;
         private int segmentPosition;
@@ -177,6 +185,7 @@ public class Accommodation {
         private boolean defaultAccommodation;
         private String typeMode;
         private boolean allowChange;
+        private String segmentKey;
 
         public Builder withValueCount(int valueCount) {
             this.valueCount = valueCount;
@@ -273,6 +282,11 @@ public class Accommodation {
             return this;
         }
 
+        public Builder withSegmentKey(String segmentKey) {
+            this.segmentKey = segmentKey;
+            return this;
+        }
+
         public Accommodation build() {
             Accommodation accommodation = new Accommodation();
             accommodation.valueCount = this.valueCount;
@@ -294,6 +308,7 @@ public class Accommodation {
             accommodation.defaultAccommodation = this.defaultAccommodation;
             accommodation.typeMode = this.typeMode;
             accommodation.allowChange = this.allowChange;
+            accommodation.segmentKey = this.segmentKey;
             return accommodation;
         }
     }
