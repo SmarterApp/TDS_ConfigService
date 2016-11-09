@@ -95,6 +95,7 @@ public class AccommodationsQueryRepositoryImplIntegrationTests {
         assertThat(segmentAccommodation.isFunctional()).isTrue();
         assertThat(segmentAccommodation.isSelectable()).isFalse();
         assertThat(segmentAccommodation.isVisible()).isTrue();
+        assertThat(segmentAccommodation.getSegmentKey()).isEqualTo("(SBAC_PT)SBAC-Mathematics-11-Spring-2013-2015");
 
         assertThat(defaultAccommodation.getAccommodationCode()).isEqualTo("toolTypeDefault");
         assertThat(defaultAccommodation.getAccommodationType()).isEqualTo("toolTypeDefault");
@@ -114,6 +115,7 @@ public class AccommodationsQueryRepositoryImplIntegrationTests {
         assertThat(defaultAccommodation.isFunctional()).isTrue();
         assertThat(defaultAccommodation.isSelectable()).isFalse();
         assertThat(defaultAccommodation.isVisible()).isTrue();
+        assertThat(defaultAccommodation.getSegmentKey()).isNull();
     }
 
     @Test
@@ -145,6 +147,7 @@ public class AccommodationsQueryRepositoryImplIntegrationTests {
         assertThat(englishAccommodation.isFunctional()).isTrue();
         assertThat(englishAccommodation.isSelectable()).isFalse();
         assertThat(englishAccommodation.isVisible()).isTrue();
+        assertThat(englishAccommodation.getSegmentKey()).isNull();
 
         assertThat(defaultAccommodation.getAccommodationCode()).isEqualTo("toolTypeDefault");
         assertThat(defaultAccommodation.getAccommodationType()).isEqualTo("toolTypeDefault");
@@ -164,5 +167,6 @@ public class AccommodationsQueryRepositoryImplIntegrationTests {
         assertThat(defaultAccommodation.isFunctional()).isTrue();
         assertThat(defaultAccommodation.isSelectable()).isFalse();
         assertThat(defaultAccommodation.isVisible()).isTrue();
+        assertThat(defaultAccommodation.getSegmentKey()).isNull();
     }
 }

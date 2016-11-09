@@ -19,6 +19,7 @@ public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRep
 
     private static final String SEGMENTED_ASSESSMENT_SQL = "SELECT \n" +
         "  distinct SegmentPosition as segment,\n" +
+        "  SEG.modekey as segmentKey, \n" +
         "  TType.DisableOnGuestSession as disableOnGuestSession, \n" +
         "  TType.SortOrder as toolTypeSortOrder , \n" +
         "  TT.SortOrder as toolValueSortOrder, \n" +
@@ -58,6 +59,7 @@ public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRep
 
     private static final String NON_SEGMENTED_ASSESSMENT_SQL = "SELECT \n" +
         "  distinct 0 as segment, \n" +
+        "  null as segmentKey, \n" +
         "  TType.DisableOnGuestSession as disableOnGuestSession, \n" +
         "  TType.SortOrder as toolTypeSortOrder, \n" +
         "  TT.SortOrder as toolValueSortOrder, \n" +
@@ -124,6 +126,7 @@ public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRep
             "(\n" +
             "SELECT \n" +
             "  distinct 0 as segment,\n" +
+            "  null as segmentKey, \n" +
             "  TType.DisableOnGuestSession as disableOnGuestSession,  \n" +
             "  TType.SortOrder as toolTypeSortOrder, \n" +
             "  TT.SortOrder as toolValueSortOrder, \n" +
@@ -181,6 +184,7 @@ public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRep
                 .withValueCount(rs.getInt("valCount"))
                 .withDependsOnToolType(rs.getString("dependsOnToolType"))
                 .withEntryControl(rs.getBoolean("isEntryControl"))
+                .withSegmentKey(rs.getString("segmentKey"))
                 .build()
         );
     }
