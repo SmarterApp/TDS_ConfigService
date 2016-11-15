@@ -13,12 +13,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import tds.common.data.mapping.ResultSetMapperUtility;
 import tds.config.AssessmentWindow;
 import tds.config.model.AssessmentFormWindowProperties;
 import tds.config.repositories.AssessmentWindowQueryRepository;
 
-import static tds.common.data.mapping.ResultSetMapperUtility.mapTimeStampToInstant;
+import static tds.common.data.mapping.ResultSetMapperUtility.mapTimeStampToJodaInstant;
 
 @Repository
 class AssessmentWindowQueryRepositoryImpl implements AssessmentWindowQueryRepository {
@@ -77,8 +76,8 @@ class AssessmentWindowQueryRepositoryImpl implements AssessmentWindowQueryReposi
                     .withWindowId(rs.getString("windowID"))
                     .withMode(rs.getString("mode"))
                     .withWindowMaxAttempts(rs.getInt("windowMax"))
-                    .withStartTime(mapTimeStampToInstant(rs, "startDate"))
-                    .withEndTime(mapTimeStampToInstant(rs, "endDate"))
+                    .withStartTime(mapTimeStampToJodaInstant(rs, "startDate"))
+                    .withEndTime(mapTimeStampToJodaInstant(rs, "endDate"))
                     .withMode(rs.getString("mode"))
                     .withModeMaxAttempts(rs.getInt("modeMax"))
                     .withWindowSessionType(rs.getInt("windowSession"))
@@ -181,8 +180,8 @@ class AssessmentWindowQueryRepositoryImpl implements AssessmentWindowQueryReposi
             .withMode(rs.getString("mode"))
             .withWindowMaxAttempts(rs.getInt("windowMax"))
             .withModeMaxAttempts(rs.getInt("modeMax"))
-            .withStartTime(ResultSetMapperUtility.mapTimeStampToInstant(rs, "startDate"))
-            .withEndTime(ResultSetMapperUtility.mapTimeStampToInstant(rs, "endDate"))
+            .withStartTime(mapTimeStampToJodaInstant(rs, "startDate"))
+            .withEndTime(mapTimeStampToJodaInstant(rs, "endDate"))
             .build()
         );
     }

@@ -55,7 +55,7 @@ public class AccommodationsQueryRepositoryImplIntegrationTests {
         String noSegmentTestToolInsertFrenchSQL = "INSERT INTO client_testtool (clientname, context, contexttype, type, code, value, isdefault, allowcombine, testmode) " +
             "VALUES ('SBAC_PT', 'SBAC-Mathematics-11', 'TEST', 'Language', 'FRN', 'FRN', 1, 0, 'ALL');";
 
-        SqlParameterSource parameters = new MapSqlParameterSource("dateentered", ResultSetMapperUtility.mapInstantToTimestamp(now));
+        SqlParameterSource parameters = new MapSqlParameterSource("dateentered", ResultSetMapperUtility.mapJodaInstantToTimestamp(now));
 
         jdbcTemplate.update(testModeInsertSQL, parameters);
         jdbcTemplate.update(segmentTestToolTypeInsertSQL, parameters);

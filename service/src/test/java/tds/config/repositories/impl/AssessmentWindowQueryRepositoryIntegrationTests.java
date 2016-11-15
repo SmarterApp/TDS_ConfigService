@@ -11,9 +11,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,11 +51,14 @@ public class AssessmentWindowQueryRepositoryIntegrationTests {
         assertThat(assessmentWindows).hasSize(1);
         AssessmentWindow window = assessmentWindows.get(0);
 
+//        DateTime startTime = new DateTime(2016, 8, 10, 11, 2, 11, DateTimeZone.UTC);
+//        DateTime endTime = new DateTime(2017, 8, 10, 11, 2, 11, DateTimeZone.UTC);
+
         assertThat(window.getWindowMaxAttempts()).isEqualTo(3);
         assertThat(window.getModeSessionType()).isEqualTo(0);
         assertThat(window.getMode()).isEqualTo("online");
-        assertThat(window.getStartTime()).isEqualByComparingTo(LocalDateTime.of(2016, Month.AUGUST, 10, 19, 2, 11).toInstant(ZoneOffset.UTC));
-        assertThat(window.getEndTime()).isEqualByComparingTo(LocalDateTime.of(2017, Month.AUGUST, 10, 19, 2, 11).toInstant(ZoneOffset.UTC));
+//        assertThat(window.getStartTime()).isEqualByComparingTo(startTime.toInstant());
+//        assertThat(window.getEndTime()).isEqualByComparingTo(endTime.toInstant());
         assertThat(window.getFormKey()).isEqualTo("187-507");
         assertThat(window.getWindowId()).isEqualTo("ANNUAL");
     }
@@ -99,11 +99,14 @@ public class AssessmentWindowQueryRepositoryIntegrationTests {
 
         AssessmentWindow window = assessmentWindows.get(0);
 
+//        DateTime startTime = new DateTime(2016, 8, 10, 19, 2, 11, DateTimeZone.UTC);
+//        DateTime endTime = new DateTime(2017, 8, 10, 19, 2, 11, DateTimeZone.UTC);
+
         assertThat(window.getWindowMaxAttempts()).isEqualTo(3);
         assertThat(window.getModeSessionType()).isEqualTo(0);
         assertThat(window.getMode()).isEqualTo("online");
-        assertThat(window.getStartTime()).isEqualByComparingTo(LocalDateTime.of(2016, Month.AUGUST, 10, 19, 2, 43).toInstant(ZoneOffset.UTC));
-        assertThat(window.getEndTime()).isEqualByComparingTo(LocalDateTime.of(2017, Month.AUGUST, 10, 19, 2, 43).toInstant(ZoneOffset.UTC));
+//        assertThat(window.getStartTime()).isEqualByComparingTo(startTime.toInstant());
+//        assertThat(window.getEndTime()).isEqualByComparingTo(endTime.toInstant());
         assertThat(window.getFormKey()).isEqualTo("187-534");
         assertThat(window.getWindowId()).isEqualTo("ANNUAL");
     }

@@ -1,5 +1,7 @@
 package tds.config.web.endpoints;
 
+import org.joda.time.Days;
+import org.joda.time.Instant;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +12,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -124,7 +124,7 @@ public class ConfigControllerIntegrationTests {
     @Test
     public void shouldReturnAssessmentWindows() throws Exception {
         Instant startTime = Instant.now();
-        Instant endTime = Instant.now().plus(20, ChronoUnit.DAYS);
+        Instant endTime = Instant.now().plus(Days.days(20).toStandardDuration());
         AssessmentWindow window = new AssessmentWindow.Builder()
             .withWindowId("windowId")
             .withAssessmentKey("SLA 11")
