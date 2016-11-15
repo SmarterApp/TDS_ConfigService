@@ -1,5 +1,7 @@
 package tds.config.repositories.impl;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,14 +53,14 @@ public class AssessmentWindowQueryRepositoryIntegrationTests {
         assertThat(assessmentWindows).hasSize(1);
         AssessmentWindow window = assessmentWindows.get(0);
 
-//        DateTime startTime = new DateTime(2016, 8, 10, 11, 2, 11, DateTimeZone.UTC);
-//        DateTime endTime = new DateTime(2017, 8, 10, 11, 2, 11, DateTimeZone.UTC);
+        DateTime startTime = new DateTime(2016, 8, 10, 19, 2, 11, DateTimeZone.UTC);
+        DateTime endTime = new DateTime(2017, 8, 10, 19, 2, 11, DateTimeZone.UTC);
 
         assertThat(window.getWindowMaxAttempts()).isEqualTo(3);
         assertThat(window.getModeSessionType()).isEqualTo(0);
         assertThat(window.getMode()).isEqualTo("online");
-//        assertThat(window.getStartTime()).isEqualByComparingTo(startTime.toInstant());
-//        assertThat(window.getEndTime()).isEqualByComparingTo(endTime.toInstant());
+        assertThat(window.getStartTime()).isEqualByComparingTo(startTime.toInstant());
+        assertThat(window.getEndTime()).isEqualByComparingTo(endTime.toInstant());
         assertThat(window.getFormKey()).isEqualTo("187-507");
         assertThat(window.getWindowId()).isEqualTo("ANNUAL");
     }
@@ -99,14 +101,14 @@ public class AssessmentWindowQueryRepositoryIntegrationTests {
 
         AssessmentWindow window = assessmentWindows.get(0);
 
-//        DateTime startTime = new DateTime(2016, 8, 10, 19, 2, 11, DateTimeZone.UTC);
-//        DateTime endTime = new DateTime(2017, 8, 10, 19, 2, 11, DateTimeZone.UTC);
+        DateTime startTime = new DateTime(2016, 8, 10, 19, 2, 43, DateTimeZone.UTC);
+        DateTime endTime = new DateTime(2017, 8, 10, 19, 2, 43, DateTimeZone.UTC);
 
         assertThat(window.getWindowMaxAttempts()).isEqualTo(3);
         assertThat(window.getModeSessionType()).isEqualTo(0);
         assertThat(window.getMode()).isEqualTo("online");
-//        assertThat(window.getStartTime()).isEqualByComparingTo(startTime.toInstant());
-//        assertThat(window.getEndTime()).isEqualByComparingTo(endTime.toInstant());
+        assertThat(window.getStartTime()).isEqualByComparingTo(startTime.toInstant());
+        assertThat(window.getEndTime()).isEqualByComparingTo(endTime.toInstant());
         assertThat(window.getFormKey()).isEqualTo("187-534");
         assertThat(window.getWindowId()).isEqualTo("ANNUAL");
     }
