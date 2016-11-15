@@ -22,34 +22,17 @@
     </parent>
 
     <properties>
-        <java.version>1.8</java.version>
-        <maven.compiler.plugin.version>3.5.1</maven.compiler.plugin.version>
+        <unit-tests.skip>false</unit-tests.skip>
+        <integration-tests.skip>true</integration-tests.skip>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <docker.image.prefix>fwsbac</docker.image.prefix>
 
         <tds.config.client.version>0.0.1-SNAPSHOT</tds.config.client.version>
         <tds.common.version>0.0.1-SNAPSHOT</tds.common.version>
         <tds.student.client.version>0.0.1-SNAPSHOT</tds.student.client.version>
 
-        <unit-tests.skip>false</unit-tests.skip>
-        <integration-tests.skip>true</integration-tests.skip>
-        <docker.image.prefix>fwsbac</docker.image.prefix>
-        <assertj.version>3.4.1</assertj.version>
+        <maven.compiler.plugin.version>3.5.1</maven.compiler.plugin.version>
         <mockito.version>1.10.19</mockito.version>
-        <rest-assured.version>2.9.0</rest-assured.version>
-        <h2-database.version>1.4.191</h2-database.version>
+        <joda-time.version>2.9.5</joda-time.version>
     </properties>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven.compiler.plugin.version}</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>
