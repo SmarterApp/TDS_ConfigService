@@ -1,5 +1,6 @@
 package tds.config.repositories.impl;
 
+import org.joda.time.Instant;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +13,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
-import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

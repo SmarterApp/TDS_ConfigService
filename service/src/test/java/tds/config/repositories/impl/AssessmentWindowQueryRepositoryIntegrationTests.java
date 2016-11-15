@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ import tds.config.model.AssessmentFormWindowProperties;
 import tds.config.repositories.AssessmentWindowQueryRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static tds.common.data.mapping.ResultSetMapperUtility.mapJodaInstantToTimestamp;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -41,20 +43,23 @@ public class AssessmentWindowQueryRepositoryIntegrationTests {
 
     @Test
     public void shouldFindAssessmentFormWindowsWithNoSegments() {
-        String testWindowInsert = "insert into client_testwindow values ('SBAC_PT', 'SBAC-Mathematics-3', 1, 3, '2016-08-10 19:02:11.000', '2017-08-10 19:02:11.000', NULL, NULL, 'ANNUAL', UNHEX('F12479625F2C11E6B2C80243FCF25EAB'), -1, 1);";
+        DateTime startTime = new DateTime(2016, 8, 10, 19, 2, 11, DateTimeZone.UTC);
+        DateTime endTime = new DateTime(2017, 8, 10, 19, 2, 11, DateTimeZone.UTC);
+
+        SqlParameterSource parameters = new MapSqlParameterSource("startTime", mapJodaInstantToTimestamp(startTime.toInstant()))
+            .addValue("endTime", mapJodaInstantToTimestamp(endTime.toInstant()));
+
+        String testWindowInsert = "insert into client_testwindow values ('SBAC_PT', 'SBAC-Mathematics-3', 1, 3, :startTime, :endTime, NULL, NULL, 'ANNUAL', UNHEX('F12479625F2C11E6B2C80243FCF25EAB'), -1, 1);";
         String testModeInsert = "insert into client_testmode values ('SBAC_PT', 'SBAC-Mathematics-3', 'online', 'fixedform', 0, 0, 50, 0, 0, 1, 0, '(SBAC_PT)SBAC-MATH-3-Spring-2013-2015', UNHEX('F12140D05F2C11E6B2C80243FCF25EAB'));";
         String testFormPropertiesInsert = "insert into client_testformproperties values ('SBAC_PT', '187-507', NULL, NULL, 'ENU', 'PracTest::MG3::S1::SP14', 'SBAC-Mathematics-3', '(SBAC_PT)SBAC-MATH-3-Spring-2013-2015', NULL, NULL);";
 
-        jdbcTemplate.update(testWindowInsert, new MapSqlParameterSource());
+        jdbcTemplate.update(testWindowInsert, parameters);
         jdbcTemplate.update(testModeInsert, new MapSqlParameterSource());
         jdbcTemplate.update(testFormPropertiesInsert, new MapSqlParameterSource());
 
         List<AssessmentWindow> assessmentWindows = repository.findCurrentAssessmentFormWindows("SBAC_PT", "SBAC-Mathematics-3", 0, 0, 0, 0, 0);
         assertThat(assessmentWindows).hasSize(1);
         AssessmentWindow window = assessmentWindows.get(0);
-
-        DateTime startTime = new DateTime(2016, 8, 10, 19, 2, 11, DateTimeZone.UTC);
-        DateTime endTime = new DateTime(2017, 8, 10, 19, 2, 11, DateTimeZone.UTC);
 
         assertThat(window.getWindowMaxAttempts()).isEqualTo(3);
         assertThat(window.getModeSessionType()).isEqualTo(0);
@@ -67,6 +72,12 @@ public class AssessmentWindowQueryRepositoryIntegrationTests {
 
     @Test
     public void shouldFindAssessmentFormWindowsWithSegments() {
+        DateTime startTime = new DateTime(2016, 8, 10, 19, 2, 43, DateTimeZone.UTC);
+        DateTime endTime = new DateTime(2017, 8, 10, 19, 2, 43, DateTimeZone.UTC);
+
+        SqlParameterSource parameters = new MapSqlParameterSource("startTime", mapJodaInstantToTimestamp(startTime.toInstant()))
+            .addValue("endTime", mapJodaInstantToTimestamp(endTime.toInstant()));
+
         String clientTestFormPropertiesInsertSQL =
             "INSERT INTO configs.client_testformproperties (clientname,_efk_testform,startdate,enddate,language,formid,testid,testkey,clientformid,accommodations) \n" +
                 "VALUES ('SBAC_PT','187-534',NULL,NULL,'ENU','PracTest::MG11::S1::SP14','SBAC-SEG1-MATH-11','(SBAC_PT)SBAC-SEG1-MATH-11-Spring-2013-2015',NULL,NULL),\n" +
@@ -88,21 +99,18 @@ public class AssessmentWindowQueryRepositoryIntegrationTests {
 
         String clientTestWindowInsertSQL =
             "INSERT INTO client_testwindow (clientname,testid,window,numopps,startdate,enddate,origin,source,windowid,_key,sessiontype,sortorder)" +
-            "VALUES ('SBAC_PT','SBAC-Mathematics-11',1,3,'2016-08-10 19:02:43.000','2017-08-10 19:02:43.000',NULL,NULL,'ANNUAL',UNHEX('043A37525F2D11E6B2C80243FCF25EAB'),-1,1);";
+            "VALUES ('SBAC_PT','SBAC-Mathematics-11',1,3,:startTime,:endTime,NULL,NULL,'ANNUAL',UNHEX('043A37525F2D11E6B2C80243FCF25EAB'),-1,1);";
 
         jdbcTemplate.update(clientTestFormPropertiesInsertSQL, new MapSqlParameterSource());
         jdbcTemplate.update(clientSegmentPropertiesInsertSQL, new MapSqlParameterSource());
         jdbcTemplate.update(clientTestPropertiesInsertSQL, new MapSqlParameterSource());
         jdbcTemplate.update(clientTestModeInsertSQL, new MapSqlParameterSource());
-        jdbcTemplate.update(clientTestWindowInsertSQL, new MapSqlParameterSource());
+        jdbcTemplate.update(clientTestWindowInsertSQL, parameters);
 
         List<AssessmentWindow> assessmentWindows = repository.findCurrentAssessmentFormWindows("SBAC_PT", "SBAC-Mathematics-11", 0, 0, 0, 0, 0);
         assertThat(assessmentWindows).hasSize(3);
 
         AssessmentWindow window = assessmentWindows.get(0);
-
-        DateTime startTime = new DateTime(2016, 8, 10, 19, 2, 43, DateTimeZone.UTC);
-        DateTime endTime = new DateTime(2017, 8, 10, 19, 2, 43, DateTimeZone.UTC);
 
         assertThat(window.getWindowMaxAttempts()).isEqualTo(3);
         assertThat(window.getModeSessionType()).isEqualTo(0);
