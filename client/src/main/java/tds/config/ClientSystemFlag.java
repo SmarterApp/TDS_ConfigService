@@ -1,6 +1,6 @@
 package tds.config;
 
-import java.time.Instant;
+import org.joda.time.Instant;
 
 /**
  Represents a record in the {@code configs.client_systemflags} table.

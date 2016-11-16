@@ -1,16 +1,15 @@
 package tds.config;
 
+import org.joda.time.Instant;
+import org.joda.time.Minutes;
 import org.junit.Test;
-
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ClientSystemFlagUnitTests {
     @Test
     public void shouldBuildAClientSystemFlag() {
-        Instant utcNow = Instant.now();
+        Instant utcNowMinusFiveMinutes = Instant.now().minus(Minutes.minutes(5).toStandardDuration());
 
         ClientSystemFlag clientSystemFlag = new ClientSystemFlag.Builder()
                 .withClientName("SBAC_PT")
@@ -18,8 +17,8 @@ public class ClientSystemFlagUnitTests {
                 .withEnabled(true)
                 .withDescription("Unit test description")
                 .withAuditObject("Unit test audit object")
-                .withDateChanged(utcNow.minus(5, ChronoUnit.MINUTES))
-                .withDatePublished(utcNow.plus(5, ChronoUnit.MINUTES))
+                .withDateChanged(utcNowMinusFiveMinutes)
+                .withDatePublished(utcNowMinusFiveMinutes)
                 .build();
 
         assertThat(clientSystemFlag.getClientName()).isEqualTo("SBAC_PT");
@@ -27,7 +26,7 @@ public class ClientSystemFlagUnitTests {
         assertThat(clientSystemFlag.isEnabled()).isTrue();
         assertThat(clientSystemFlag.getDescription()).isEqualTo("Unit test description");
         assertThat(clientSystemFlag.getAuditObject()).isEqualTo("Unit test audit object");
-        assertThat(clientSystemFlag.getDateChanged()).isEqualTo(utcNow.minus(5, ChronoUnit.MINUTES));
-        assertThat(clientSystemFlag.getDatePublished()).isEqualTo(utcNow.plus(5, ChronoUnit.MINUTES));
+        assertThat(clientSystemFlag.getDateChanged()).isEqualTo(utcNowMinusFiveMinutes);
+        assertThat(clientSystemFlag.getDatePublished()).isEqualTo(utcNowMinusFiveMinutes);
     }
 }

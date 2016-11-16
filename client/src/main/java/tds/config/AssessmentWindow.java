@@ -1,6 +1,6 @@
 package tds.config;
 
-import java.time.Instant;
+import org.joda.time.Instant;
 
 /**
  * Contains information for the assessment time windows

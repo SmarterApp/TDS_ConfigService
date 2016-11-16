@@ -7,7 +7,8 @@ import java.sql.SQLException;
 
 import tds.config.ClientSystemFlag;
 
-import static tds.common.data.mapping.ResultSetMapperUtility.mapTimeStampToInstant;
+import static tds.common.data.mapping.ResultSetMapperUtility.mapTimestampToJodaInstant;
+
 
 /**
  * Map a {@link ClientSystemFlag} from the database to a POJO.
@@ -21,8 +22,8 @@ public class ClientSystemFlagRowMapper implements RowMapper<ClientSystemFlag> {
                 .withIsPracticeTest(rs.getBoolean("isPracticeTest"))
                 .withEnabled(rs.getInt("isOn") == 1)
                 .withDescription(rs.getString("description"))
-                .withDateChanged(mapTimeStampToInstant(rs, "dateChanged"))
-                .withDatePublished(mapTimeStampToInstant(rs, "datePublished"))
+                .withDateChanged(mapTimestampToJodaInstant(rs, "dateChanged"))
+                .withDatePublished(mapTimestampToJodaInstant(rs, "datePublished"))
                 .build();
     }
 }

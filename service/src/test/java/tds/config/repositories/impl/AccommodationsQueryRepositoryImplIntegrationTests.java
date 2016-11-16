@@ -1,5 +1,6 @@
 package tds.config.repositories.impl;
 
+import org.joda.time.Instant;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +13,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
-import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -55,7 +55,7 @@ public class AccommodationsQueryRepositoryImplIntegrationTests {
         String noSegmentTestToolInsertFrenchSQL = "INSERT INTO client_testtool (clientname, context, contexttype, type, code, value, isdefault, allowcombine, testmode) " +
             "VALUES ('SBAC_PT', 'SBAC-Mathematics-11', 'TEST', 'Language', 'FRN', 'FRN', 1, 0, 'ALL');";
 
-        SqlParameterSource parameters = new MapSqlParameterSource("dateentered", ResultSetMapperUtility.mapInstantToTimestamp(now));
+        SqlParameterSource parameters = new MapSqlParameterSource("dateentered", ResultSetMapperUtility.mapJodaInstantToTimestamp(now));
 
         jdbcTemplate.update(testModeInsertSQL, parameters);
         jdbcTemplate.update(segmentTestToolTypeInsertSQL, parameters);
