@@ -62,9 +62,10 @@ public class AccommodationsServiceImplTest {
         Segment segmentOne = new Segment.Builder("key1").build();
         Segment segmentTwo = new Segment.Builder("key2").build();
 
-        Assessment assessment = new Assessment();
-        assessment.setKey("key");
-        assessment.setSegments(Arrays.asList(segmentOne, segmentTwo));
+        Assessment assessment = new Assessment.Builder()
+            .withKey("key")
+            .withSegments(Arrays.asList(segmentOne, segmentTwo))
+            .build();
 
         Accommodation accommodation = new Accommodation.Builder().build();
 
@@ -88,9 +89,10 @@ public class AccommodationsServiceImplTest {
             .withLanguages(languages)
             .build();
 
-        Assessment assessment = new Assessment();
-        assessment.setKey("key");
-        assessment.setSegments(Collections.singletonList(segmentOne));
+        Assessment assessment = new Assessment.Builder()
+            .withKey("key")
+            .withSegments(Collections.singletonList(segmentOne))
+            .build();
 
         Accommodation accommodation = new Accommodation.Builder().build();
 
