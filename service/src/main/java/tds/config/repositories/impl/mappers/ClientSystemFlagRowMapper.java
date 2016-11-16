@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 import tds.config.ClientSystemFlag;
 
-import static tds.common.data.mapping.ResultSetMapperUtility.mapTimeStampToJodaInstant;
+import static tds.common.data.mapping.ResultSetMapperUtility.mapTimestampToJodaInstant;
 
 
 /**
@@ -22,8 +22,8 @@ public class ClientSystemFlagRowMapper implements RowMapper<ClientSystemFlag> {
                 .withIsPracticeTest(rs.getBoolean("isPracticeTest"))
                 .withEnabled(rs.getInt("isOn") == 1)
                 .withDescription(rs.getString("description"))
-                .withDateChanged(mapTimeStampToJodaInstant(rs, "dateChanged"))
-                .withDatePublished(mapTimeStampToJodaInstant(rs, "datePublished"))
+                .withDateChanged(mapTimestampToJodaInstant(rs, "dateChanged"))
+                .withDatePublished(mapTimestampToJodaInstant(rs, "datePublished"))
                 .build();
     }
 }
