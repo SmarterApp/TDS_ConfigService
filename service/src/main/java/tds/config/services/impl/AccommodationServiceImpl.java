@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import tds.assessment.Assessment;
-import tds.assessment.Property;
+import tds.assessment.ItemProperty;
 import tds.common.web.exceptions.NotFoundException;
 import tds.config.Accommodation;
 import tds.config.repositories.AccommodationsQueryRepository;
@@ -43,10 +43,10 @@ public class AccommodationServiceImpl implements AccommodationsService {
         } else {
             Set<String> languages = new HashSet<>();
             assessment.getSegments().forEach(segment -> segment.getLanguages()
-                .forEach(new Consumer<Property>() {
+                .forEach(new Consumer<ItemProperty>() {
                     @Override
-                    public void accept(Property property) {
-                        languages.add(property.getValue());
+                    public void accept(ItemProperty itemProperty) {
+                        languages.add(itemProperty.getValue());
                     }
                 }));
 
