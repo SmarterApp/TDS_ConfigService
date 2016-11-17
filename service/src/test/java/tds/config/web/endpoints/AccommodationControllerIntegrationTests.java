@@ -49,7 +49,6 @@ public class AccommodationControllerIntegrationTests {
             .withToolMode("toolMode")
             .withToolTypeSortOrder(25)
             .withToolValueSortOrder(50)
-            .withValueCount(250)
             .withVisible(true)
             .build();
 
@@ -75,7 +74,6 @@ public class AccommodationControllerIntegrationTests {
             .andExpect(jsonPath("[0].toolMode", is("toolMode")))
             .andExpect(jsonPath("[0].toolTypeSortOrder", is(25)))
             .andExpect(jsonPath("[0].toolValueSortOrder", is(50)))
-            .andExpect(jsonPath("[0].valueCount", is(250)))
             .andExpect(jsonPath("[0].visible", is(true)))
             .andExpect(jsonPath("[0].accommodationType", is("type")));
     }

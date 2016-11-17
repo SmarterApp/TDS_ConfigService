@@ -86,7 +86,6 @@ public class AccommodationsQueryRepositoryImplIntegrationTests {
         assertThat(segmentAccommodation.getToolTypeSortOrder()).isEqualTo(0);
         assertThat(segmentAccommodation.getToolValueSortOrder()).isEqualTo(0);
         assertThat(segmentAccommodation.getTypeMode()).isEqualTo("ALL");
-        assertThat(segmentAccommodation.getValueCount()).isEqualTo(0);
         assertThat(segmentAccommodation.isAllowChange()).isFalse();
         assertThat(segmentAccommodation.isAllowCombine()).isFalse();
         assertThat(segmentAccommodation.isDefaultAccommodation()).isTrue();
@@ -106,7 +105,6 @@ public class AccommodationsQueryRepositoryImplIntegrationTests {
         assertThat(defaultAccommodation.getToolTypeSortOrder()).isEqualTo(0);
         assertThat(defaultAccommodation.getToolValueSortOrder()).isEqualTo(0);
         assertThat(defaultAccommodation.getTypeMode()).isEqualTo("ALL");
-        assertThat(defaultAccommodation.getValueCount()).isEqualTo(1);
         assertThat(defaultAccommodation.isAllowChange()).isFalse();
         assertThat(defaultAccommodation.isAllowCombine()).isFalse();
         assertThat(defaultAccommodation.isDefaultAccommodation()).isTrue();
@@ -138,7 +136,6 @@ public class AccommodationsQueryRepositoryImplIntegrationTests {
         assertThat(englishAccommodation.getToolTypeSortOrder()).isEqualTo(0);
         assertThat(englishAccommodation.getToolValueSortOrder()).isEqualTo(0);
         assertThat(englishAccommodation.getTypeMode()).isEqualTo("ALL");
-        assertThat(englishAccommodation.getValueCount()).isEqualTo(2);
         assertThat(englishAccommodation.isAllowChange()).isFalse();
         assertThat(englishAccommodation.isAllowCombine()).isFalse();
         assertThat(englishAccommodation.isDefaultAccommodation()).isTrue();
@@ -158,7 +155,6 @@ public class AccommodationsQueryRepositoryImplIntegrationTests {
         assertThat(defaultAccommodation.getToolTypeSortOrder()).isEqualTo(0);
         assertThat(defaultAccommodation.getToolValueSortOrder()).isEqualTo(0);
         assertThat(defaultAccommodation.getTypeMode()).isEqualTo("ALL");
-        assertThat(defaultAccommodation.getValueCount()).isEqualTo(1);
         assertThat(defaultAccommodation.isAllowChange()).isFalse();
         assertThat(defaultAccommodation.isAllowCombine()).isFalse();
         assertThat(defaultAccommodation.isDefaultAccommodation()).isTrue();

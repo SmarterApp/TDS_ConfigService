@@ -4,7 +4,6 @@ package tds.config;
  * Represents an Assessment accommodation
  */
 public class Accommodation {
-    private int valueCount;
     private int segmentPosition;
     private boolean disableOnGuestSession;
     private int toolTypeSortOrder;
@@ -24,13 +23,6 @@ public class Accommodation {
     private String dependsOnToolType;
     private String typeMode;
     private String segmentKey;
-
-    /**
-     * @return the count of tools associated with the accommodation
-     */
-    public int getValueCount() {
-        return valueCount;
-    }
 
     /**
      * @return the segment position which relates to this accommodation.  Zero if non segmented assessment
@@ -166,7 +158,6 @@ public class Accommodation {
     }
 
     public static final class Builder {
-        private int valueCount;
         private int segmentPosition;
         private boolean disableOnGuestSession;
         private int toolTypeSortOrder;
@@ -186,11 +177,6 @@ public class Accommodation {
         private String typeMode;
         private boolean allowChange;
         private String segmentKey;
-
-        public Builder withValueCount(int valueCount) {
-            this.valueCount = valueCount;
-            return this;
-        }
 
         public Builder withSegmentPosition(int segmentPosition) {
             this.segmentPosition = segmentPosition;
@@ -289,7 +275,6 @@ public class Accommodation {
 
         public Accommodation build() {
             Accommodation accommodation = new Accommodation();
-            accommodation.valueCount = this.valueCount;
             accommodation.toolValueSortOrder = this.toolValueSortOrder;
             accommodation.segmentPosition = this.segmentPosition;
             accommodation.accommodationValue = this.accommodationValue;
