@@ -53,8 +53,8 @@ public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRep
         "  and MODE.testkey = :testKey \n" +
         "  and TType.ContextType = 'SEGMENT' \n" +
         "  and TT.ContextType = 'SEGMENT' \n" +
-        "  and (TType.TestMode = 'ALL' or TType.TestMode = MODE.mode) \n" +
-        "  and (TT.TestMode = 'ALL' or TT.TestMode = MODE.mode)";
+        "  and (TType.TestMode = 'ALL' AND TT.TestMode = 'ALL') \n" +
+        "  or (TType.TestMode = MODE.mode and TT.TestMode = MODE.mode) \n";
 
     private static final String NON_SEGMENTED_ASSESSMENT_SQL = "SELECT \n" +
         "  distinct 0 as segment, \n" +
@@ -91,8 +91,8 @@ public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRep
         "  and TT.Context = MODE.testid \n" +
         "  and TT.ContextType = 'TEST' \n" +
         "  and (TT.Type <> 'Language' or TT.Code in (:languages)) \n" +
-        "  and (TType.TestMode = 'ALL' or TType.TestMode = MODE.mode) \n" +
-        "  and (TT.TestMode = 'ALL' or TT.TestMode = MODE.mode)";
+        "  and (TType.TestMode = 'ALL' AND TT.TestMode = 'ALL') \n" +
+        "  or (TType.TestMode = MODE.mode and TT.TestMode = MODE.mode) \n";
 
     @Autowired
     public AccommodationsQueryRepositoryImpl(DataSource dataSource) {
@@ -155,8 +155,8 @@ public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRep
             "  and TType.Context = '*' \n" +
             "  and TT.ContextType = 'TEST' \n" +
             "  and TT.Context = '*' \n" +
-            "  and (TType.TestMode = 'ALL' or TType.TestMode = MODE.mode) \n" +
-            "  and (TT.TestMode = 'ALL' or TT.TestMode = MODE.mode) \n" +
+            "  and (TType.TestMode = 'ALL' AND TT.TestMode = 'ALL') \n" +
+            "  or (TType.TestMode = MODE.mode and TT.TestMode = MODE.mode) \n" +
             "  and not exists (select * from configs.client_testtooltype Tool where Tool.ContextType = 'TEST' and Tool.Context = MODE.testID and Tool.Toolname = TType.Toolname and Tool.Clientname = MODE.clientname)\n" +
             ")";
 
