@@ -25,8 +25,8 @@ class AssessmentWindowQueryRepositoryImpl implements AssessmentWindowQueryReposi
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
-    public AssessmentWindowQueryRepositoryImpl(final DataSource dataSource) {
-        jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+    public AssessmentWindowQueryRepositoryImpl(final NamedParameterJdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override

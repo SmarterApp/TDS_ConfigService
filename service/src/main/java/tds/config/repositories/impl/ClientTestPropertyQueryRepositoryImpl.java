@@ -19,11 +19,11 @@ import tds.config.repositories.impl.mappers.ClientTestPropertyRowMapper;
 @Repository
 public class ClientTestPropertyQueryRepositoryImpl implements ClientTestPropertyQueryRepository {
     private static final Logger LOG = LoggerFactory.getLogger(ConfigRepositoryImpl.class);
-    private final NamedParameterJdbcTemplate jdbcTemplate;
+    private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
-    public ClientTestPropertyQueryRepositoryImpl(DataSource dataSource) {
-        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+    public ClientTestPropertyQueryRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override

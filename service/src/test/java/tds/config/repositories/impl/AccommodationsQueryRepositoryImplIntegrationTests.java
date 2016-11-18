@@ -31,13 +31,10 @@ public class AccommodationsQueryRepositoryImplIntegrationTests {
     private AccommodationsQueryRepository repository;
 
     @Autowired
-    private DataSource dataSource;
-
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Before
     public void setUp() {
-        jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
 
         Instant now = Instant.now();
 

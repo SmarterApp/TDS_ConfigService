@@ -32,14 +32,7 @@ public class AssessmentWindowQueryRepositoryIntegrationTests {
     private AssessmentWindowQueryRepository repository;
 
     @Autowired
-    private DataSource dataSource;
-
     private NamedParameterJdbcTemplate jdbcTemplate;
-
-    @Before
-    public void setUp() {
-        jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-    }
 
     @Test
     public void shouldFindAssessmentFormWindowsWithNoSegments() {

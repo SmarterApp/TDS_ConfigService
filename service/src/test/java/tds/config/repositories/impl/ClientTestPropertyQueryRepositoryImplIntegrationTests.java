@@ -24,15 +24,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 public class ClientTestPropertyQueryRepositoryImplIntegrationTests {
     @Autowired
-    private DataSource dataSource;
+    private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
     private ClientTestPropertyQueryRepository repository;
 
     @Before
     public void setUp() {
-        NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-
         String clientTestPropertyInsertSQL = "INSERT INTO client_testproperties (clientname,testid,maxopportunities,handscoreproject,prefetch,datechanged,isprintable,isselectable,label,printitemtypes,scorebytds,batchmodereport,subjectname,origin,source,maskitemsbysubject,initialabilitybysubject,startdate,enddate,ftstartdate,ftenddate,accommodationfamily,sortorder,rtsformfield,rtswindowfield,windowtideselectable,requirertswindow,reportinginstrument,tide_id,forcecomplete,rtsmodefield,modetideselectable,requirertsmode,requirertsmodewindow,deleteunanswereditems,abilityslope,abilityintercept,validatecompleteness,gradetext,initialabilitytestid,proctoreligibility,category) \n" +
             "VALUES ('SBAC_PT','IRP-Perf-ELA-11',3,NULL,2,NULL,0,1,'Grade 11 ELA','',1,0,'ELA',NULL,NULL,1,1,NULL,NULL,NULL,NULL,'ELA',NULL,'tds-testform','tds-testwindow',0,1,NULL,NULL,1,'tds-testmode',0,0,0,0,1,0,0,'Grade 11',NULL,0,NULL);";
 
