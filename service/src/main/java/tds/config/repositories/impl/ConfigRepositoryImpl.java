@@ -23,8 +23,8 @@ public class ConfigRepositoryImpl implements ConfigRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
-    public ConfigRepositoryImpl(DataSource dataSource) {
-        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+    public ConfigRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override

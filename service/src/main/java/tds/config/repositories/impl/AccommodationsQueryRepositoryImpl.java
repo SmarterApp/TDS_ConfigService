@@ -95,8 +95,8 @@ public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRep
         "  or (TType.TestMode = MODE.mode and TT.TestMode = MODE.mode) \n";
 
     @Autowired
-    public AccommodationsQueryRepositoryImpl(DataSource dataSource) {
-        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+    public AccommodationsQueryRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override

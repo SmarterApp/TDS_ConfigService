@@ -22,8 +22,8 @@ public class TimeLimitConfigurationRepositoryImpl implements TimeLimitConfigurat
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
-    public TimeLimitConfigurationRepositoryImpl(DataSource dataSource) {
-        this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+    public TimeLimitConfigurationRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
