@@ -59,13 +59,12 @@ public class AccommodationsServiceImplTest {
 
     @Test
     public void shouldFindSegmentedAccommodations() {
-        Segment segmentOne = new Segment.Builder("key1").build();
-        Segment segmentTwo = new Segment.Builder("key2").build();
+        Segment segmentOne = new Segment("key1");
+        Segment segmentTwo = new Segment("key2");
 
-        Assessment assessment = new Assessment.Builder()
-            .withKey("key")
-            .withSegments(Arrays.asList(segmentOne, segmentTwo))
-            .build();
+        Assessment assessment = new Assessment();
+        assessment.setKey("key");
+        assessment.setSegments(Arrays.asList(segmentOne, segmentTwo));
 
         Accommodation accommodation = new Accommodation.Builder().build();
 
@@ -85,14 +84,12 @@ public class AccommodationsServiceImplTest {
             new ItemProperty("Language", "Braille"),
             new ItemProperty("Language", "FRN")
         );
-        Segment segmentOne = new Segment.Builder("key1")
-            .withLanguages(languages)
-            .build();
+        Segment segmentOne = new Segment("key1");
+        segmentOne.setLanguages(languages);
 
-        Assessment assessment = new Assessment.Builder()
-            .withKey("key")
-            .withSegments(Collections.singletonList(segmentOne))
-            .build();
+        Assessment assessment = new Assessment();
+        assessment.setKey("key");
+        assessment.setSegments(Collections.singletonList(segmentOne));
 
         Accommodation accommodation = new Accommodation.Builder().build();
 
