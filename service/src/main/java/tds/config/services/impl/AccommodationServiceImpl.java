@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import tds.assessment.Assessment;
 import tds.assessment.ItemProperty;
@@ -41,14 +42,14 @@ public class AccommodationServiceImpl implements AccommodationsService {
         if (assessment.isSegmented()) {
             return accommodationsQueryRepository.findAccommodationsForSegmentedAssessment(assessmentKey);
         } else {
-            Set<String> languages = new HashSet<>();
-            assessment.getSegments().forEach(segment -> segment.getLanguages()
-                .forEach(new Consumer<ItemProperty>() {
-                    @Override
-                    public void accept(ItemProperty itemProperty) {
-                        languages.add(itemProperty.getValue());
-                    }
-                }));
+            Set<String> languages =
+                assessment.getSegments().stream()
+                    .flatMap(segment -> segment.getItems().stream()
+                        .flatMap(item -> item.getItemProperties().stream()
+                            .filter(itemProperty -> itemProperty.getName().equalsIgnoreCase(Accommodation.ACCOMMODATION_TYPE_LANGUAGE)))
+                        .map(itemProperty -> itemProperty.getValue()))
+                    .collect(Collectors.toSet());
+
 
             return accommodationsQueryRepository.findAccommodationsForNonSegmentedAssessment(assessment.getKey(), languages);
         }
