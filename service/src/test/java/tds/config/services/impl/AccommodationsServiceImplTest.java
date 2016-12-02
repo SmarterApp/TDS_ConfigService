@@ -16,6 +16,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import tds.assessment.Assessment;
+import tds.assessment.Item;
 import tds.assessment.ItemProperty;
 import tds.assessment.Segment;
 import tds.common.web.exceptions.NotFoundException;
@@ -79,13 +80,22 @@ public class AccommodationsServiceImplTest {
 
     @Test
     public void shouldFindNonSegmentedAccommodations() {
-        List<ItemProperty> languages = Arrays.asList(
+        List<ItemProperty> languages1 = Arrays.asList(
             new ItemProperty("Language", "ENU"),
-            new ItemProperty("Language", "Braille"),
-            new ItemProperty("Language", "FRN")
+            new ItemProperty("Language", "Braille")
         );
+        Item item1 = new Item("item1");
+        item1.setItemProperties(languages1);
+
+        List<ItemProperty> languages2 = Arrays.asList(
+            new ItemProperty("Language", "FRN"),
+            new ItemProperty("Some other", "prop")
+        );
+        Item item2 = new Item("item2");
+        item2.setItemProperties(languages2);
+
         Segment segmentOne = new Segment("key1");
-        segmentOne.setLanguages(languages);
+        segmentOne.setItems(Arrays.asList(item1, item2));
 
         Assessment assessment = new Assessment();
         assessment.setKey("key");

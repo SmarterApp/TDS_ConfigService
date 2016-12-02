@@ -24,6 +24,8 @@ public class Accommodation {
     private String typeMode;
     private String segmentKey;
 
+    public static final String ACCOMMODATION_TYPE_LANGUAGE = "Language";
+
     /**
      * @return the segment position which relates to this accommodation.  Zero if non segmented assessment
      */
