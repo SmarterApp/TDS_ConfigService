@@ -1,10 +1,11 @@
 package tds.config.repositories.impl.mappers;
 
 import org.springframework.jdbc.core.RowMapper;
-import tds.config.TimeLimitConfiguration;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import tds.config.TimeLimitConfiguration;
 
 /**
  * Map a {@link TimeLimitConfiguration} from the database to a POJO.

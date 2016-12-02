@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TimeLimitConfigurationUnitTests {
+public class TimeLimitConfigurationTest {
     @Test
     public void shouldBuildATimeLimitConfiguration() {
         TimeLimitConfiguration timeLimitConfiguration = new TimeLimitConfiguration.Builder()

@@ -1,8 +1,8 @@
 package tds.config.repositories;
 
-import tds.config.TimeLimitConfiguration;
-
 import java.util.Optional;
+
+import tds.config.TimeLimitConfiguration;
 
 /**
  * Data Access for interacting with the time limit-related configuration stored within the {@code session} database.

@@ -7,6 +7,7 @@ import org.joda.time.Instant;
  */
 public class ClientSystemFlag {
     public static final String ALLOW_ANONYMOUS_STUDENT_FLAG_TYPE = "AnonymousTestee";
+    public static final String RESTORE_ACCOMMODATIONS_TYPE = "RestoreAccommodations";
 
     private String auditObject = "";
     private String clientName = "";

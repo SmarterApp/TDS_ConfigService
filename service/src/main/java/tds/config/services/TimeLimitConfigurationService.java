@@ -1,8 +1,8 @@
 package tds.config.services;
 
-import tds.config.TimeLimitConfiguration;
-
 import java.util.Optional;
+
+import tds.config.TimeLimitConfiguration;
 
 /**
  * Provide an interface for interacting with the {@code session} database and providing time limit configuration.

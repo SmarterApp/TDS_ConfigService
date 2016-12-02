@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ClientSystemFlagUnitTests {
+public class ClientSystemFlagTest {
     @Test
     public void shouldBuildAClientSystemFlag() {
         Instant utcNowMinusFiveMinutes = Instant.now().minus(Minutes.minutes(5).toStandardDuration());
