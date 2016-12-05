@@ -8,8 +8,6 @@ import tds.config.ClientSystemFlag;
  * Data Access for interacting with the {@code configs} database.
  */
 public interface ConfigRepository {
-
-
     /**
      * Get all the {@link ClientSystemFlag} records from the {@code configs.client_systemflags} database for the
      * specified client name.

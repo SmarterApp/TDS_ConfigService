@@ -17,7 +17,6 @@ import java.util.Optional;
 import tds.common.web.exceptions.NotFoundException;
 import tds.config.AssessmentWindow;
 import tds.config.ClientSystemFlag;
-import tds.config.ClientTestProperty;
 import tds.config.model.AssessmentWindowParameters;
 import tds.config.services.ConfigService;
 
@@ -46,12 +45,12 @@ public class ConfigControllerTest {
         String clientName = "UNIT_TEST";
         String auditObject = "unit test";
         ClientSystemFlag mockClientSystemFlag = new ClientSystemFlag.Builder()
-                .withClientName(clientName)
-                .withAuditObject(auditObject)
-                .withDescription("mock client system flag")
-                .build();
+            .withClientName(clientName)
+            .withAuditObject(auditObject)
+            .withDescription("mock client system flag")
+            .build();
         when(mockConfigService.findClientSystemFlag(clientName, auditObject))
-                .thenReturn(Optional.of(mockClientSystemFlag));
+            .thenReturn(Optional.of(mockClientSystemFlag));
 
         ResponseEntity<ClientSystemFlag> response = configController.getClientSystemFlag(clientName, auditObject);
 
@@ -69,48 +68,9 @@ public class ConfigControllerTest {
         String auditObject = "unit_test";
 
         when(mockConfigService.findClientSystemFlag(clientName, auditObject))
-                .thenReturn(Optional.empty());
-
-        configController.getClientSystemFlag(clientName, auditObject);
-    }
-
-    @Test
-    public void shouldGetAClientTestProperty() {
-        String clientName = "UNIT_TEST";
-        String assessmentId = "SBAC Math 3-MATH-3";
-        ClientTestProperty mockClientTestProperty = new ClientTestProperty.Builder()
-            .withClientName(clientName)
-            .withAssessmentId(assessmentId)
-            .withMaxOpportunities(3)
-            .withPrefetch(2)
-            .withIsSelectable(true)
-            .withLabel("Grades 3 - 5 MATH")
-            .build();
-        when(mockConfigService.findClientTestProperty(clientName, assessmentId))
-            .thenReturn(Optional.of(mockClientTestProperty));
-
-        ResponseEntity<ClientTestProperty> response = configController.getClientTestProperty(clientName, assessmentId);
-
-        verify(mockConfigService).findClientTestProperty(clientName, assessmentId);
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody().getClientName()).isEqualTo(clientName);
-        assertThat(response.getBody().getAssessmentId()).isEqualTo(assessmentId);
-        assertThat(response.getBody().getMaxOpportunities()).isEqualTo(3);
-        assertThat(response.getBody().getPrefetch()).isEqualTo(2);
-        assertThat(response.getBody().getIsSelectable()).isTrue();
-        assertThat(response.getBody().getLabel()).isEqualTo("Grades 3 - 5 MATH");
-    }
-
-    @Test(expected = NotFoundException.class)
-    public void shouldGetNotFoundExceptionWhenGettingClientTestPropertyForInvalidClientName() {
-        String clientName = "foo";
-        String assessmentId = "SBAC Math 3-MATH-3";
-
-        when(mockConfigService.findClientTestProperty(clientName, assessmentId))
             .thenReturn(Optional.empty());
 
-        configController.getClientTestProperty(clientName, assessmentId);
+        configController.getClientSystemFlag(clientName, auditObject);
     }
 
     @Test

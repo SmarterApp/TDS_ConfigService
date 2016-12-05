@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Collections;
 import java.util.Optional;
@@ -19,7 +18,6 @@ import java.util.Optional;
 import tds.common.web.advice.ExceptionAdvice;
 import tds.config.AssessmentWindow;
 import tds.config.ClientSystemFlag;
-import tds.config.ClientTestProperty;
 import tds.config.model.AssessmentWindowParameters;
 import tds.config.services.ConfigService;
 
@@ -39,49 +37,6 @@ public class ConfigControllerIntegrationTests {
 
     @MockBean
     private ConfigService mockConfigService;
-
-    // -----------------------------------------------------------------------------------------------------------------
-    // ClientSystemProperty Tests
-    // -----------------------------------------------------------------------------------------------------------------
-    @Test
-    public void shouldGetAClientTestProperty() throws Exception {
-        final String clientName = "SBAC_PT";
-        final String testId = "SBAC Math 3-MATH-3";
-        ClientTestProperty prop = new ClientTestProperty.Builder()
-            .withClientName(clientName)
-            .withAssessmentId(testId)
-            .withMaxOpportunities(3)
-            .build();
-
-        when(mockConfigService.findClientTestProperty(clientName, testId)).thenReturn(Optional.of(prop));
-
-        String requestUri = UriComponentsBuilder.fromUriString("/config/client-test-properties/" + clientName + "/" + testId)
-            .build()
-            .toUriString();
-
-        http.perform(get(requestUri)
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("clientName", is(clientName)))
-            .andExpect(jsonPath("assessmentId", is(testId)))
-            .andExpect(jsonPath("maxOpportunities", is(3)));
-    }
-
-    @Test
-    public void shouldReturn404WhenGettingClientTestPropertyWithInvalidClientName() throws Exception{
-        final String clientName = "foo";
-        final String testId = "SBAC Math 3-MATH-3";
-
-        when(mockConfigService.findClientTestProperty(clientName, testId)).thenReturn(Optional.empty());
-
-        String requestUri = UriComponentsBuilder.fromUriString("/config/client-test-properties/" + clientName + "/" + testId)
-            .build()
-            .toUriString();
-
-        http.perform(get(requestUri)
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isNotFound());
-    }
 
     // -----------------------------------------------------------------------------------------------------------------
     // ClientSystemFlag Tests

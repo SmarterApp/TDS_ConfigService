@@ -5,23 +5,12 @@ import java.util.Optional;
 
 import tds.config.AssessmentWindow;
 import tds.config.ClientSystemFlag;
-import tds.config.ClientTestProperty;
 import tds.config.model.AssessmentWindowParameters;
 
 /**
  * Provide an interface for interacting with the {@code configs} database and providing configuration information.
  */
 public interface ConfigService {
-    /**
-     * Get all the {@link ClientTestProperty} records from the {@code configs.client_testproperties} table for the
-     * client and test.
-     *
-     * @param clientName   The name of the client (typically SBAC or SBAC_PT)
-     * @param assessmentId The assessment identifier
-     * @return A {@link Optional<ClientTestProperty>} for the specified client name and assessment id.
-     */
-    Optional<ClientTestProperty> findClientTestProperty(String clientName, String assessmentId);
-
     /**
      * Get the {@link ClientSystemFlag} for the specified client and audit name.
      *

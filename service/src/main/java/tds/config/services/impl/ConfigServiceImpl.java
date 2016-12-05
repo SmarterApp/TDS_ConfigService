@@ -16,32 +16,22 @@ import java.util.stream.Collectors;
 
 import tds.config.AssessmentWindow;
 import tds.config.ClientSystemFlag;
-import tds.config.ClientTestProperty;
 import tds.config.model.AssessmentFormWindowProperties;
 import tds.config.model.AssessmentWindowParameters;
 import tds.config.repositories.AssessmentWindowQueryRepository;
-import tds.config.repositories.ClientTestPropertyQueryRepository;
 import tds.config.repositories.ConfigRepository;
 import tds.config.services.ConfigService;
 
 @Service
 public class ConfigServiceImpl implements ConfigService {
     private final ConfigRepository configRepository;
-    private final ClientTestPropertyQueryRepository clientTestPropertyQueryRepository;
     private final AssessmentWindowQueryRepository assessmentWindowQueryRepository;
 
     @Autowired
     public ConfigServiceImpl(ConfigRepository configRepository,
-                             ClientTestPropertyQueryRepository clientTestPropertyQueryRepository,
                              AssessmentWindowQueryRepository assessmentWindowQueryRepository) {
         this.configRepository = configRepository;
-        this.clientTestPropertyQueryRepository = clientTestPropertyQueryRepository;
         this.assessmentWindowQueryRepository = assessmentWindowQueryRepository;
-    }
-
-    @Override
-    public Optional<ClientTestProperty> findClientTestProperty(final String clientName, final String assessmentId) {
-        return clientTestPropertyQueryRepository.findClientTestProperty(clientName, assessmentId);
     }
 
     @Override
