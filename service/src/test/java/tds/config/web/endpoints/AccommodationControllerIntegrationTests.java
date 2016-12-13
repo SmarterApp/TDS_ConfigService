@@ -62,8 +62,8 @@ public class AccommodationControllerIntegrationTests {
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("[0].defaultAccommodation", is(true)))
-            .andExpect(jsonPath("[0].accommodationCode", is("code")))
-            .andExpect(jsonPath("[0].accommodationValue", is("value")))
+            .andExpect(jsonPath("[0].code", is("code")))
+            .andExpect(jsonPath("[0].value", is("value")))
             .andExpect(jsonPath("[0].allowChange", is(true)))
             .andExpect(jsonPath("[0].dependsOnToolType", is("depends")))
             .andExpect(jsonPath("[0].allowCombine", is(false)))
@@ -75,6 +75,6 @@ public class AccommodationControllerIntegrationTests {
             .andExpect(jsonPath("[0].toolTypeSortOrder", is(25)))
             .andExpect(jsonPath("[0].toolValueSortOrder", is(50)))
             .andExpect(jsonPath("[0].visible", is(true)))
-            .andExpect(jsonPath("[0].accommodationType", is("type")));
+            .andExpect(jsonPath("[0].type", is("type")));
     }
 }

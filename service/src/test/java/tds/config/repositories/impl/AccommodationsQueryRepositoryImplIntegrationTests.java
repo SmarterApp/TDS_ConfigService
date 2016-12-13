@@ -12,7 +12,6 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.sql.DataSource;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -74,9 +73,9 @@ public class AccommodationsQueryRepositoryImplIntegrationTests {
         Accommodation segmentAccommodation = accommodationList.get(0);
         Accommodation defaultAccommodation = accommodationList.get(1);
 
-        assertThat(segmentAccommodation.getAccommodationCode()).isEqualTo("toolTypeSegmented");
-        assertThat(segmentAccommodation.getAccommodationType()).isEqualTo("toolTypeSegmented");
-        assertThat(segmentAccommodation.getAccommodationValue()).isEqualTo("segmentValue");
+        assertThat(segmentAccommodation.getCode()).isEqualTo("toolTypeSegmented");
+        assertThat(segmentAccommodation.getType()).isEqualTo("toolTypeSegmented");
+        assertThat(segmentAccommodation.getValue()).isEqualTo("segmentValue");
         assertThat(segmentAccommodation.getDependsOnToolType()).isNull();
         assertThat(segmentAccommodation.getSegmentPosition()).isEqualTo(99);
         assertThat(segmentAccommodation.getToolMode()).isEqualTo("ALL");
@@ -93,9 +92,9 @@ public class AccommodationsQueryRepositoryImplIntegrationTests {
         assertThat(segmentAccommodation.isVisible()).isTrue();
         assertThat(segmentAccommodation.getSegmentKey()).isEqualTo("(SBAC_PT)SBAC-Mathematics-11-Spring-2013-2015");
 
-        assertThat(defaultAccommodation.getAccommodationCode()).isEqualTo("toolTypeDefault");
-        assertThat(defaultAccommodation.getAccommodationType()).isEqualTo("toolTypeDefault");
-        assertThat(defaultAccommodation.getAccommodationValue()).isEqualTo("defaultTool");
+        assertThat(defaultAccommodation.getCode()).isEqualTo("toolTypeDefault");
+        assertThat(defaultAccommodation.getType()).isEqualTo("toolTypeDefault");
+        assertThat(defaultAccommodation.getValue()).isEqualTo("defaultTool");
         assertThat(defaultAccommodation.getDependsOnToolType()).isNull();
         assertThat(defaultAccommodation.getSegmentPosition()).isEqualTo(0);
         assertThat(defaultAccommodation.getToolMode()).isEqualTo("ALL");
@@ -124,9 +123,9 @@ public class AccommodationsQueryRepositoryImplIntegrationTests {
         Accommodation englishAccommodation = accommodationList.get(0);
         Accommodation defaultAccommodation = accommodationList.get(1);
 
-        assertThat(englishAccommodation.getAccommodationCode()).isEqualTo("ENU");
-        assertThat(englishAccommodation.getAccommodationType()).isEqualTo("Language");
-        assertThat(englishAccommodation.getAccommodationValue()).isEqualTo("ENU");
+        assertThat(englishAccommodation.getCode()).isEqualTo("ENU");
+        assertThat(englishAccommodation.getType()).isEqualTo("Language");
+        assertThat(englishAccommodation.getValue()).isEqualTo("ENU");
         assertThat(englishAccommodation.getDependsOnToolType()).isNull();
         assertThat(englishAccommodation.getSegmentPosition()).isEqualTo(0);
         assertThat(englishAccommodation.getToolMode()).isEqualTo("ALL");
@@ -143,9 +142,9 @@ public class AccommodationsQueryRepositoryImplIntegrationTests {
         assertThat(englishAccommodation.isVisible()).isTrue();
         assertThat(englishAccommodation.getSegmentKey()).isNull();
 
-        assertThat(defaultAccommodation.getAccommodationCode()).isEqualTo("toolTypeDefault");
-        assertThat(defaultAccommodation.getAccommodationType()).isEqualTo("toolTypeDefault");
-        assertThat(defaultAccommodation.getAccommodationValue()).isEqualTo("defaultTool");
+        assertThat(defaultAccommodation.getCode()).isEqualTo("toolTypeDefault");
+        assertThat(defaultAccommodation.getType()).isEqualTo("toolTypeDefault");
+        assertThat(defaultAccommodation.getValue()).isEqualTo("defaultTool");
         assertThat(defaultAccommodation.getDependsOnToolType()).isNull();
         assertThat(defaultAccommodation.getSegmentPosition()).isEqualTo(0);
         assertThat(defaultAccommodation.getToolMode()).isEqualTo("ALL");

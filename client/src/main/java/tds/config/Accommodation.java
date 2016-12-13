@@ -9,9 +9,9 @@ public class Accommodation {
     private int toolTypeSortOrder;
     private int toolValueSortOrder;
     private String toolMode;
-    private String accommodationType;
-    private String accommodationValue;
-    private String accommodationCode;
+    private String type;
+    private String value;
+    private String code;
     private boolean defaultAccommodation;
     private boolean allowCombine;
     private boolean allowChange;
@@ -64,22 +64,22 @@ public class Accommodation {
     /**
      * @return the type of the accommodation
      */
-    public String getAccommodationType() {
-        return accommodationType;
+    public String getType() {
+        return type;
     }
 
     /**
      * @return the value of the accommodation
      */
-    public String getAccommodationValue() {
-        return accommodationValue;
+    public String getValue() {
+        return value;
     }
 
     /**
      * @return the code of the accommodation
      */
-    public String getAccommodationCode() {
-        return accommodationCode;
+    public String getCode() {
+        return code;
     }
 
     /**
@@ -279,7 +279,7 @@ public class Accommodation {
             Accommodation accommodation = new Accommodation();
             accommodation.toolValueSortOrder = this.toolValueSortOrder;
             accommodation.segmentPosition = this.segmentPosition;
-            accommodation.accommodationValue = this.accommodationValue;
+            accommodation.value = this.accommodationValue;
             accommodation.selectable = this.selectable;
             accommodation.dependsOnToolType = this.dependsOnToolType;
             accommodation.functional = this.functional;
@@ -287,11 +287,11 @@ public class Accommodation {
             accommodation.studentControl = this.studentControl;
             accommodation.disableOnGuestSession = this.disableOnGuestSession;
             accommodation.toolMode = this.toolMode;
-            accommodation.accommodationCode = this.accommodationCode;
+            accommodation.code = this.accommodationCode;
             accommodation.toolTypeSortOrder = this.toolTypeSortOrder;
             accommodation.visible = this.visible;
             accommodation.allowCombine = this.allowCombine;
-            accommodation.accommodationType = this.accommodationType;
+            accommodation.type = this.accommodationType;
             accommodation.defaultAccommodation = this.defaultAccommodation;
             accommodation.typeMode = this.typeMode;
             accommodation.allowChange = this.allowChange;
