@@ -24,16 +24,16 @@ public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRep
         "  TT.SortOrder as toolValueSortOrder, \n" +
         "  TType.TestMode as typeMode, \n" +
         "  TT.TestMode as toolMode, \n" +
-        "  Type as accType, \n" +
-        "  Value as accValue, \n" +
-        "  Code as accCode, \n" +
-        "  IsDefault as isDefault, \n" +
-        "  AllowCombine as allowCombine, \n" +
-        "  IsFunctional as isFunctional, \n" +
-        "  AllowChange as allowChange,\n" +
-        "  IsSelectable as isSelectable, \n" +
-        "  IsVisible as isVisible, \n" +
-        "  studentControl as studentControl, \n" +
+        "  TT.Type as accType, \n" +
+        "  TT.Value as accValue, \n" +
+        "  TT.Code as accCode, \n" +
+        "  TT.IsDefault as isDefault, \n" +
+        "  TT.AllowCombine as allowCombine, \n" +
+        "  TType.IsFunctional as isFunctional, \n" +
+        "  TType.AllowChange as allowChange,\n" +
+        "  TType.IsSelectable as isSelectable, \n" +
+        "  TType.IsVisible as isVisible, \n" +
+        "  TType.studentControl as studentControl, \n" +
         "  null as dependsOnToolType, \n" +
         "  IsEntryControl as isEntryControl\n" +
         "FROM \n" +
@@ -113,7 +113,7 @@ public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRep
             .addValue("languages", languageCodes);
 
         String SQL;
-        if(segmented) {
+        if (segmented) {
             SQL = "(" + SEGMENTED_ASSESSMENT_SQL + ")";
         } else {
             SQL = "(" + NON_SEGMENTED_ASSESSMENT_SQL + ")";
@@ -129,25 +129,25 @@ public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRep
             "  TT.SortOrder as toolValueSortOrder, \n" +
             "  TType.TestMode as typeMode, \n" +
             "  TT.TestMode as toolMode, \n" +
-            "  Type as accType, \n" +
-            "  Value as accValue, \n" +
-            "  Code as accCode, \n" +
-            "  IsDefault as isDefault, \n" +
-            "  AllowCombine as allowCombine, \n" +
-            "  IsFunctional as isFunctional, \n" +
-            "  AllowChange as allowChange, \n" +
-            "  IsSelectable as isSelectable, \n" +
-            "  IsVisible as isVisible, \n" +
-            "  studentControl as studentControl, \n" +
-            "  DependsOnToolType as dependsOnToolType, \n" +
-            "  IsEntryControl as isEntryControl\n" +
+            "  TT.Type as accType, \n" +
+            "  TT.Value as accValue, \n" +
+            "  TT.Code as accCode, \n" +
+            "  TT.IsDefault as isDefault, \n" +
+            "  TT.AllowCombine as allowCombine, \n" +
+            "  TType.IsFunctional as isFunctional, \n" +
+            "  TType.AllowChange as allowChange, \n" +
+            "  TType.IsSelectable as isSelectable, \n" +
+            "  TType.IsVisible as isVisible, \n" +
+            "  TType.studentControl as studentControl, \n" +
+            "  TType.DependsOnToolType as dependsOnToolType, \n" +
+            "  TType.IsEntryControl as isEntryControl\n" +
             "FROM  \n" +
             "  configs.client_testmode MODE\n" +
             "  JOIN configs.client_testtooltype TType ON\n" +
             "    TType.clientname = MODE.clientname\n" +
             "  JOIN configs.client_testtool TT ON\n" +
             "    TT.clientname = TType.clientname AND\n" +
-            "    TT.Type = TType.Toolname\n"  +
+            "    TT.Type = TType.Toolname\n" +
             "WHERE \n" +
             "  MODE.testkey = :testKey \n" +
             "  and TType.ContextType = 'TEST' \n" +
