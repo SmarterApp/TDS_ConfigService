@@ -55,7 +55,7 @@ public class AccommodationsServiceImplTest {
     @Test (expected = NotFoundException.class)
     public void shouldThrowNotFoundWhenAssessmentCannotBeFound() {
         when(assessmentService.findAssessment("id")).thenReturn(Optional.empty());
-        accommodationsService.findAccommodations("id");
+        accommodationsService.findAccommodationsByAssessmentKey("id");
     }
 
     @Test
@@ -70,10 +70,10 @@ public class AccommodationsServiceImplTest {
         Accommodation accommodation = new Accommodation.Builder().build();
 
         when(assessmentService.findAssessment("key")).thenReturn(Optional.of(assessment));
-        when(accommodationsQueryRepository.findAccommodationsForSegmentedAssessment("key"))
+        when(accommodationsQueryRepository.findAccommodationsForSegmentedAssessmentByKey("key"))
             .thenReturn(Collections.singletonList(accommodation));
 
-        List<Accommodation> accommodationList = accommodationsService.findAccommodations("key");
+        List<Accommodation> accommodationList = accommodationsService.findAccommodationsByAssessmentKey("key");
 
         assertThat(accommodationList).containsExactly(accommodation);
     }
@@ -106,16 +106,26 @@ public class AccommodationsServiceImplTest {
         when(assessmentService.findAssessment("key")).thenReturn(Optional.of(assessment));
 
         when(accommodationsQueryRepository
-            .findAccommodationsForNonSegmentedAssessment(isA(String.class), anySetOf(String.class)))
+            .findAccommodationsForNonSegmentedAssessmentByKey(isA(String.class), anySetOf(String.class)))
             .thenReturn(Collections.singletonList(accommodation));
 
-        List<Accommodation> accommodations = accommodationsService.findAccommodations("key");
+        List<Accommodation> accommodations = accommodationsService.findAccommodationsByAssessmentKey("key");
 
         verify(accommodationsQueryRepository)
-            .findAccommodationsForNonSegmentedAssessment(isA(String.class), languageCaptor.capture());
+            .findAccommodationsForNonSegmentedAssessmentByKey(isA(String.class), languageCaptor.capture());
 
         assertThat(accommodations).containsExactly(accommodation);
         assertThat(languageCaptor.getValue()).containsOnly("ENU", "FRN", "Braille");
+    }
+
+    @Test
+    public void shouldFindAccommodationsById() {
+        Accommodation accommodation = new Accommodation.Builder().build();
+
+        when(accommodationsQueryRepository.findAssessmentAccommodationsById("SBAC_PT", "clientName")).thenReturn(Collections.singletonList(accommodation));
+        List<Accommodation> accommodations = accommodationsService.findAccommodationsByAssessmentId("SBAC_PT", "clientName");
+
+        assertThat(accommodations).containsExactly(accommodation);
     }
 }
 

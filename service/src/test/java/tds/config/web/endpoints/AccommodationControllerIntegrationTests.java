@@ -33,7 +33,7 @@ public class AccommodationControllerIntegrationTests {
     private AccommodationsService mockAccommodationsService;
 
     @Test
-    public void shouldGetAClientTestProperty() throws Exception {
+    public void shouldFindAccommodationsByKey() throws Exception {
         Accommodation accommodation = new Accommodation.Builder()
             .withDefaultAccommodation(true)
             .withAccommodationCode("code")
@@ -52,9 +52,9 @@ public class AccommodationControllerIntegrationTests {
             .withVisible(true)
             .build();
 
-        when(mockAccommodationsService.findAccommodations("key")).thenReturn(singletonList(accommodation));
+        when(mockAccommodationsService.findAccommodationsByAssessmentKey("key")).thenReturn(singletonList(accommodation));
 
-        String requestUri = UriComponentsBuilder.fromUriString("/config/accommodations/key")
+        String requestUri = UriComponentsBuilder.fromUriString("/config/SBAC/accommodations/key")
             .build()
             .toUriString();
 
@@ -76,5 +76,62 @@ public class AccommodationControllerIntegrationTests {
             .andExpect(jsonPath("[0].toolValueSortOrder", is(50)))
             .andExpect(jsonPath("[0].visible", is(true)))
             .andExpect(jsonPath("[0].type", is("type")));
+    }
+
+    @Test
+    public void shouldFindAccommodations() throws Exception {
+        Accommodation accommodation = new Accommodation.Builder()
+            .withDefaultAccommodation(true)
+            .withAccommodationCode("code")
+            .withAccommodationType("type")
+            .withAccommodationValue("value")
+            .withAllowChange(true)
+            .withDependsOnToolType("depends")
+            .withAllowCombine(false)
+            .withDisableOnGuestSession(true)
+            .withEntryControl(false)
+            .withFunctional(true)
+            .withSegmentPosition(99)
+            .withToolMode("toolMode")
+            .withToolTypeSortOrder(25)
+            .withToolValueSortOrder(50)
+            .withVisible(true)
+            .build();
+
+        when(mockAccommodationsService.findAccommodationsByAssessmentId("SBAC","id")).thenReturn(singletonList(accommodation));
+
+        String requestUri = UriComponentsBuilder.fromUriString("/config/SBAC/accommodations?assessmentId=id")
+            .build()
+            .toUriString();
+
+        http.perform(get(requestUri)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("[0].defaultAccommodation", is(true)))
+            .andExpect(jsonPath("[0].code", is("code")))
+            .andExpect(jsonPath("[0].value", is("value")))
+            .andExpect(jsonPath("[0].allowChange", is(true)))
+            .andExpect(jsonPath("[0].dependsOnToolType", is("depends")))
+            .andExpect(jsonPath("[0].allowCombine", is(false)))
+            .andExpect(jsonPath("[0].disableOnGuestSession", is(true)))
+            .andExpect(jsonPath("[0].entryControl", is(false)))
+            .andExpect(jsonPath("[0].functional", is(true)))
+            .andExpect(jsonPath("[0].segmentPosition", is(99)))
+            .andExpect(jsonPath("[0].toolMode", is("toolMode")))
+            .andExpect(jsonPath("[0].toolTypeSortOrder", is(25)))
+            .andExpect(jsonPath("[0].toolValueSortOrder", is(50)))
+            .andExpect(jsonPath("[0].visible", is(true)))
+            .andExpect(jsonPath("[0].type", is("type")));
+    }
+
+    @Test
+    public void shouldRequireAccommodationId() throws Exception {
+        String requestUri = UriComponentsBuilder.fromUriString("/config/SBAC/accommodations")
+            .build()
+            .toUriString();
+
+        http.perform(get(requestUri)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest());
     }
 }

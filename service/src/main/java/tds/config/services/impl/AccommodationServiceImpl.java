@@ -3,11 +3,9 @@ package tds.config.services.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import tds.assessment.Assessment;
@@ -30,7 +28,7 @@ public class AccommodationServiceImpl implements AccommodationsService {
     }
 
     @Override
-    public List<Accommodation> findAccommodations(String assessmentKey) {
+    public List<Accommodation> findAccommodationsByAssessmentKey(String assessmentKey) {
         //Implements the replacement for CommonDLL.TestKeyAccommodations_FN
         Optional<Assessment> maybeAssessment = assessmentService.findAssessment(assessmentKey);
         if (!maybeAssessment.isPresent()) {
@@ -40,18 +38,23 @@ public class AccommodationServiceImpl implements AccommodationsService {
         Assessment assessment = maybeAssessment.get();
 
         if (assessment.isSegmented()) {
-            return accommodationsQueryRepository.findAccommodationsForSegmentedAssessment(assessmentKey);
+            return accommodationsQueryRepository.findAccommodationsForSegmentedAssessmentByKey(assessmentKey);
         } else {
             Set<String> languages =
                 assessment.getSegments().stream()
                     .flatMap(segment -> segment.getItems().stream()
                         .flatMap(item -> item.getItemProperties().stream()
                             .filter(itemProperty -> itemProperty.getName().equalsIgnoreCase(Accommodation.ACCOMMODATION_TYPE_LANGUAGE)))
-                        .map(itemProperty -> itemProperty.getValue()))
+                        .map(ItemProperty::getValue))
                     .collect(Collectors.toSet());
 
 
-            return accommodationsQueryRepository.findAccommodationsForNonSegmentedAssessment(assessment.getKey(), languages);
+            return accommodationsQueryRepository.findAccommodationsForNonSegmentedAssessmentByKey(assessment.getKey(), languages);
         }
+    }
+
+    @Override
+    public List<Accommodation> findAccommodationsByAssessmentId(String clientName, String assessmentId) {
+        return accommodationsQueryRepository.findAssessmentAccommodationsById(clientName, assessmentId);
     }
 }
