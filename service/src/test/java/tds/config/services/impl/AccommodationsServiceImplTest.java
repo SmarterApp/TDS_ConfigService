@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import tds.assessment.Algorithm;
 import tds.assessment.Assessment;
 import tds.assessment.Item;
 import tds.assessment.ItemProperty;
@@ -60,8 +61,8 @@ public class AccommodationsServiceImplTest {
 
     @Test
     public void shouldFindSegmentedAccommodations() {
-        Segment segmentOne = new Segment("key1");
-        Segment segmentTwo = new Segment("key2");
+        Segment segmentOne = new Segment("key1", Algorithm.ADAPTIVE_2);
+        Segment segmentTwo = new Segment("key2", Algorithm.ADAPTIVE_2);
 
         Assessment assessment = new Assessment();
         assessment.setKey("key");
@@ -94,7 +95,7 @@ public class AccommodationsServiceImplTest {
         Item item2 = new Item("item2");
         item2.setItemProperties(languages2);
 
-        Segment segmentOne = new Segment("key1");
+        Segment segmentOne = new Segment("key1", Algorithm.ADAPTIVE_2);
         segmentOne.setItems(Arrays.asList(item1, item2));
 
         Assessment assessment = new Assessment();

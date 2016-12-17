@@ -42,16 +42,7 @@ public class AccommodationServiceImpl implements AccommodationsService {
         if (assessment.isSegmented()) {
             return accommodationsQueryRepository.findAccommodationsForSegmentedAssessment(assessmentKey);
         } else {
-            Set<String> languages =
-                assessment.getSegments().stream()
-                    .flatMap(segment -> segment.getItems().stream()
-                        .flatMap(item -> item.getItemProperties().stream()
-                            .filter(itemProperty -> itemProperty.getName().equalsIgnoreCase(Accommodation.ACCOMMODATION_TYPE_LANGUAGE)))
-                        .map(itemProperty -> itemProperty.getValue()))
-                    .collect(Collectors.toSet());
-
-
-            return accommodationsQueryRepository.findAccommodationsForNonSegmentedAssessment(assessment.getKey(), languages);
+            return accommodationsQueryRepository.findAccommodationsForNonSegmentedAssessment(assessment.getKey(), assessment.getLanguageCodes());
         }
     }
 }
