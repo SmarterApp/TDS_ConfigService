@@ -11,6 +11,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -100,6 +101,7 @@ public class AccommodationsServiceImplTest {
 
         Assessment assessment = new Assessment();
         assessment.setKey("key");
+        assessment.setLanguageCodes(new HashSet<>(Arrays.asList("ENU", "Braille", "FRN")));
         assessment.setSegments(Collections.singletonList(segmentOne));
 
         Accommodation accommodation = new Accommodation.Builder().build();
