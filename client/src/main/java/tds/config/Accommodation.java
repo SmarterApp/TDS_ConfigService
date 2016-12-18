@@ -23,7 +23,7 @@ public class Accommodation {
     private String dependsOnToolType;
     private String typeMode;
     private String segmentKey;
-    private int valueCount;
+    private int typeTotal;
 
     public static final String ACCOMMODATION_TYPE_LANGUAGE = "Language";
 
@@ -163,8 +163,8 @@ public class Accommodation {
         return segmentKey;
     }
 
-    public int getValueCount() {
-        return valueCount;
+    public int getTypeTotal() {
+        return typeTotal;
     }
 
     public static final class Builder {
@@ -187,7 +187,7 @@ public class Accommodation {
         private String typeMode;
         private boolean allowChange;
         private String segmentKey;
-        private int valueCount;
+        private int typeTotal;
 
         public Builder withSegmentPosition(int segmentPosition) {
             this.segmentPosition = segmentPosition;
@@ -284,8 +284,8 @@ public class Accommodation {
             return this;
         }
 
-        public Builder withValueCount(int valueCount) {
-            this.valueCount = valueCount;
+        public Builder withTypeTotal(int typeTotal) {
+            this.typeTotal = typeTotal;
             return this;
         }
 
@@ -310,7 +310,7 @@ public class Accommodation {
             accommodation.typeMode = this.typeMode;
             accommodation.allowChange = this.allowChange;
             accommodation.segmentKey = this.segmentKey;
-            accommodation.valueCount = this.valueCount;
+            accommodation.typeTotal = this.typeTotal;
             return accommodation;
         }
     }

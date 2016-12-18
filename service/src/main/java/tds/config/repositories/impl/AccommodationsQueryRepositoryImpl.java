@@ -39,6 +39,7 @@ public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRep
         "  TType.IsVisible as isVisible, \n" +
         "  TType.studentControl as studentControl, \n" +
         "  null as dependsOnToolType, \n" +
+        "  (select count(1) from client_testtool TOOL where TOOL.ContextType = 'TEST' and TOOL.Context = MODE.testID and TOOL.clientname = MODE.clientname and TOOL.Type = TT.Type) as ValCount, \n" +
         "  IsEntryControl as isEntryControl\n" +
         "FROM \n" +
         "  configs.client_testmode MODE \n" +
@@ -78,6 +79,7 @@ public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRep
         "  TType.IsVisible as isVisible, \n" +
         "  TType.studentControl as studentControl,\n" +
         "  TType.DependsOnToolType as dependsOnToolType, \n" +
+        "  (select count(1) from client_testtool TOOL where TOOL.ContextType = 'TEST' and TOOL.Context = MODE.testID  and TOOL.clientname = MODE.clientname and TOOL.Type = TT.Type) as ValCount, \n" +
         "  TType.IsEntryControl as isEntryControl\n" +
         "FROM \n" +
         "  configs.client_testtooltype TType \n" +
@@ -266,6 +268,7 @@ public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRep
             "  TType.IsVisible as isVisible, \n" +
             "  TType.studentControl as studentControl, \n" +
             "  TType.DependsOnToolType as dependsOnToolType, \n" +
+            "  (select count(1) from client_testtool TOOL where TOOL.ContextType = 'TEST' and TOOL.Context = '*' and TOOL.clientname = MODE.clientname and TOOL.Type = TT.Type) as ValCount, " +
             "  TType.IsEntryControl as isEntryControl\n" +
             "FROM  \n" +
             "  configs.client_testmode MODE\n" +
@@ -311,6 +314,7 @@ public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRep
                 .withDependsOnToolType(rs.getString("dependsOnToolType"))
                 .withEntryControl(rs.getBoolean("isEntryControl"))
                 .withSegmentKey(rs.getString("segmentKey"))
+                .withTypeTotal(rs.getInt("ValCount"))
                 .build();
         }
     }
