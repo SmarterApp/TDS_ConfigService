@@ -37,10 +37,9 @@ public class AssessmentServiceImplTest {
     @Test
     public void shouldFindAssessmentByKey() {
         List<Segment> segments = new ArrayList<>();
-        Segment seg1 = new Segment("segkey");
+        Segment seg1 = new Segment("segkey", Algorithm.FIXED_FORM);
         seg1.setSegmentId("segid");
         seg1.setAssessmentKey("key");
-        seg1.setSelectionAlgorithm(Algorithm.FIXED_FORM);
         seg1.setStartAbility(0);
         segments.add(seg1);
 

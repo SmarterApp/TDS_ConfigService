@@ -5,11 +5,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import tds.assessment.Assessment;
-import tds.assessment.ItemProperty;
 import tds.common.web.exceptions.NotFoundException;
 import tds.config.Accommodation;
 import tds.config.repositories.AccommodationsQueryRepository;
@@ -40,16 +37,7 @@ public class AccommodationServiceImpl implements AccommodationsService {
         if (assessment.isSegmented()) {
             return accommodationsQueryRepository.findAccommodationsForSegmentedAssessmentByKey(assessmentKey);
         } else {
-            Set<String> languages =
-                assessment.getSegments().stream()
-                    .flatMap(segment -> segment.getItems().stream()
-                        .flatMap(item -> item.getItemProperties().stream()
-                            .filter(itemProperty -> itemProperty.getName().equalsIgnoreCase(Accommodation.ACCOMMODATION_TYPE_LANGUAGE)))
-                        .map(ItemProperty::getValue))
-                    .collect(Collectors.toSet());
-
-
-            return accommodationsQueryRepository.findAccommodationsForNonSegmentedAssessmentByKey(assessment.getKey(), languages);
+            return accommodationsQueryRepository.findAccommodationsForNonSegmentedAssessmentByKey(assessment.getKey(), assessment.getLanguageCodes());
         }
     }
 
