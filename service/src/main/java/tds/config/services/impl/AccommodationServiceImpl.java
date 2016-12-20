@@ -3,15 +3,10 @@ package tds.config.services.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 import tds.assessment.Assessment;
-import tds.assessment.ItemProperty;
 import tds.common.web.exceptions.NotFoundException;
 import tds.config.Accommodation;
 import tds.config.repositories.AccommodationsQueryRepository;
@@ -30,7 +25,7 @@ public class AccommodationServiceImpl implements AccommodationsService {
     }
 
     @Override
-    public List<Accommodation> findAccommodations(String assessmentKey) {
+    public List<Accommodation> findAccommodationsByAssessmentKey(String assessmentKey) {
         //Implements the replacement for CommonDLL.TestKeyAccommodations_FN
         Optional<Assessment> maybeAssessment = assessmentService.findAssessment(assessmentKey);
         if (!maybeAssessment.isPresent()) {
@@ -40,9 +35,14 @@ public class AccommodationServiceImpl implements AccommodationsService {
         Assessment assessment = maybeAssessment.get();
 
         if (assessment.isSegmented()) {
-            return accommodationsQueryRepository.findAccommodationsForSegmentedAssessment(assessmentKey);
+            return accommodationsQueryRepository.findAccommodationsForSegmentedAssessmentByKey(assessmentKey);
         } else {
-            return accommodationsQueryRepository.findAccommodationsForNonSegmentedAssessment(assessment.getKey(), assessment.getLanguageCodes());
+            return accommodationsQueryRepository.findAccommodationsForNonSegmentedAssessmentByKey(assessment.getKey(), assessment.getLanguageCodes());
         }
+    }
+
+    @Override
+    public List<Accommodation> findAccommodationsByAssessmentId(String clientName, String assessmentId) {
+        return accommodationsQueryRepository.findAssessmentAccommodationsById(clientName, assessmentId);
     }
 }

@@ -1,10 +1,14 @@
 package tds.config.repositories.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,7 +20,7 @@ import tds.config.repositories.AccommodationsQueryRepository;
 public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
-    private static final String SEGMENTED_ASSESSMENT_SQL = "SELECT \n" +
+    private static final String SEGMENTED_ASSESSMENT_BY_KEY_SQL = "SELECT \n" +
         "  distinct SegmentPosition as segment,\n" +
         "  SEG.modekey as segmentKey, \n" +
         "  TType.DisableOnGuestSession as disableOnGuestSession, \n" +
@@ -35,6 +39,7 @@ public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRep
         "  TType.IsVisible as isVisible, \n" +
         "  TType.studentControl as studentControl, \n" +
         "  null as dependsOnToolType, \n" +
+        "  (select count(1) from client_testtool TOOL where TOOL.ContextType = 'TEST' and TOOL.Context = MODE.testID and TOOL.clientname = MODE.clientname and TOOL.Type = TT.Type) as ValCount, \n" +
         "  IsEntryControl as isEntryControl\n" +
         "FROM \n" +
         "  configs.client_testmode MODE \n" +
@@ -55,7 +60,7 @@ public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRep
         "  and (TType.TestMode = 'ALL' AND TT.TestMode = 'ALL') \n" +
         "  or (TType.TestMode = MODE.mode and TT.TestMode = MODE.mode) \n";
 
-    private static final String NON_SEGMENTED_ASSESSMENT_SQL = "SELECT \n" +
+    private static final String NON_SEGMENTED_ASSESSMENT_BY_KEY_SQL = "SELECT \n" +
         "  distinct 0 as segment, \n" +
         "  null as segmentKey, \n" +
         "  TType.DisableOnGuestSession as disableOnGuestSession, \n" +
@@ -74,6 +79,7 @@ public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRep
         "  TType.IsVisible as isVisible, \n" +
         "  TType.studentControl as studentControl,\n" +
         "  TType.DependsOnToolType as dependsOnToolType, \n" +
+        "  (select count(1) from client_testtool TOOL where TOOL.ContextType = 'TEST' and TOOL.Context = MODE.testID  and TOOL.clientname = MODE.clientname and TOOL.Type = TT.Type) as ValCount, \n" +
         "  TType.IsEntryControl as isEntryControl\n" +
         "FROM \n" +
         "  configs.client_testtooltype TType \n" +
@@ -99,24 +105,146 @@ public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRep
     }
 
     @Override
-    public List<Accommodation> findAccommodationsForSegmentedAssessment(String assessmentKey) {
-        return findAssessmentAccommodations(assessmentKey, true, new HashSet<>());
+    public List<Accommodation> findAccommodationsForSegmentedAssessmentByKey(String assessmentKey) {
+        return findAssessmentAccommodationsByKey(assessmentKey, true, new HashSet<>());
     }
 
     @Override
-    public List<Accommodation> findAccommodationsForNonSegmentedAssessment(String assessmentKey, Set<String> languageCodes) {
-        return findAssessmentAccommodations(assessmentKey, false, languageCodes);
+    public List<Accommodation> findAccommodationsForNonSegmentedAssessmentByKey(String assessmentKey, Set<String> languageCodes) {
+        return findAssessmentAccommodationsByKey(assessmentKey, false, languageCodes);
     }
 
-    private List<Accommodation> findAssessmentAccommodations(String assessmentKey, boolean segmented, Set<String> languageCodes) {
+    @Override
+    public List<Accommodation> findAssessmentAccommodationsById(String clientName, String assessmentId) {
+        SqlParameterSource parameters = new MapSqlParameterSource("assessmentId", assessmentId)
+            .addValue("clientName", clientName);
+
+        String SQL = "(\n" +
+            "SELECT\n" +
+            "  DISTINCT 0 AS segment, \n" +
+            "  NULL AS segmentKey, \n" +
+            "  TType.DisableOnGuestSession AS disableOnGuestSession, \n" +
+            "  TType.SortOrder AS toolTypeSortOrder, \n" +
+            "  TT.SortOrder AS toolValueSortOrder, \n" +
+            "  TType.TestMode AS typeMode,\n" +
+            "  TT.TestMode AS toolMode, \n" +
+            "  TT.Type AS accType, \n" +
+            "  TT.Value AS accValue, \n" +
+            "  TT.Code AS accCode, \n" +
+            "  TT.IsDefault AS isDefault, \n" +
+            "  TT.AllowCombine AS allowCombine, \n" +
+            "  TType.IsFunctional AS isFunctional, \n" +
+            "  TType.AllowChange AS allowChange, \n" +
+            "  TType.IsSelectable AS isSelectable, \n" +
+            "  TType.IsVisible AS isVisible, \n" +
+            "  TType.studentControl AS studentControl,\n" +
+            "  TType.DependsOnToolType AS dependsOnToolType, \n" +
+            "  (SELECT count(1) FROM client_testtool TOOL WHERE TOOL.ContextType = 'TEST' AND TOOL.Context = :assessmentId AND TOOL.clientname = :clientName AND TOOL.Type = TT.Type) AS ValCount,    \n" +
+            "  TType.IsEntryControl AS isEntryControl\n" +
+            "FROM\n" +
+            "  configs.client_testtooltype TType\n" +
+            "JOIN configs.client_testtool TT \n" +
+            "  ON TType.context = TT.context\n" +
+            "  AND TType.clientname = TT.clientname\n" +
+            "  AND TType.contexttype = TT.contexttype\n" +
+            "  AND TType.toolname = TT.type\n" +
+            "WHERE\n" +
+            "  TType.contexttype = 'TEST'\n" +
+            "  AND TType.context = :assessmentId\n" +
+            "  AND TType.clientname = :clientName\n" +
+            ") UNION ALL (\n" +
+            "SELECT\n" +
+            "  DISTINCT SegmentPosition AS segment, \n" +
+            "  SEG.modekey AS segmentKey,\n" +
+            "  TType.DisableOnGuestSession AS disableOnGuestSession, \n" +
+            "  TType.SortOrder AS toolTypeSortOrder, \n" +
+            "  TT.SortOrder AS toolValueSortOrder, \n" +
+            "  TType.TestMode AS typeMode, \n" +
+            "  TT.TestMode AS toolMode, \n" +
+            "  TT.Type AS accType, \n" +
+            "  TT.Value AS accValue, \n" +
+            "  TT.Code AS accCode, \n" +
+            "  TT.IsDefault AS isDefault, \n" +
+            "  TT.AllowCombine AS allowCombine, \n" +
+            "  TType.IsFunctional AS isFunctional, \n" +
+            "  TType.AllowChange AS allowChange, \n" +
+            "  TType.IsSelectable AS isSelectable, \n" +
+            "  TType.IsVisible AS isVisible, \n" +
+            "  TType.studentControl AS studentControl, \n" +
+            "  NULL AS dependsOnToolType, \n" +
+            "  (SELECT count(1) FROM client_testtool TOOL WHERE TOOL.ContextType = 'TEST' AND TOOL.Context = :assessmentId AND TOOL.clientname = :clientName AND TOOL.Type = TT.Type) AS ValCount,  \n" +
+            "  IsEntryControl AS isEntryControl \n" +
+            "FROM\n" +
+            "  configs.client_testtooltype TType\n" +
+            "JOIN configs.client_testtool TT \n" +
+            "  ON TType.context = TT.context\n" +
+            "  AND TType.clientname = TT.clientname\n" +
+            "  AND TType.contexttype = TT.contexttype\n" +
+            "  AND TType.toolname = TT.type\n" +
+            "JOIN \n" +
+            "  configs.client_segmentproperties SEG\n" +
+            "  ON TType.context = SEG.segmentid\n" +
+            "WHERE\n" +
+            "  SEG.parenttest = :assessmentId\n" +
+            "  AND TType.contexttype = 'SEGMENT'\n" +
+            "  AND TType.clientname = :clientName\n" +
+            ") UNION ALL (\n" +
+            "SELECT \n" +
+            "  DISTINCT 0 AS segment,\n" +
+            "  NULL AS segmentKey, \n" +
+            "  TType.DisableOnGuestSession AS disableOnGuestSession,  \n" +
+            "  TType.SortOrder AS toolTypeSortOrder, \n" +
+            "  TT.SortOrder AS toolValueSortOrder, \n" +
+            "  TType.TestMode AS typeMode, \n" +
+            "  TT.TestMode AS toolMode, \n" +
+            "  TT.Type AS accType, \n" +
+            "  TT.Value AS accValue, \n" +
+            "  TT.Code AS accCode, \n" +
+            "  TT.IsDefault AS isDefault, \n" +
+            "  TT.AllowCombine AS allowCombine, \n" +
+            "  TType.IsFunctional AS isFunctional, \n" +
+            "  TType.AllowChange AS allowChange, \n" +
+            "  TType.IsSelectable AS isSelectable, \n" +
+            "  TType.IsVisible AS isVisible, \n" +
+            "  TType.studentControl AS studentControl, \n" +
+            "  TType.DependsOnToolType AS dependsOnToolType, \n" +
+            "  (SELECT count(1) FROM client_testtool TOOL WHERE TOOL.ContextType = 'TEST' AND TOOL.Context = '*' AND TOOL.clientname = :clientName AND TOOL.Type = TT.Type) AS ValCount, \n" +
+            "  TType.IsEntryControl AS isEntryControl\n" +
+            "FROM\n" +
+            "  configs.client_testtooltype TType\n" +
+            "JOIN configs.client_testtool TT \n" +
+            "  ON TType.context = TT.context\n" +
+            "  AND TType.clientname = TT.clientname\n" +
+            "  AND TType.contexttype = TT.contexttype\n" +
+            "  AND TType.toolname = TT.type\n" +
+            "WHERE\n" +
+            "  TType.contexttype = 'TEST'\n" +
+            "  AND TType.context = '*'\n" +
+            "  AND TType.clientname = :clientName\n" +
+            "  AND NOT EXISTS \n" +
+            "    (\n" +
+            "      SELECT \n" +
+            "        toolname \n" +
+            "      FROM configs.client_testtooltype Tool \n" +
+            "      WHERE Tool.ContextType = 'TEST' \n" +
+            "        AND Tool.Context = :assessmentId \n" +
+            "        AND Tool.Toolname = TType.Toolname \n" +
+            "        AND Tool.Clientname = :clientName\n" +
+            "    )\n" +
+            ")";
+
+        return jdbcTemplate.query(SQL, parameters, new ResultSetRowMapper());
+    }
+
+    private List<Accommodation> findAssessmentAccommodationsByKey(String assessmentKey, boolean segmented, Set<String> languageCodes) {
         MapSqlParameterSource parameters = new MapSqlParameterSource("testKey", assessmentKey)
             .addValue("languages", languageCodes);
 
         String SQL;
         if (segmented) {
-            SQL = "(" + SEGMENTED_ASSESSMENT_SQL + ")";
+            SQL = "(" + SEGMENTED_ASSESSMENT_BY_KEY_SQL + ")";
         } else {
-            SQL = "(" + NON_SEGMENTED_ASSESSMENT_SQL + ")";
+            SQL = "(" + NON_SEGMENTED_ASSESSMENT_BY_KEY_SQL + ")";
         }
 
         SQL += "UNION ALL \n " +
@@ -140,6 +268,7 @@ public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRep
             "  TType.IsVisible as isVisible, \n" +
             "  TType.studentControl as studentControl, \n" +
             "  TType.DependsOnToolType as dependsOnToolType, \n" +
+            "  (select count(1) from client_testtool TOOL where TOOL.ContextType = 'TEST' and TOOL.Context = '*' and TOOL.clientname = MODE.clientname and TOOL.Type = TT.Type) as ValCount, " +
             "  TType.IsEntryControl as isEntryControl\n" +
             "FROM  \n" +
             "  configs.client_testmode MODE\n" +
@@ -159,8 +288,13 @@ public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRep
             "  and not exists (select * from configs.client_testtooltype Tool where Tool.ContextType = 'TEST' and Tool.Context = MODE.testID and Tool.Toolname = TType.Toolname and Tool.Clientname = MODE.clientname)\n" +
             ")";
 
-        return jdbcTemplate.query(SQL, parameters, (rs, rowNum) ->
-            new Accommodation.Builder()
+        return jdbcTemplate.query(SQL, parameters, new ResultSetRowMapper());
+    }
+
+    private static class ResultSetRowMapper implements RowMapper<Accommodation> {
+        @Override
+        public Accommodation mapRow(ResultSet rs, int i) throws SQLException {
+            return new tds.config.Accommodation.Builder()
                 .withSegmentPosition(rs.getInt("segment"))
                 .withDisableOnGuestSession(rs.getBoolean("disableOnGuestSession"))
                 .withToolTypeSortOrder(rs.getInt("toolTypeSortOrder"))
@@ -180,7 +314,8 @@ public class AccommodationsQueryRepositoryImpl implements AccommodationsQueryRep
                 .withDependsOnToolType(rs.getString("dependsOnToolType"))
                 .withEntryControl(rs.getBoolean("isEntryControl"))
                 .withSegmentKey(rs.getString("segmentKey"))
-                .build()
-        );
+                .withTypeTotal(rs.getInt("ValCount"))
+                .build();
+        }
     }
 }

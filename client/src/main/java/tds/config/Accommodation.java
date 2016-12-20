@@ -23,8 +23,12 @@ public class Accommodation {
     private String dependsOnToolType;
     private String typeMode;
     private String segmentKey;
+    private int typeTotal;
 
     public static final String ACCOMMODATION_TYPE_LANGUAGE = "Language";
+
+    private Accommodation() {
+    }
 
     /**
      * @return the segment position which relates to this accommodation.  Zero if non segmented assessment
@@ -159,6 +163,10 @@ public class Accommodation {
         return segmentKey;
     }
 
+    public int getTypeTotal() {
+        return typeTotal;
+    }
+
     public static final class Builder {
         private int segmentPosition;
         private boolean disableOnGuestSession;
@@ -179,6 +187,7 @@ public class Accommodation {
         private String typeMode;
         private boolean allowChange;
         private String segmentKey;
+        private int typeTotal;
 
         public Builder withSegmentPosition(int segmentPosition) {
             this.segmentPosition = segmentPosition;
@@ -275,6 +284,11 @@ public class Accommodation {
             return this;
         }
 
+        public Builder withTypeTotal(int typeTotal) {
+            this.typeTotal = typeTotal;
+            return this;
+        }
+
         public Accommodation build() {
             Accommodation accommodation = new Accommodation();
             accommodation.toolValueSortOrder = this.toolValueSortOrder;
@@ -296,6 +310,7 @@ public class Accommodation {
             accommodation.typeMode = this.typeMode;
             accommodation.allowChange = this.allowChange;
             accommodation.segmentKey = this.segmentKey;
+            accommodation.typeTotal = this.typeTotal;
             return accommodation;
         }
     }

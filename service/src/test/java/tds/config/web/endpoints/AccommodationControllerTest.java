@@ -35,11 +35,22 @@ public class AccommodationControllerTest {
     }
 
     @Test
-    public void shouldReturnAccommodations() {
+    public void shouldReturnAccommodationsByAssessmentKey() {
         Accommodation accommodation = new Accommodation.Builder().build();
-        when(accommodationsService.findAccommodations("key")).thenReturn(Collections.singletonList(accommodation));
+        when(accommodationsService.findAccommodationsByAssessmentKey("key")).thenReturn(Collections.singletonList(accommodation));
 
         ResponseEntity<List<Accommodation>> response = controller.findAccommodations("key");
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).containsOnly(accommodation);
+    }
+
+    @Test
+    public void shouldReturnAccommodationsByAssessmentId() {
+        Accommodation accommodation = new Accommodation.Builder().build();
+        when(accommodationsService.findAccommodationsByAssessmentId("client", "id")).thenReturn(Collections.singletonList(accommodation));
+
+        ResponseEntity<List<Accommodation>> response = controller.findAccommodations("client", "id");
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).containsOnly(accommodation);

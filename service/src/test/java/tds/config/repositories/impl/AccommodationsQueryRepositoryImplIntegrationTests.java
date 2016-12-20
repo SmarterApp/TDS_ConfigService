@@ -65,8 +65,8 @@ public class AccommodationsQueryRepositoryImplIntegrationTests {
     }
 
     @Test
-    public void shouldFindAccommodationsForSegmentAndDefault() {
-        List<Accommodation> accommodationList = repository.findAccommodationsForSegmentedAssessment("(SBAC_PT)SBAC-Mathematics-11-Spring-2013-2015");
+    public void shouldFindAccommodationsForSegmentAndDefaultByAssessmentKey() {
+        List<Accommodation> accommodationList = repository.findAccommodationsForSegmentedAssessmentByKey("(SBAC_PT)SBAC-Mathematics-11-Spring-2013-2015");
 
         assertThat(accommodationList).hasSize(2);
 
@@ -90,6 +90,7 @@ public class AccommodationsQueryRepositoryImplIntegrationTests {
         assertThat(segmentAccommodation.isFunctional()).isTrue();
         assertThat(segmentAccommodation.isSelectable()).isFalse();
         assertThat(segmentAccommodation.isVisible()).isTrue();
+        assertThat(segmentAccommodation.getTypeTotal()).isEqualTo(0);
         assertThat(segmentAccommodation.getSegmentKey()).isEqualTo("(SBAC_PT)SBAC-Mathematics-11-Spring-2013-2015");
 
         assertThat(defaultAccommodation.getCode()).isEqualTo("toolTypeDefault");
@@ -109,14 +110,15 @@ public class AccommodationsQueryRepositoryImplIntegrationTests {
         assertThat(defaultAccommodation.isFunctional()).isTrue();
         assertThat(defaultAccommodation.isSelectable()).isFalse();
         assertThat(defaultAccommodation.isVisible()).isTrue();
+        assertThat(defaultAccommodation.getTypeTotal()).isEqualTo(1);
         assertThat(defaultAccommodation.getSegmentKey()).isNull();
     }
 
     @Test
-    public void shouldFindAccommodationsForNonSegmentAndDefault() {
+    public void shouldFindAccommodationsForNonSegmentAndDefaultByAssessmentKey() {
         Set<String> languages = new HashSet<>();
         languages.add("ENU");
-        List<Accommodation> accommodationList = repository.findAccommodationsForNonSegmentedAssessment("(SBAC_PT)SBAC-Mathematics-11-Spring-2013-2015", languages);
+        List<Accommodation> accommodationList = repository.findAccommodationsForNonSegmentedAssessmentByKey("(SBAC_PT)SBAC-Mathematics-11-Spring-2013-2015", languages);
 
         assertThat(accommodationList).hasSize(2);
 
@@ -140,6 +142,7 @@ public class AccommodationsQueryRepositoryImplIntegrationTests {
         assertThat(englishAccommodation.isFunctional()).isTrue();
         assertThat(englishAccommodation.isSelectable()).isFalse();
         assertThat(englishAccommodation.isVisible()).isTrue();
+        assertThat(englishAccommodation.getTypeTotal()).isEqualTo(2);
         assertThat(englishAccommodation.getSegmentKey()).isNull();
 
         assertThat(defaultAccommodation.getCode()).isEqualTo("toolTypeDefault");
@@ -159,6 +162,13 @@ public class AccommodationsQueryRepositoryImplIntegrationTests {
         assertThat(defaultAccommodation.isFunctional()).isTrue();
         assertThat(defaultAccommodation.isSelectable()).isFalse();
         assertThat(defaultAccommodation.isVisible()).isTrue();
+        assertThat(defaultAccommodation.getTypeTotal()).isEqualTo(1);
         assertThat(defaultAccommodation.getSegmentKey()).isNull();
+    }
+
+    @Test
+    public void shouldFindAccommodationsByAssessmentIdAndClientName() {
+        List<Accommodation> accommodationList = repository.findAssessmentAccommodationsById("SBAC_PT", "SBAC-Mathematics-11");
+        assertThat(accommodationList).hasSize(4);
     }
 }
