@@ -31,7 +31,7 @@ public class ConfigRepositoryImpl implements ConfigRepository {
         final SqlParameterSource parameters = new MapSqlParameterSource("clientName", clientName);
 
         final String SQL =
-                "SELECT\n" +
+            "SELECT\n" +
                 "   auditobject AS auditObject,\n" +
                 "   clientname AS clientName,\n" +
                 "   ispracticetest AS isPracticeTest,\n" +
@@ -47,11 +47,11 @@ public class ConfigRepositoryImpl implements ConfigRepository {
         List<ClientSystemFlag> clientSystemFlags;
         try {
             clientSystemFlags =
-                    jdbcTemplate.query(
-                            SQL,
-                            parameters,
-                            new ClientSystemFlagRowMapper());
-        } catch(DataAccessException e) {
+                jdbcTemplate.query(
+                    SQL,
+                    parameters,
+                    new ClientSystemFlagRowMapper());
+        } catch (DataAccessException e) {
             LOG.debug("{} did not return results for clientName = {}", SQL, clientName);
             clientSystemFlags = Collections.emptyList();
         }

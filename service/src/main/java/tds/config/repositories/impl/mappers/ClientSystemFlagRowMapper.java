@@ -17,13 +17,13 @@ public class ClientSystemFlagRowMapper implements RowMapper<ClientSystemFlag> {
     @Override
     public ClientSystemFlag mapRow(ResultSet rs, int i) throws SQLException {
         return new ClientSystemFlag.Builder()
-                .withAuditObject(rs.getString("auditObject"))
-                .withClientName(rs.getString("clientName"))
-                .withIsPracticeTest(rs.getBoolean("isPracticeTest"))
-                .withEnabled(rs.getInt("isOn") == 1)
-                .withDescription(rs.getString("description"))
-                .withDateChanged(mapTimestampToJodaInstant(rs, "dateChanged"))
-                .withDatePublished(mapTimestampToJodaInstant(rs, "datePublished"))
-                .build();
+            .withAuditObject(rs.getString("auditObject"))
+            .withClientName(rs.getString("clientName"))
+            .withIsPracticeTest(rs.getBoolean("isPracticeTest"))
+            .withEnabled(rs.getInt("isOn") == 1)
+            .withDescription(rs.getString("description"))
+            .withDateChanged(mapTimestampToJodaInstant(rs, "dateChanged"))
+            .withDatePublished(mapTimestampToJodaInstant(rs, "datePublished"))
+            .build();
     }
 }

@@ -30,7 +30,7 @@ public class TimeLimitConfigurationRepositoryImpl implements TimeLimitConfigurat
         final SqlParameterSource parameters = new MapSqlParameterSource("clientName", clientName);
 
         final String SQL =
-                "SELECT \n" +
+            "SELECT \n" +
                 "   clientname, \n" +
                 "   _efk_testid AS assessmentId, \n" +
                 "   environment, \n" +
@@ -48,11 +48,11 @@ public class TimeLimitConfigurationRepositoryImpl implements TimeLimitConfigurat
         Optional<TimeLimitConfiguration> maybeTimeLimitConfig;
         try {
             maybeTimeLimitConfig = Optional.of(
-                    jdbcTemplate.queryForObject(
-                            SQL,
-                            parameters,
-                            new TimeLimitsRowMapper()));
-        } catch(IncorrectResultSizeDataAccessException e) {
+                jdbcTemplate.queryForObject(
+                    SQL,
+                    parameters,
+                    new TimeLimitsRowMapper()));
+        } catch (IncorrectResultSizeDataAccessException e) {
             LOG.debug("{} did not return results for clientName = {}", SQL, clientName);
             maybeTimeLimitConfig = Optional.empty();
         }
@@ -63,12 +63,12 @@ public class TimeLimitConfigurationRepositoryImpl implements TimeLimitConfigurat
     @Override
     public Optional<TimeLimitConfiguration> findTimeLimitConfiguration(final String clientName, final String assessmentId) {
         final SqlParameterSource parameters = new MapSqlParameterSource("clientName", clientName)
-                .addValue("assessmentId", assessmentId);
+            .addValue("assessmentId", assessmentId);
 
         // The TA Checkin time should always come from the timelimits record that has a NULL assessmentId value (that is
         // it should always come from the Client Name level).
         final String SQL =
-                "SELECT \n" +
+            "SELECT \n" +
                 "   clientname, \n" +
                 "   _efk_testid AS assessmentId, \n" +
                 "   environment, \n" +
@@ -86,11 +86,11 @@ public class TimeLimitConfigurationRepositoryImpl implements TimeLimitConfigurat
         Optional<TimeLimitConfiguration> maybeTimeLimitConfig;
         try {
             maybeTimeLimitConfig = Optional.of(
-                    jdbcTemplate.queryForObject(
-                            SQL,
-                            parameters,
-                            new TimeLimitsRowMapper()));
-        } catch(IncorrectResultSizeDataAccessException e) {
+                jdbcTemplate.queryForObject(
+                    SQL,
+                    parameters,
+                    new TimeLimitsRowMapper()));
+        } catch (IncorrectResultSizeDataAccessException e) {
             LOG.debug("{} did not return results for clientName = {}, assessmentId = {}", SQL, clientName, assessmentId);
             maybeTimeLimitConfig = Optional.empty();
         }

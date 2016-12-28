@@ -14,7 +14,7 @@ public class AssessmentWindowParameters {
     private int shiftFormEnd;
     private String formList;
 
-    private AssessmentWindowParameters(Builder builder){
+    private AssessmentWindowParameters(Builder builder) {
         this.studentId = builder.studentId;
         this.clientName = builder.clientName;
         this.assessmentId = builder.assessmentId;

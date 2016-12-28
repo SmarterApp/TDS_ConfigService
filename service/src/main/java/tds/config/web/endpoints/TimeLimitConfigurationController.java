@@ -27,7 +27,7 @@ class TimeLimitConfigurationController {
     @ResponseBody
     ResponseEntity<TimeLimitConfiguration> getTimeLimitConfiguration(@PathVariable final String clientName) {
         final TimeLimitConfiguration timeLimitConfiguration = timeLimitConfigurationService.findTimeLimitConfiguration(clientName)
-                .orElseThrow(() -> new NotFoundException("Could not find time limit configuration for client name %s", clientName));
+            .orElseThrow(() -> new NotFoundException("Could not find time limit configuration for client name %s", clientName));
 
         return ResponseEntity.ok(timeLimitConfiguration);
     }
@@ -36,7 +36,7 @@ class TimeLimitConfigurationController {
     @ResponseBody
     ResponseEntity<TimeLimitConfiguration> getTimeLimitConfiguration(@PathVariable final String clientName, @PathVariable final String assessmentId) {
         final TimeLimitConfiguration timeLimitConfiguration = timeLimitConfigurationService.findTimeLimitConfiguration(clientName, assessmentId)
-                .orElseThrow(() -> new NotFoundException("Could not find time limit configuration for client name %s and assessment id %s", clientName, assessmentId));
+            .orElseThrow(() -> new NotFoundException("Could not find time limit configuration for client name %s and assessment id %s", clientName, assessmentId));
 
         return ResponseEntity.ok(timeLimitConfiguration);
     }

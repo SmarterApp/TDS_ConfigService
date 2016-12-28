@@ -115,7 +115,7 @@ public class ConfigServiceImpl implements ConfigService {
         //Key is a the form key and the value is the list of window ids associated with the form key
         Map<String, Set<String>> studentPackageForms = new HashMap<>();
 
-        if(formList != null) {
+        if (formList != null) {
             //Lines 3753 - 3781 in StudentDLL._GetTesteeTestForms_SP
             String[] forms = formList.split(";");
             for (String formValue : forms) {
