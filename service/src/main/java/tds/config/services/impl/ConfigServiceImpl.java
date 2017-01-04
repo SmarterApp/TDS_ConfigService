@@ -58,7 +58,6 @@ public class ConfigServiceImpl implements ConfigService {
         //Lines StudentDLL 5955 - 5975
         List<AssessmentWindow> examFormWindows = assessmentWindowQueryRepository.findCurrentAssessmentFormWindows(clientName,
             assessmentId,
-            assessmentWindowParameters.getSessionType(),
             assessmentWindowParameters.getShiftWindowStart(),
             assessmentWindowParameters.getShiftWindowEnd(),
             assessmentWindowParameters.getShiftFormStart(),
@@ -75,8 +74,7 @@ public class ConfigServiceImpl implements ConfigService {
         List<AssessmentWindow> assessmentWindows = assessmentWindowQueryRepository.findCurrentAssessmentWindows(clientName,
             assessmentId,
             assessmentWindowParameters.getShiftWindowStart(),
-            assessmentWindowParameters.getShiftWindowEnd(),
-            assessmentWindowParameters.getSessionType());
+            assessmentWindowParameters.getShiftWindowEnd());
 
         if (studentId < 0) {
             return assessmentWindows;
@@ -97,7 +95,8 @@ public class ConfigServiceImpl implements ConfigService {
         }
 
         //Lines 3712 - 3730 in StudentDLL._GetTesteeTestForms_SP
-        Optional<AssessmentFormWindowProperties> maybeAssessmentProperties = assessmentWindowQueryRepository.findAssessmentFormWindowProperties(assessmentWindowParameters.getClientName(), assessmentWindowParameters.getAssessmentId(), assessmentWindowParameters.getSessionType());
+        //TODO - revisit this because it isn't currently bing used
+        Optional<AssessmentFormWindowProperties> maybeAssessmentProperties = assessmentWindowQueryRepository.findAssessmentFormWindowProperties(assessmentWindowParameters.getClientName(), assessmentWindowParameters.getAssessmentId());
         if (maybeAssessmentProperties.isPresent()) {
             AssessmentFormWindowProperties properties = maybeAssessmentProperties.get();
         }

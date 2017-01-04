@@ -84,7 +84,6 @@ public class ConfigControllerTest {
 
         ResponseEntity<List<AssessmentWindow>> response = configController.findAssessmentWindows("SBAC_PT",
             "assessment",
-            0,
             1,
             25,
             50,
@@ -102,7 +101,6 @@ public class ConfigControllerTest {
         AssessmentWindowParameters parameters = assessmentWindowParametersArgumentCaptor.getValue();
         assertThat(parameters.getAssessmentId()).isEqualTo("assessment");
         assertThat(parameters.getClientName()).isEqualTo("SBAC_PT");
-        assertThat(parameters.getSessionType()).isEqualTo(0);
         assertThat(parameters.getStudentId()).isEqualTo(1);
         assertThat(parameters.getShiftWindowStart()).isEqualTo(25);
         assertThat(parameters.getShiftWindowEnd()).isEqualTo(50);
@@ -120,7 +118,6 @@ public class ConfigControllerTest {
 
         ResponseEntity<List<AssessmentWindow>> response = configController.findAssessmentWindows("SBAC",
             "assessment",
-            0,
             1,
             null,
             null,

@@ -29,13 +29,13 @@ class AssessmentWindowQueryRepositoryImpl implements AssessmentWindowQueryReposi
     }
 
     @Override
-    public List<AssessmentWindow> findCurrentAssessmentWindows(String clientName, String assessmentId, int shiftWindowStart, int shiftWindowEnd, int sessionType) {
+    public List<AssessmentWindow> findCurrentAssessmentWindows(String clientName, String assessmentId, int shiftWindowStart, int shiftWindowEnd) {
         final MapSqlParameterSource parameters = new MapSqlParameterSource("clientName", clientName)
             .addValue("assessmentId", assessmentId)
-            .addValue("sessionType", sessionType)
             .addValue("shiftWindowStart", shiftWindowStart)
             .addValue("shiftWindowEnd", shiftWindowEnd);
 
+        //NOTE - SessionType is always 0 for the online application
         String SQL = "SELECT \n" +
             "      DISTINCT W.numopps AS windowMax, \n" +
             "      W.windowID,\n" +
@@ -65,8 +65,8 @@ class AssessmentWindowQueryRepositoryImpl implements AssessmentWindowQueryReposi
             "        THEN UTC_TIMESTAMP() \n" +
             "        ELSE ( W.endDate + INTERVAL :shiftWindowEnd DAY) \n" +
             "    END    \n" +
-            "AND (M.sessionType = -1 OR M.sessionType = :sessionType) \n" +
-            "AND (W.sessionType = -1 OR W.sessionType = :sessionType);";
+            "AND (M.sessionType = -1 OR M.sessionType = 0) \n" +
+            "AND (W.sessionType = -1 OR W.sessionType = 0);";
 
         List<AssessmentWindow> assessmentWindows;
         try {
@@ -91,15 +91,15 @@ class AssessmentWindowQueryRepositoryImpl implements AssessmentWindowQueryReposi
     }
 
     @Override
-    public List<AssessmentWindow> findCurrentAssessmentFormWindows(String clientName, String assessmentId, int sessionType, int shiftWindowStart, int shiftWindowEnd, int shiftFormStart, int shiftFormEnd) {
+    public List<AssessmentWindow> findCurrentAssessmentFormWindows(String clientName, String assessmentId, int shiftWindowStart, int shiftWindowEnd, int shiftFormStart, int shiftFormEnd) {
         final MapSqlParameterSource parameters = new MapSqlParameterSource("clientName", clientName)
             .addValue("assessmentId", assessmentId)
-            .addValue("sessionType", sessionType)
             .addValue("shiftWindowStart", shiftWindowStart)
             .addValue("shiftWindowEnd", shiftWindowEnd)
             .addValue("shiftFormStart", shiftFormStart)
             .addValue("shiftFormEnd", shiftFormEnd);
 
+        //NOTE - SessionType is always 0 for the online application
         String SQL = "SELECT\n" +
             "   windowID, \n" +
             "   W.numopps AS windowMax, \n" +
@@ -119,7 +119,7 @@ class AssessmentWindowQueryRepositoryImpl implements AssessmentWindowQueryReposi
             "JOIN configs.client_testmode M ON\n" +
             "   M.testid = W.testid AND\n" +
             "   M.clientname = W.clientname AND\n" +
-            "   (M.sessionType = -1 OR M.sessionType = :sessionType) \n" +
+            "   (M.sessionType = -1 OR M.sessionType = 0) \n" +
             "JOIN configs.client_testformproperties F ON \n" +
             "   M.testkey = F.testkey AND\n" +
             "   F.testid = W.testid AND\n" +
@@ -128,7 +128,7 @@ class AssessmentWindowQueryRepositoryImpl implements AssessmentWindowQueryReposi
             "   AND CASE WHEN F.enddate IS NULL THEN UTC_TIMESTAMP() ELSE (F.enddate + INTERVAL :shiftFormEnd DAY) END      \n" +
             "WHERE W.clientname = :clientName AND \n" +
             "      W.testid = :assessmentId AND \n" +
-            "      (W.sessionType = -1 OR W.sessionType = :sessionType) AND \n" +
+            "      (W.sessionType = -1 OR W.sessionType = 0) AND \n" +
             "      UTC_TIMESTAMP() BETWEEN CASE WHEN W.startDate IS NULL THEN UTC_TIMESTAMP() ELSE (W.startDate + INTERVAL :shiftWindowStart DAY) END\n" +
             "    AND CASE WHEN W.endDate IS NULL THEN UTC_TIMESTAMP() ELSE (W.endDate + INTERVAL :shiftWindowEnd DAY ) END \n" +
             "UNION (\n" +
@@ -160,12 +160,12 @@ class AssessmentWindowQueryRepositoryImpl implements AssessmentWindowQueryReposi
             "   JOIN configs.client_testmode M ON\n" +
             "            F.clientname = M.clientname\n" +
             "            AND S.parentTest = M.testID \n" +
-            "            AND (M.sessionType = -1 OR M.sessionType = :sessionType) \n" +
+            "            AND (M.sessionType = -1 OR M.sessionType = 0) \n" +
             "            AND S.modekey = M.testkey\n" +
             "   JOIN configs.client_testwindow W ON\n" +
             "            M.clientname = W.clientname\n" +
             "            AND W.testID = S.parentTest \n" +
-            "            AND (W.sessionType = -1 OR W.sessionType = :sessionType)\n" +
+            "            AND (W.sessionType = -1 OR W.sessionType = 0)\n" +
             "            AND UTC_TIMESTAMP() BETWEEN\n" +
             "               ( CASE WHEN W.startDate IS NULL THEN UTC_TIMESTAMP() ELSE (W.startDate + INTERVAL :shiftWindowStart DAY) END )\n" +
             "               AND ( CASE WHEN W.endDate IS NULL THEN UTC_TIMESTAMP() ELSE (W.endDate + INTERVAL :shiftWindowEnd DAY ) END )\n" +
@@ -186,11 +186,11 @@ class AssessmentWindowQueryRepositoryImpl implements AssessmentWindowQueryReposi
     }
 
     @Override
-    public Optional<AssessmentFormWindowProperties> findAssessmentFormWindowProperties(String clientName, String assessmentId, int sessionType) {
+    public Optional<AssessmentFormWindowProperties> findAssessmentFormWindowProperties(String clientName, String assessmentId) {
         final MapSqlParameterSource parameters = new MapSqlParameterSource("clientName", clientName)
-            .addValue("sessionType", sessionType)
             .addValue("assessmentId", assessmentId);
 
+        //NOTE - sessionType is always 0 for the online application
         String SQL = "SELECT " +
             "   requireRTSFormWindow AS requireFormWindow, \n" +
             "   RTSFormField AS formField, \n" +
@@ -202,7 +202,7 @@ class AssessmentWindowQueryRepositoryImpl implements AssessmentWindowQueryReposi
             "   T.testid = M.testid \n" +
             "WHERE T.clientname = :clientName \n" +
             "   AND T.TestID = :assessmentId \n" +
-            "   AND (M.sessionType = -1 OR M.sessionType = :sessionType);";
+            "   AND (M.sessionType = -1 OR M.sessionType = 0);";
 
         Optional<AssessmentFormWindowProperties> maybeAssessmentProperties = Optional.empty();
 
@@ -216,7 +216,7 @@ class AssessmentWindowQueryRepositoryImpl implements AssessmentWindowQueryReposi
 
             maybeAssessmentProperties = Optional.of(properties);
         } catch (EmptyResultDataAccessException e) {
-            LOG.debug("Could not find assessment property %s, %s, and %d", clientName, assessmentId, sessionType);
+            LOG.debug("Could not find assessment property for client %s and assessment %s", clientName, assessmentId);
         }
 
         return maybeAssessmentProperties;
