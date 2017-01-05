@@ -2,7 +2,6 @@ package tds.config.repositories.impl;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.sql.DataSource;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,7 +48,7 @@ public class AssessmentWindowQueryRepositoryIntegrationTests {
         jdbcTemplate.update(testModeInsert, new MapSqlParameterSource());
         jdbcTemplate.update(testFormPropertiesInsert, new MapSqlParameterSource());
 
-        List<AssessmentWindow> assessmentWindows = repository.findCurrentAssessmentFormWindows("SBAC_PT", "SBAC-Mathematics-3", 0, 0, 0, 0, 0);
+        List<AssessmentWindow> assessmentWindows = repository.findCurrentAssessmentFormWindows("SBAC_PT", "SBAC-Mathematics-3", 0, 0, 0, 0);
         assertThat(assessmentWindows).hasSize(1);
         AssessmentWindow window = assessmentWindows.get(0);
 
@@ -100,7 +98,7 @@ public class AssessmentWindowQueryRepositoryIntegrationTests {
         jdbcTemplate.update(clientTestModeInsertSQL, new MapSqlParameterSource());
         jdbcTemplate.update(clientTestWindowInsertSQL, parameters);
 
-        List<AssessmentWindow> assessmentWindows = repository.findCurrentAssessmentFormWindows("SBAC_PT", "SBAC-Mathematics-11", 0, 0, 0, 0, 0);
+        List<AssessmentWindow> assessmentWindows = repository.findCurrentAssessmentFormWindows("SBAC_PT", "SBAC-Mathematics-11", 0, 0, 0, 0);
         assertThat(assessmentWindows).hasSize(3);
 
         AssessmentWindow window = assessmentWindows.get(0);
@@ -116,7 +114,7 @@ public class AssessmentWindowQueryRepositoryIntegrationTests {
 
     @Test
     public void shouldReturnEmptyListWhenWindowsCannotBeFound() {
-        List<AssessmentWindow> assessmentWindows = repository.findCurrentAssessmentWindows("SBAC_PT", "SBAC-Mathematics-3", 0, 0, 0);
+        List<AssessmentWindow> assessmentWindows = repository.findCurrentAssessmentWindows("SBAC_PT", "SBAC-Mathematics-3", 0, 0);
         assertThat(assessmentWindows).isEmpty();
     }
 
@@ -133,7 +131,7 @@ public class AssessmentWindowQueryRepositoryIntegrationTests {
         jdbcTemplate.update(clientTestModeInsertSQL, new MapSqlParameterSource());
         jdbcTemplate.update(clientTestWindowInsertSQL, new MapSqlParameterSource());
 
-        List<AssessmentWindow> assessmentWindows = repository.findCurrentAssessmentWindows("SBAC_PT", "SBAC-Mathematics-3", 0, 0, 0);
+        List<AssessmentWindow> assessmentWindows = repository.findCurrentAssessmentWindows("SBAC_PT", "SBAC-Mathematics-3", 0, 0);
         assertThat(assessmentWindows).hasSize(1);
     }
 
@@ -150,7 +148,7 @@ public class AssessmentWindowQueryRepositoryIntegrationTests {
         jdbcTemplate.update(clientTestModeInsertSQL, new MapSqlParameterSource());
         jdbcTemplate.update(clientTestPropertiesInsertSQL, new MapSqlParameterSource());
 
-        AssessmentFormWindowProperties assessmentFormWindowProperties = repository.findAssessmentFormWindowProperties("SBAC_PT", "SBAC-Mathematics-3", 0).get();
+        AssessmentFormWindowProperties assessmentFormWindowProperties = repository.findAssessmentFormWindowProperties("SBAC_PT", "SBAC-Mathematics-3").get();
 
         assertThat(assessmentFormWindowProperties.getFormField()).isEqualTo("tds-testform");
         assertThat(assessmentFormWindowProperties.isRequireForm()).isFalse();
@@ -160,7 +158,7 @@ public class AssessmentWindowQueryRepositoryIntegrationTests {
 
     @Test
     public void shouldReturnEmptyWhenAssessmentFormWindowPropertiesCannotBeFound() {
-        Optional<AssessmentFormWindowProperties> maybeAssessmentProperties = repository.findAssessmentFormWindowProperties("SBAC_PT", "SBAC-Mathematics-3", 0);
+        Optional<AssessmentFormWindowProperties> maybeAssessmentProperties = repository.findAssessmentFormWindowProperties("SBAC_PT", "SBAC-Mathematics-3");
         assertThat(maybeAssessmentProperties).isNotPresent();
     }
 }

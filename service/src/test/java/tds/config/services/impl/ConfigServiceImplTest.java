@@ -37,7 +37,7 @@ public class ConfigServiceImplTest {
     private AssessmentWindowQueryRepository mockAssessmentWindowQueryRepository;
 
     @Before
-    public void Setup() {
+    public void setUp() {
         configService = new ConfigServiceImpl(
             mockConfigRepository,
             mockAssessmentWindowQueryRepository
@@ -45,9 +45,7 @@ public class ConfigServiceImplTest {
     }
 
     @After
-    public void Teardown() {
-        mockConfigRepository = null;
-        configService = null;
+    public void tearDown() {
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -77,19 +75,19 @@ public class ConfigServiceImplTest {
 
     @Test
     public void shouldReturnEmptyWindowWhenNoResultsAreFoundForGuest() {
-        AssessmentWindowParameters properties = new AssessmentWindowParameters.Builder(-1, "test", "assessment", 0).build();
-        when(mockAssessmentWindowQueryRepository.findCurrentAssessmentWindows("test", "assessment", 0, 0, 0)).thenReturn(Collections.emptyList());
+        AssessmentWindowParameters properties = new AssessmentWindowParameters.Builder(-1, "test", "assessment").build();
+        when(mockAssessmentWindowQueryRepository.findCurrentAssessmentWindows("test", "assessment", 0, 0)).thenReturn(Collections.emptyList());
         assertThat(configService.findAssessmentWindows(properties)).isEmpty();
     }
 
     @Test
     public void shouldReturnWindowForGuestWhenFound() {
         AssessmentWindow window = new AssessmentWindow.Builder().withWindowId("id").build();
-        AssessmentWindowParameters properties = new AssessmentWindowParameters.Builder(-1, "test", "assessment", 0).build();
+        AssessmentWindowParameters properties = new AssessmentWindowParameters.Builder(-1, "test", "assessment").build();
 
-        when(mockAssessmentWindowQueryRepository.findCurrentAssessmentWindows("test", "assessment", 0, 0, 0)).thenReturn(Collections.singletonList(window));
+        when(mockAssessmentWindowQueryRepository.findCurrentAssessmentWindows("test", "assessment", 0, 0)).thenReturn(Collections.singletonList(window));
         assertThat(configService.findAssessmentWindows(properties).get(0)).isEqualTo(window);
-        verify(mockAssessmentWindowQueryRepository).findCurrentAssessmentWindows("test", "assessment", 0, 0, 0);
+        verify(mockAssessmentWindowQueryRepository).findCurrentAssessmentWindows("test", "assessment", 0, 0);
     }
 
     @Test
@@ -98,9 +96,9 @@ public class ConfigServiceImplTest {
         AssessmentWindow window2 = new AssessmentWindow.Builder().withWindowId("id").withAssessmentKey("SBAC-Mathematics-8-2018").build();
         AssessmentWindow window3 = new AssessmentWindow.Builder().withWindowId("id3").withAssessmentKey("SBAC-Mathematics-8-2018").build();
         AssessmentWindow window4 = new AssessmentWindow.Builder().withWindowId("id4").withAssessmentKey("SBAC-Mathematics-3").build();
-        AssessmentWindowParameters properties = new AssessmentWindowParameters.Builder(23, "SBAC_PT", "SBAC-Mathematics-8", 0).build();
+        AssessmentWindowParameters properties = new AssessmentWindowParameters.Builder(23, "SBAC_PT", "SBAC-Mathematics-8").build();
 
-        when(mockAssessmentWindowQueryRepository.findCurrentAssessmentWindows("SBAC_PT", "SBAC-Mathematics-8", 0, 0, 0)).thenReturn(Arrays.asList(window, window2, window3, window4));
+        when(mockAssessmentWindowQueryRepository.findCurrentAssessmentWindows("SBAC_PT", "SBAC-Mathematics-8", 0, 0)).thenReturn(Arrays.asList(window, window2, window3, window4));
         List<AssessmentWindow> windows = configService.findAssessmentWindows(properties);
 
         assertThat(windows).containsExactly(window, window3, window4);
@@ -113,11 +111,11 @@ public class ConfigServiceImplTest {
         AssessmentWindow window3 = new AssessmentWindow.Builder().withWindowId("id3").withAssessmentKey("SBAC-Mathematics-8-2018").build();
         AssessmentWindow window4 = new AssessmentWindow.Builder().withWindowId("id4").withAssessmentKey("SBAC-Mathematics-3").build();
 
-        AssessmentWindowParameters properties = new AssessmentWindowParameters.Builder(23, "SBAC_PT", "SBAC-Mathematics-8", 0).build();
+        AssessmentWindowParameters properties = new AssessmentWindowParameters.Builder(23, "SBAC_PT", "SBAC-Mathematics-8").build();
         AssessmentFormWindowProperties assessmentFormWindowProperties = new AssessmentFormWindowProperties(true, true, "formField", true);
 
-        when(mockAssessmentWindowQueryRepository.findCurrentAssessmentFormWindows("SBAC_PT", "SBAC-Mathematics-8", 0, 0, 0, 0, 0)).thenReturn(Arrays.asList(window, window2, window3, window4));
-        when(mockAssessmentWindowQueryRepository.findAssessmentFormWindowProperties("SBAC_PT", "SBAC-Mathematics-8", 0)).thenReturn(Optional.of(assessmentFormWindowProperties));
+        when(mockAssessmentWindowQueryRepository.findCurrentAssessmentFormWindows("SBAC_PT", "SBAC-Mathematics-8", 0, 0, 0, 0)).thenReturn(Arrays.asList(window, window2, window3, window4));
+        when(mockAssessmentWindowQueryRepository.findAssessmentFormWindowProperties("SBAC_PT", "SBAC-Mathematics-8")).thenReturn(Optional.of(assessmentFormWindowProperties));
         List<AssessmentWindow> windows = configService.findAssessmentWindows(properties);
 
         assertThat(windows).containsExactly(window, window2, window3, window4);
@@ -137,13 +135,13 @@ public class ConfigServiceImplTest {
             .withAssessmentKey("SBAC-Mathematics-8-2018")
             .build();
 
-        AssessmentWindowParameters properties = new AssessmentWindowParameters.Builder(23, "SBAC_PT", "SBAC-Mathematics-8", 0)
+        AssessmentWindowParameters properties = new AssessmentWindowParameters.Builder(23, "SBAC_PT", "SBAC-Mathematics-8")
             .withFormList("formKey2")
             .build();
         AssessmentFormWindowProperties assessmentFormWindowProperties = new AssessmentFormWindowProperties(true, true, "formField", true);
 
-        when(mockAssessmentWindowQueryRepository.findCurrentAssessmentFormWindows("SBAC_PT", "SBAC-Mathematics-8", 0, 0, 0, 0, 0)).thenReturn(Arrays.asList(window, window2));
-        when(mockAssessmentWindowQueryRepository.findAssessmentFormWindowProperties("SBAC_PT", "SBAC-Mathematics-8", 0)).thenReturn(Optional.of(assessmentFormWindowProperties));
+        when(mockAssessmentWindowQueryRepository.findCurrentAssessmentFormWindows("SBAC_PT", "SBAC-Mathematics-8", 0, 0, 0, 0)).thenReturn(Arrays.asList(window, window2));
+        when(mockAssessmentWindowQueryRepository.findAssessmentFormWindowProperties("SBAC_PT", "SBAC-Mathematics-8")).thenReturn(Optional.of(assessmentFormWindowProperties));
         List<AssessmentWindow> windows = configService.findAssessmentWindows(properties);
 
         assertThat(windows).containsExactly(window2);
@@ -163,13 +161,13 @@ public class ConfigServiceImplTest {
             .withAssessmentKey("SBAC-Mathematics-8-2018")
             .build();
 
-        AssessmentWindowParameters properties = new AssessmentWindowParameters.Builder(23, "SBAC_PT", "SBAC-Mathematics-8", 0)
+        AssessmentWindowParameters properties = new AssessmentWindowParameters.Builder(23, "SBAC_PT", "SBAC-Mathematics-8")
             .withFormList("id:formKey")
             .build();
         AssessmentFormWindowProperties assessmentFormWindowProperties = new AssessmentFormWindowProperties(true, true, "formField", true);
 
-        when(mockAssessmentWindowQueryRepository.findCurrentAssessmentFormWindows("SBAC_PT", "SBAC-Mathematics-8", 0, 0, 0, 0, 0)).thenReturn(Arrays.asList(window, window2));
-        when(mockAssessmentWindowQueryRepository.findAssessmentFormWindowProperties("SBAC_PT", "SBAC-Mathematics-8", 0)).thenReturn(Optional.of(assessmentFormWindowProperties));
+        when(mockAssessmentWindowQueryRepository.findCurrentAssessmentFormWindows("SBAC_PT", "SBAC-Mathematics-8", 0, 0, 0, 0)).thenReturn(Arrays.asList(window, window2));
+        when(mockAssessmentWindowQueryRepository.findAssessmentFormWindowProperties("SBAC_PT", "SBAC-Mathematics-8")).thenReturn(Optional.of(assessmentFormWindowProperties));
         List<AssessmentWindow> windows = configService.findAssessmentWindows(properties);
 
         assertThat(windows).containsExactly(window);

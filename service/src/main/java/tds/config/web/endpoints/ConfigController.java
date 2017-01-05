@@ -37,11 +37,10 @@ class ConfigController {
         return ResponseEntity.ok(clientSystemFlag);
     }
 
-    @GetMapping(value = "/assessment-windows/{clientName}/{assessmentId}/session-type/{sessionType}/student/{studentId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/assessment-windows/{clientName}/{assessmentId}/student/{studentId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<List<AssessmentWindow>> findAssessmentWindows(@PathVariable final String clientName,
                                                                  @PathVariable final String assessmentId,
-                                                                 @PathVariable final int sessionType,
                                                                  @PathVariable final long studentId,
                                                                  @RequestParam(required = false) final Integer shiftWindowStart,
                                                                  @RequestParam(required = false) final Integer shiftWindowEnd,
@@ -50,7 +49,7 @@ class ConfigController {
                                                                  @RequestParam(required = false) final String formList
     ) {
         AssessmentWindowParameters assessmentWindowParameters = new AssessmentWindowParameters
-            .Builder(studentId, clientName, assessmentId, sessionType)
+            .Builder(studentId, clientName, assessmentId)
             .withShiftWindowStart(shiftWindowStart == null ? 0 : shiftWindowStart)
             .withShiftWindowEnd(shiftWindowEnd == null ? 0 : shiftWindowEnd)
             .withShiftFormStart(shiftFormStart == null ? 0 : shiftFormStart)

@@ -100,7 +100,7 @@ public class ConfigControllerIntegrationTests {
         when(mockConfigService.findAssessmentWindows(isA(AssessmentWindowParameters.class))).
             thenReturn(Collections.singletonList(window));
 
-        String url = "/config/assessment-windows/SBAC_PT/math11/session-type/0/student/23";
+        String url = "/config/assessment-windows/SBAC_PT/math11/student/23";
 
         http.perform(get(url)
             .contentType(MediaType.APPLICATION_JSON))
