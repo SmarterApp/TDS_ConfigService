@@ -9,8 +9,6 @@
   relies on this table being present.  This means that there are some instances where the Config service will query data
   from the session database.
 
-  Auth:  Jeff Johnson <jeffjohnson9046>
-
 ***********************************************************************************************************************/
 USE configs;
 
