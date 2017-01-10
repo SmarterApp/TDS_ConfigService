@@ -9,8 +9,6 @@
   order to have an accurate schema to test against, this table is created.  This table has a foreign key constraint that
   references the geo_database table, thus that table must also be created.
 
-  Auth:  Jeff Johnson <jeffjohnson9046>
-
 ***********************************************************************************************************************/
 USE configs;
 DROP TABLE IF EXISTS geo_clientapplication;

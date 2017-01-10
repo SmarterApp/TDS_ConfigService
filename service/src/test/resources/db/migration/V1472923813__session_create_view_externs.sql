@@ -25,8 +25,6 @@
     'SBAC', 'Development'
     'SBAC_PT', 'Development'
 
-  Auth:  Jeff Johnson <jeffjohnson9046>
-
 ***********************************************************************************************************************/
 USE session;
 CREATE OR REPLACE VIEW externs AS

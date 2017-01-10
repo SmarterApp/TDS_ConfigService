@@ -5,8 +5,6 @@
   seed data are intended to support integration tests.  The schema and seed data are representative of what is deployed
   when a TDS system is deployed.
 
-  Auth:  Jeff Johnson <jeffjohnson9046>
-
 ***********************************************************************************************************************/
 USE configs;
 DROP TABLE IF EXISTS client_systemflags;

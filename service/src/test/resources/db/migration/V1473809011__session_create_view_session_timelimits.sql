@@ -34,8 +34,6 @@
     'SBAC_PT', NULL, NULL
     'SBAC', NULL, NULL
 
-  Auth:  Jeff Johnson <jeffjohnson9046>
-
 ***********************************************************************************************************************/
 USE session;
 CREATE OR REPLACE VIEW timelimits AS

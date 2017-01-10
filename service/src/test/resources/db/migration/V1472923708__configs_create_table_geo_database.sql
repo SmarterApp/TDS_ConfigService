@@ -8,8 +8,6 @@
   This table does not directly affect any of the integration tests; the geo_clientapplications table has a foreign key
   constraint that references this table.  In order to have an accurate schema to test against, this table is created.
 
-  Auth:  Jeff Johnson <jeffjohnson9046>
-
 ***********************************************************************************************************************/
 USE configs;
 DROP TABLE IF EXISTS geo_database;
