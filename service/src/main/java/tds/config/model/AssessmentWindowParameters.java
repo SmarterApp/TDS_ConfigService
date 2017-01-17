@@ -125,4 +125,34 @@ public class AssessmentWindowParameters {
             return new AssessmentWindowParameters(this);
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AssessmentWindowParameters that = (AssessmentWindowParameters) o;
+
+        if (studentId != that.studentId) return false;
+        if (shiftWindowStart != that.shiftWindowStart) return false;
+        if (shiftWindowEnd != that.shiftWindowEnd) return false;
+        if (shiftFormStart != that.shiftFormStart) return false;
+        if (shiftFormEnd != that.shiftFormEnd) return false;
+        if (!clientName.equals(that.clientName)) return false;
+        if (!assessmentId.equals(that.assessmentId)) return false;
+        return formList != null ? formList.equals(that.formList) : that.formList == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (studentId ^ (studentId >>> 32));
+        result = 31 * result + clientName.hashCode();
+        result = 31 * result + assessmentId.hashCode();
+        result = 31 * result + shiftWindowStart;
+        result = 31 * result + shiftWindowEnd;
+        result = 31 * result + shiftFormStart;
+        result = 31 * result + shiftFormEnd;
+        result = 31 * result + (formList != null ? formList.hashCode() : 0);
+        return result;
+    }
 }

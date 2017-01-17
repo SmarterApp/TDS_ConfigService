@@ -1,12 +1,14 @@
 package tds.config.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 import tds.assessment.Assessment;
+import tds.common.cache.CacheType;
 import tds.common.web.exceptions.NotFoundException;
 import tds.config.Accommodation;
 import tds.config.repositories.AccommodationsQueryRepository;
@@ -25,6 +27,7 @@ public class AccommodationServiceImpl implements AccommodationsService {
     }
 
     @Override
+    @Cacheable(CacheType.LONG_TERM)
     public List<Accommodation> findAccommodationsByAssessmentKey(String assessmentKey) {
         //Implements the replacement for CommonDLL.TestKeyAccommodations_FN
         Optional<Assessment> maybeAssessment = assessmentService.findAssessment(assessmentKey);
@@ -42,6 +45,7 @@ public class AccommodationServiceImpl implements AccommodationsService {
     }
 
     @Override
+    @Cacheable(CacheType.LONG_TERM)
     public List<Accommodation> findAccommodationsByAssessmentId(String clientName, String assessmentId) {
         return accommodationsQueryRepository.findAssessmentAccommodationsById(clientName, assessmentId);
     }

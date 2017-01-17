@@ -2,6 +2,8 @@ package tds.config;
 
 import org.joda.time.Instant;
 
+import java.util.Objects;
+
 /**
  * Contains information for the assessment time windows
  */
@@ -170,5 +172,36 @@ public class AssessmentWindow {
         public AssessmentWindow build() {
             return new AssessmentWindow(this);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AssessmentWindow that = (AssessmentWindow) o;
+
+        if (windowMaxAttempts != that.windowMaxAttempts) return false;
+        if (modeMaxAttempts != that.modeMaxAttempts) return false;
+        if (windowSessionType != that.windowSessionType) return false;
+        if (modeSessionType != that.modeSessionType) return false;
+        if (!Objects.equals(windowId, that.windowId)) return false;
+        if (!Objects.equals(formKey, that.formKey)) return false;
+        return assessmentKey.equals(that.assessmentKey);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = windowId.hashCode();
+        result = 31 * result + windowMaxAttempts;
+        result = 31 * result + mode.hashCode();
+        result = 31 * result + modeMaxAttempts;
+        result = 31 * result + Objects.hashCode(startTime);
+        result = 31 * result + Objects.hashCode(endTime.hashCode());
+        result = 31 * result + Objects.hashCode(windowSessionType);
+        result = 31 * result + Objects.hashCode(modeSessionType);
+        result = 31 * result + Objects.hashCode(formKey.hashCode());
+        result = 31 * result + Objects.hashCode(assessmentKey.hashCode());
+        return result;
     }
 }

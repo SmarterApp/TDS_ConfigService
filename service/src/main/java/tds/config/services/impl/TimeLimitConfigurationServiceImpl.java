@@ -1,10 +1,12 @@
 package tds.config.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import tds.common.cache.CacheType;
 import tds.config.TimeLimitConfiguration;
 import tds.config.repositories.TimeLimitConfigurationRepository;
 import tds.config.services.TimeLimitConfigurationService;
@@ -19,11 +21,13 @@ public class TimeLimitConfigurationServiceImpl implements TimeLimitConfiguration
     }
 
     @Override
+    @Cacheable(CacheType.MEDIUM_TERM)
     public Optional<TimeLimitConfiguration> findTimeLimitConfiguration(String clientName) {
         return this.findTimeLimitConfiguration(clientName, null);
     }
 
     @Override
+    @Cacheable(CacheType.MEDIUM_TERM)
     public Optional<TimeLimitConfiguration> findTimeLimitConfiguration(String clientName, String assessmentId) {
         Optional<TimeLimitConfiguration> maybeTimeLimitConfig;
 
