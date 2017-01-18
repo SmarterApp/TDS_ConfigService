@@ -1,6 +1,7 @@
 package tds.config.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import tds.common.cache.CacheType;
 import tds.config.AssessmentWindow;
 import tds.config.ClientSystemFlag;
 import tds.config.model.AssessmentFormWindowProperties;
@@ -35,6 +37,7 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
+    @Cacheable(CacheType.LONG_TERM)
     public Optional<ClientSystemFlag> findClientSystemFlag(String clientName, String type) {
         /*
             The type is the name of the ClientSystemFlag.  Ideally the source of data for this
@@ -50,6 +53,7 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
+    @Cacheable(CacheType.MEDIUM_TERM)
     public List<AssessmentWindow> findAssessmentWindows(AssessmentWindowParameters assessmentWindowParameters) {
         long studentId = assessmentWindowParameters.getStudentId();
         String clientName = assessmentWindowParameters.getClientName();

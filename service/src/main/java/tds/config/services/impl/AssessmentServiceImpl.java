@@ -1,6 +1,7 @@
 package tds.config.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -10,6 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.Optional;
 
 import tds.assessment.Assessment;
+import tds.common.cache.CacheType;
 import tds.config.configuration.ConfigServiceProperties;
 import tds.config.services.AssessmentService;
 
@@ -25,6 +27,7 @@ public class AssessmentServiceImpl implements AssessmentService {
     }
 
     @Override
+    @Cacheable(CacheType.LONG_TERM)
     public Optional<Assessment> findAssessment(String assessmentKey) {
         UriComponentsBuilder builder =
             UriComponentsBuilder
