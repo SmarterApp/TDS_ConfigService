@@ -41,9 +41,11 @@ public class ConfigServiceImplIntegrationTests {
 
         when(mockAssessmentWindowQueryRepository.findCurrentAssessmentFormWindows("SBAC_PT", "SBAC-Mathematics-8", 0, 0, 0, 0)).thenReturn(Arrays.asList(window, window2));
         when(mockAssessmentWindowQueryRepository.findAssessmentFormWindowProperties("SBAC_PT", "SBAC-Mathematics-8")).thenReturn(Optional.of(assessmentFormWindowProperties));
-        List<AssessmentWindow> windows = configService.findAssessmentWindows(properties);
+        List<AssessmentWindow> windows1 = configService.findAssessmentWindows(properties);
+        List<AssessmentWindow> windows2 = configService.findAssessmentWindows(properties);
 
-        assertThat(windows).containsExactly(window, window2);
+        assertThat(windows1).containsExactly(window, window2);
+        assertThat(windows2).containsExactly(window, window2);
         verify(mockAssessmentWindowQueryRepository, times(1)).findCurrentAssessmentFormWindows("SBAC_PT", "SBAC-Mathematics-8", 0, 0, 0, 0);
         verify(mockAssessmentWindowQueryRepository, times(1)).findAssessmentFormWindowProperties("SBAC_PT", "SBAC-Mathematics-8");
     }
