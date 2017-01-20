@@ -122,6 +122,10 @@ public class TimeLimitConfiguration {
         this.taCheckinTimeMinutes = builder.taCheckinTimeMinutes;
     }
 
+    private TimeLimitConfiguration() {
+        //For frameworks
+    }
+
     /**
      * @return The name of the client that owns these {@link TimeLimitConfiguration}.
      */

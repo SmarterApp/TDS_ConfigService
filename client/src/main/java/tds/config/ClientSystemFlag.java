@@ -76,6 +76,12 @@ public class ClientSystemFlag {
         this.datePublished = builder.datePublished;
     }
 
+    /**
+     * only present for frameworks
+     */
+    private ClientSystemFlag() {
+    }
+
 
     /**
      * @return The type of thing this {@link ClientSystemFlag} represents/is related to.
