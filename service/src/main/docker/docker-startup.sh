@@ -11,7 +11,6 @@ java \
     -Dspring.datasource.username="${CONFIG_DB_USER}" \
     -Dspring.datasource.password="${CONFIG_DB_PASSWORD}" \
     -Dspring.datasource.type=com.zaxxer.hikari.HikariDataSource \
-    -Dconfig-service.assessment-url=http://assessment/ \
     -jar /tds-config-service.jar \
     --server-port="8080" \
     --server.undertow.buffer-size=16384 \
