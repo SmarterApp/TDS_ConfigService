@@ -147,12 +147,6 @@
             <scope>test</scope>
             <version>${flyway.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.opentestsystem.assessment</groupId>
-            <artifactId>tds-assessment-client</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
     </dependencies>
 
     <build>

@@ -1,5 +1,6 @@
 package tds.config.repositories.impl;
 
+import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +12,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 import tds.config.ClientSystemFlag;
@@ -51,7 +51,7 @@ public class ConfigRepositoryImplIntegrationTests {
 
         List<ClientSystemFlag> result = configRepository.findClientSystemFlags(clientName);
 
-        assertThat(result).isNotNull();
+        Assertions.assertThat(result).isNotNull();
         assertThat(result.size()).isEqualTo(1);
         result.forEach(r -> {
             assertThat(r.getAuditObject()).isNotNull();

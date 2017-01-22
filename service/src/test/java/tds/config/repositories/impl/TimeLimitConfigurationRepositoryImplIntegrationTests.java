@@ -1,5 +1,6 @@
 package tds.config.repositories.impl;
 
+import org.assertj.core.api.Assertions;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,7 +12,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.sql.DataSource;
 import java.util.Optional;
 
 import tds.config.TimeLimitConfiguration;
@@ -49,7 +49,7 @@ public class TimeLimitConfigurationRepositoryImplIntegrationTests {
 
         Optional<TimeLimitConfiguration> result = timeLimitConfigurationRepository.findTimeLimitConfiguration(clientName);
 
-        assertThat(result).isPresent();
+        Assertions.assertThat(result).isPresent();
         assertThat(result.get().getClientName()).isEqualTo(clientName);
         assertThat(result.get().getAssessmentId()).isNull();
         assertThat(result.get().getEnvironment()).isEqualTo("Development");
@@ -67,7 +67,7 @@ public class TimeLimitConfigurationRepositoryImplIntegrationTests {
 
         Optional<TimeLimitConfiguration> result = timeLimitConfigurationRepository.findTimeLimitConfiguration(clientName, assessmentId);
 
-        assertThat(result).isPresent();
+        Assertions.assertThat(result).isPresent();
         assertThat(result.get().getClientName()).isEqualTo(clientName);
         assertThat(result.get().getAssessmentId()).isNotNull();
         assertThat(result.get().getAssessmentId()).isEqualTo(assessmentId);
@@ -85,7 +85,7 @@ public class TimeLimitConfigurationRepositoryImplIntegrationTests {
 
         Optional<TimeLimitConfiguration> result = timeLimitConfigurationRepository.findTimeLimitConfiguration(clientName);
 
-        assertThat(result).isNotPresent();
+        Assertions.assertThat(result).isNotPresent();
     }
 
     @Test
@@ -95,6 +95,6 @@ public class TimeLimitConfigurationRepositoryImplIntegrationTests {
 
         Optional<TimeLimitConfiguration> result = timeLimitConfigurationRepository.findTimeLimitConfiguration(clientName, assessmentId);
 
-        assertThat(result).isNotPresent();
+        Assertions.assertThat(result).isNotPresent();
     }
 }

@@ -6,16 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 import tds.common.web.exceptions.NotFoundException;
-import tds.config.AssessmentWindow;
 import tds.config.ClientSystemFlag;
-import tds.config.model.AssessmentWindowParameters;
 import tds.config.services.ConfigService;
 
 @RestController
@@ -35,28 +30,5 @@ class ConfigController {
             .orElseThrow(() -> new NotFoundException("Could not find ClientSystemFlag for client name %s and type %s", clientName, type));
 
         return ResponseEntity.ok(clientSystemFlag);
-    }
-
-    @GetMapping(value = "/assessment-windows/{clientName}/{assessmentId}/student/{studentId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    ResponseEntity<List<AssessmentWindow>> findAssessmentWindows(@PathVariable final String clientName,
-                                                                 @PathVariable final String assessmentId,
-                                                                 @PathVariable final long studentId,
-                                                                 @RequestParam(required = false) final Integer shiftWindowStart,
-                                                                 @RequestParam(required = false) final Integer shiftWindowEnd,
-                                                                 @RequestParam(required = false) final Integer shiftFormStart,
-                                                                 @RequestParam(required = false) final Integer shiftFormEnd,
-                                                                 @RequestParam(required = false) final String formList
-    ) {
-        AssessmentWindowParameters assessmentWindowParameters = new AssessmentWindowParameters
-            .Builder(studentId, clientName, assessmentId)
-            .withShiftWindowStart(shiftWindowStart == null ? 0 : shiftWindowStart)
-            .withShiftWindowEnd(shiftWindowEnd == null ? 0 : shiftWindowEnd)
-            .withShiftFormStart(shiftFormStart == null ? 0 : shiftFormStart)
-            .withShiftFormEnd(shiftFormEnd == null ? 0 : shiftFormEnd)
-            .withFormList(formList)
-            .build();
-
-        return ResponseEntity.ok(configService.findAssessmentWindows(assessmentWindowParameters));
     }
 }
