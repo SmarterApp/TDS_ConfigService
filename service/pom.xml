@@ -36,12 +36,6 @@
         </dependency>
 
         <dependency>
-            <groupId>org.opentestsystem.student</groupId>
-            <artifactId>tds-student-client</artifactId>
-            <version>${tds.student.client.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
             <version>${joda-time.version}</version>
