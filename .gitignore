@@ -125,3 +125,5 @@ buildNumber.properties
 ### Project-specific ###
 # Ignore Docker environment variable files
 **/*.env
+service/src/main/resources/application.properties
+service/src/test/resources/application.properties
