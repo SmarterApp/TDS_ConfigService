@@ -122,8 +122,10 @@ public class TimeLimitConfiguration {
         this.taCheckinTimeMinutes = builder.taCheckinTimeMinutes;
     }
 
+    /**
+     * Present for frameworks
+     */
     private TimeLimitConfiguration() {
-        //For frameworks
     }
 
     /**
