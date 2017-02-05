@@ -16,4 +16,6 @@ public interface ConfigService {
      * @return The {@link Optional<ClientSystemFlag>} that matches the client and audit name.
      */
     Optional<ClientSystemFlag> findClientSystemFlag(String clientName, String type);
+
+    String getSystemMessage(String clientName, String messageKey, String language, String context, String subject, String grade);
 }

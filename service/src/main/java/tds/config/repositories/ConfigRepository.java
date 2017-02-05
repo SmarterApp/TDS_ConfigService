@@ -1,8 +1,11 @@
 package tds.config.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
+import tds.config.ClientLanguage;
 import tds.config.ClientSystemFlag;
+import tds.config.ClientSystemMessage;
 
 /**
  * Data Access for interacting with the {@code configs} database.
@@ -24,4 +27,8 @@ public interface ConfigRepository {
      * @return A collection of {@link ClientSystemFlag} records for the specified client name.
      */
     List<ClientSystemFlag> findClientSystemFlags(String clientName);
+
+    Optional<ClientSystemMessage> findClientSystemMessage(String clientName, String messageKey, String language, String clientDefaultLanguage, String context, String subject, String grade);
+
+    Optional<ClientLanguage> findClientLanguage(String clientName);
 }
