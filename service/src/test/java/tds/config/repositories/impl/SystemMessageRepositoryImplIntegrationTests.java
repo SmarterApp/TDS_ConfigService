@@ -43,10 +43,15 @@ public class SystemMessageRepositoryImplIntegrationTests {
         String coreMessageObjectInsertSQL = "INSERT INTO tds_coremessageobject VALUES ('_CanOpenTestOpportunity', 'database', 10211, 'Database', 'Your next test opportunity is not yet available.', 'You cannot take this test until {0}.', 'DATEPARAMETER', 3146, NULL, '2012-05-03 19:17:37 ', NULL, NULL);";
         jdbcTemplate.update(coreMessageObjectInsertSQL, new MapSqlParameterSource());
 
-        String messageTranslationInsertSQL = "INSERT INTO client_messagetranslation VALUES (3146, 'SBAC_PT', 'Ao hiki iā oe ke hana i kēia hōike a hiki i ka lā  {0}.', 'HAW', '--ANY--', '--ANY--', 0xB32C36BFDF094559A65E46DBDD5DF602, '2013-08-01 11:02:31');\n" +
-            "INSERT INTO client_messagetranslation VALUES (3146, 'SBAC_PT', 'No puede realizar esta prueba hasta {0}.', 'ESN', '--ANY--', '--ANY--', 0x46F548F386ED4A92B554C6FCC835C2AF, '2013-08-01 11:02:31');\n" +
-            "INSERT INTO client_messagetranslation VALUES (3146, 'SBAC', 'Ao hiki iā oe ke hana i kēia hōike a hiki i ka lā  {0}.', 'HAW', '--ANY--', '--ANY--', 0xC43A1E73EB7E11E68FF40A73DE62EC37, '2013-08-02 10:34:37');";
-        jdbcTemplate.batchUpdate(messageTranslationInsertSQL, new SqlParameterSource[]{});
+        String[] messageTranslationInsertSQL = new String[] {
+            "INSERT INTO client_messagetranslation VALUES (3146, 'SBAC_PT', 'Ao hiki iā oe ke hana i kēia hōike a hiki i ka lā  {0}.', 'HAW', '--ANY--', '--ANY--', 0xB32C36BFDF094559A65E46DBDD5DF602, '2013-08-01 11:02:31');",
+            "INSERT INTO client_messagetranslation VALUES (3146, 'SBAC_PT', 'No puede realizar esta prueba hasta {0}.', 'ESN', '--ANY--', '--ANY--', 0x46F548F386ED4A92B554C6FCC835C2AF, '2013-08-01 11:02:31');",
+            "INSERT INTO client_messagetranslation VALUES (3146, 'SBAC', 'Ao hiki iā oe ke hana i kēia hōike a hiki i ka lā  {0}.', 'HAW', '--ANY--', '--ANY--', 0xC43A1E73EB7E11E68FF40A73DE62EC37, '2013-08-02 10:34:37');"
+        };
+
+        for (String insertSQL : messageTranslationInsertSQL) {
+            jdbcTemplate.update(insertSQL, new MapSqlParameterSource());
+        }
     }
 
     @After
