@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,9 +36,14 @@ class ConfigController {
 
     @GetMapping(value = "{clientName}/messages/{context}/{messageKey}/{language}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    ResponseEntity<String> getClientSystemMessage(@PathVariable final String clientName, @PathVariable final String language, @PathVariable final String context, @PathVariable final String messageKey) {
+    ResponseEntity<String> getClientSystemMessage(@PathVariable final String clientName,
+                                                  @PathVariable final String language,
+                                                  @PathVariable final String context,
+                                                  @PathVariable final String messageKey,
+                                                  @RequestParam(required = false) final String subject,
+                                                  @RequestParam(required = false) final String grade) {
         return ResponseEntity.ok(
-            configService.getSystemMessage(clientName, messageKey, language, context, null, null)
+            configService.getSystemMessage(clientName, messageKey, language, context, subject, grade)
         );
     }
 }

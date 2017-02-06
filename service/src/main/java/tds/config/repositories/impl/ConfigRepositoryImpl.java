@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -68,8 +69,8 @@ public class ConfigRepositoryImpl implements ConfigRepository {
     @Override
     public Optional<ClientSystemMessage> findClientSystemMessage(String clientName, String messageKey, String language, String clientDefaultLanguage, String context, String subject, String grade) {
         List<String> langauges = Arrays.asList(language, clientDefaultLanguage);
-        List<String> grades = Arrays.asList("--ANY--");
-        List<String> subjects = Arrays.asList("--ANY--");
+        List<String> grades = new ArrayList<>(Arrays.asList("--ANY--"));
+        List<String> subjects = new ArrayList<>(Arrays.asList("--ANY--"));
 
         if (grade != null && !grade.equals("--ANY--")) {
             grades.add(grade);
