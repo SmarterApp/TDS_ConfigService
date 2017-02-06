@@ -16,6 +16,8 @@ import tds.config.ClientSystemMessage;
 import tds.config.repositories.ConfigRepository;
 import tds.config.services.ConfigService;
 
+import static tds.common.util.Preconditions.checkNotNull;
+
 @Service
 public class ConfigServiceImpl implements ConfigService {
     private static final Logger LOG = LoggerFactory.getLogger(ConfigServiceImpl.class);
@@ -55,6 +57,8 @@ public class ConfigServiceImpl implements ConfigService {
     @Override
     @Cacheable(CacheType.LONG_TERM)
     public String getSystemMessage(String clientName, String messageKey, String languageCode, String context, String subject, String grade) {
+        checkNotNull(languageCode, "languageCode cannot be null");
+
         String clientDefaultLanguage = null;
         Optional<ClientLanguage> maybeClientLanguage = configRepository.findClientLanguage(clientName);
 

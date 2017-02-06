@@ -29,6 +29,7 @@
 
         <tds.config.client.version>0.0.1-SNAPSHOT</tds.config.client.version>
         <tds.common.version>0.0.1-SNAPSHOT</tds.common.version>
+        <tds-common-legacy.version>0.0.1-SNAPSHOT</tds-common-legacy.version>
         <tds.student.client.version>0.0.1-SNAPSHOT</tds.student.client.version>
 
         <maven.compiler.plugin.version>3.5.1</maven.compiler.plugin.version>
