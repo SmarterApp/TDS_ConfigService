@@ -14,7 +14,6 @@ import tds.config.ClientLanguage;
 import tds.config.ClientSystemFlag;
 import tds.config.ClientSystemMessage;
 import tds.config.repositories.ConfigRepository;
-import tds.config.repositories.impl.ConfigRepositoryImpl;
 import tds.config.services.ConfigService;
 
 @Service
@@ -45,13 +44,13 @@ public class ConfigServiceImpl implements ConfigService {
 
     /**
      * This method is meant to replace CommonDLL._FormatMessage_SP (line 1975)
-     *
+     * <p>
      * Instead of following the existing pattern in the code of getting the _key (int) from tds_coremessageobject for default translation
      * or getting the _key (varbinary) from client_messagetranslation and then using that to get the actual message text.
      * The repository takes care of that in a single database query.
-     *
+     * <p>
      * NOTE: This method differs from _FormatMessage_SP in that it does not take in arguments to replace placeholder text in the messages.
-     *  The consumer of the endpoint is expected to handle this.
+     * The consumer of the endpoint is expected to handle this.
      */
     @Override
     public String getSystemMessage(String clientName, String messageKey, String language, String context, String subject, String grade) {
@@ -78,9 +77,9 @@ public class ConfigServiceImpl implements ConfigService {
 
         if (!maybeSystemMessage.isPresent()) {
             LOG.info("Message missing for key {} for client {}", messageKey, clientName);
-            return String.format ("%s [-----]", messageKey);
+            return String.format("%s [-----]", messageKey);
         }
 
-        return String.format ("%s [%d]", maybeSystemMessage.get().getMessage(), maybeSystemMessage.get().getMessageId());
+        return String.format("%s [%d]", maybeSystemMessage.get().getMessage(), maybeSystemMessage.get().getMessageId());
     }
 }

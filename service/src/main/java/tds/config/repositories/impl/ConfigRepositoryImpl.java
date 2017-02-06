@@ -110,8 +110,8 @@ public class ConfigRepositoryImpl implements ConfigRepository {
                 "   and mt.client = :clientName \n" +
                 "   and mt.Grade in (:grades) \n" +
                 "   and mt.Subject in (:subjects) \n" +
-            "UNION \n" +
-            "SELECT \n" +
+                "UNION \n" +
+                "SELECT \n" +
                 "   mo.message, \n" +
                 "   mo.messageID, \n" +
                 "   'ENU', \n" +
@@ -126,10 +126,10 @@ public class ConfigRepositoryImpl implements ConfigRepository {
                 "   and mo.Context = :context \n" +
                 "   and mo.contextType = 'database' \n" +
                 "   and mo.appkey = :messageKey \n" +
-            "ORDER BY \n" +
-            "   rank, \n" +
-            "   CASE WHEN language = :language THEN 1 ELSE 2 END \n" +
-            "LIMIT 1";
+                "ORDER BY \n" +
+                "   rank, \n" +
+                "   CASE WHEN language = :language THEN 1 ELSE 2 END \n" +
+                "LIMIT 1";
 
         /*
             The first part of the UNION is for message translations
@@ -143,12 +143,12 @@ public class ConfigRepositoryImpl implements ConfigRepository {
         try {
             maybeClientSystemMessage = Optional.of(
                 jdbcTemplate.queryForObject(SQL, parameters, (resultSet, i) ->
-                        new ClientSystemMessage(
-                            resultSet.getInt("messageID"),
-                            resultSet.getString("message"),
-                            resultSet.getString("language")
-                        )
-                    ));
+                    new ClientSystemMessage(
+                        resultSet.getInt("messageID"),
+                        resultSet.getString("message"),
+                        resultSet.getString("language")
+                    )
+                ));
         } catch (EmptyResultDataAccessException e) {
             LOG.debug("Missing Message: {} did not return results for clientName = {}, messageKey = {}, language = {}, context = {}, subject = {}, grade = {}", SQL, clientName);
             maybeClientSystemMessage = Optional.empty();
@@ -171,7 +171,7 @@ public class ConfigRepositoryImpl implements ConfigRepository {
                 "WHERE \n" +
                 "   name = :clientName";
 
-        Optional <ClientLanguage> clientLanguage;
+        Optional<ClientLanguage> clientLanguage;
         try {
             clientLanguage = Optional.of(
                 jdbcTemplate.queryForObject(SQL, parameters, (resultSet, i) ->

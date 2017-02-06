@@ -78,7 +78,7 @@ public class ConfigRepositoryImplIntegrationTests {
     public void shouldGetOptionalEmptyClientSystemMessageForAnInvalidClientName() {
         final String clientName = "foo";
 
-        Optional<ClientSystemMessage> result = configRepository.findClientSystemMessage(clientName, null, null,null, null, null, null);
+        Optional<ClientSystemMessage> result = configRepository.findClientSystemMessage(clientName, null, null, null, null, null, null);
 
         assertThat(result.isPresent()).isFalse();
     }
@@ -88,7 +88,7 @@ public class ConfigRepositoryImplIntegrationTests {
         final String clientName = "SBAC_PT";
         final String messageKey = "some invalid message key";
 
-        Optional<ClientSystemMessage> result = configRepository.findClientSystemMessage(clientName, messageKey, null,null, null, null, null);
+        Optional<ClientSystemMessage> result = configRepository.findClientSystemMessage(clientName, messageKey, null, null, null, null, null);
 
         assertThat(result.isPresent()).isFalse();
     }
