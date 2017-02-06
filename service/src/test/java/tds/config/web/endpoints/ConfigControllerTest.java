@@ -25,7 +25,7 @@ public class ConfigControllerTest {
     private ConfigService mockConfigService;
 
     @Before
-    public void Setup() {
+    public void setup() {
         HttpServletRequest request = new MockHttpServletRequest();
         ServletRequestAttributes requestAttributes = new ServletRequestAttributes(request);
         RequestContextHolder.setRequestAttributes(requestAttributes);
@@ -65,5 +65,24 @@ public class ConfigControllerTest {
             .thenReturn(Optional.empty());
 
         configController.getClientSystemFlag(clientName, auditObject);
+    }
+
+    @Test
+    public void shouldGetClientSystemMessage() {
+        String clientName = "UNIT_TEST";
+        String messageKey = "unit test";
+        String language = "Unit Language";
+        String context = "Unit context";
+        String subject = "Unit subject";
+        String grade = "Unit grade";
+        when(mockConfigService.getSystemMessage(clientName, messageKey, language, context, subject, grade))
+            .thenReturn("Mocked message");
+
+        ResponseEntity<String> response = configController.getClientSystemMessage(clientName, language, context, messageKey, subject, grade);
+
+        verify(mockConfigService).getSystemMessage(clientName, messageKey, language, context, subject, grade);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isEqualTo("Mocked message");
     }
 }

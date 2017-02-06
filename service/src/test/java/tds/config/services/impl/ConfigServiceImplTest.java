@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import tds.config.ClientLanguage;
 import tds.config.ClientSystemFlag;
+import tds.config.ClientSystemMessage;
 import tds.config.repositories.ConfigRepository;
 import tds.config.services.ConfigService;
 
@@ -76,5 +78,51 @@ public class ConfigServiceImplTest {
         }
 
         return clientSystemFlags;
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // ClientSystemMessage Tests
+    // -----------------------------------------------------------------------------------------------------------------
+    @Test
+    public void shouldGetAClientSystemMessage() {
+        String clientName = "SBAC_PT";
+        String messageKey = "some message key";
+        String language = "ENU";
+        String context = "some message context";
+        String subject = "ELA";
+        String grade = "7";
+
+        ClientLanguage clientLanguage = new ClientLanguage(clientName, language, true);
+        when(mockConfigRepository.findClientLanguage(clientName)).thenReturn(Optional.of(clientLanguage));
+
+        ClientSystemMessage clientSystemMessage = new ClientSystemMessage(123, "Message goes here", language);
+        when(mockConfigRepository.findClientSystemMessage(clientName, messageKey, language, clientLanguage.getDefaultLanguage(), context, subject, grade))
+            .thenReturn(Optional.of(clientSystemMessage));
+
+        String result = configService.getSystemMessage(clientName, messageKey, language, context, subject, grade);
+
+        assertThat(result).isEqualTo("Message goes here [123]");
+    }
+
+    @Test
+    public void shouldGetAClientSystemMessageWithClientDefaultLanguage() {
+        String clientName = "SBAC_PT";
+        String messageKey = "some message key";
+        String language = "ESN";
+        String context = "some message context";
+        String subject = "ELA";
+        String grade = "7";
+
+        ClientLanguage clientLanguage = new ClientLanguage(clientName, "ENU", false);
+        when(mockConfigRepository.findClientLanguage(clientName)).thenReturn(Optional.of(clientLanguage));
+
+        // When ClientLanguage internationalize is false, the langauge and defaultClientLanguage passed in are the same since it must always use the client default
+        ClientSystemMessage clientSystemMessage = new ClientSystemMessage(123, "Message goes here", language);
+        when(mockConfigRepository.findClientSystemMessage(clientName, messageKey, clientLanguage.getDefaultLanguage(), clientLanguage.getDefaultLanguage(), context, subject, grade))
+            .thenReturn(Optional.of(clientSystemMessage));
+
+        String result = configService.getSystemMessage(clientName, messageKey, language, context, subject, grade);
+
+        assertThat(result).isEqualTo("Message goes here [123]");
     }
 }

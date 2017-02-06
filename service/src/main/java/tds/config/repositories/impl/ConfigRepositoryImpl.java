@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -26,6 +25,7 @@ import tds.config.repositories.impl.mappers.ClientSystemFlagRowMapper;
 @Repository
 public class ConfigRepositoryImpl implements ConfigRepository {
     private static final Logger LOG = LoggerFactory.getLogger(ConfigRepositoryImpl.class);
+    private static final String MATCH_ANY = "--ANY--";
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -69,13 +69,13 @@ public class ConfigRepositoryImpl implements ConfigRepository {
     @Override
     public Optional<ClientSystemMessage> findClientSystemMessage(String clientName, String messageKey, String language, String clientDefaultLanguage, String context, String subject, String grade) {
         List<String> langauges = Arrays.asList(language, clientDefaultLanguage);
-        List<String> grades = new ArrayList<>(Arrays.asList("--ANY--"));
-        List<String> subjects = new ArrayList<>(Arrays.asList("--ANY--"));
+        List<String> grades = new ArrayList<>(Arrays.asList(MATCH_ANY));
+        List<String> subjects = new ArrayList<>(Arrays.asList(MATCH_ANY));
 
-        if (grade != null && !grade.equals("--ANY--")) {
+        if (grade != null && !grade.equals(MATCH_ANY)) {
             grades.add(grade);
         }
-        if (subject != null && !subject.equals("--ANY--")) {
+        if (subject != null && !subject.equals(MATCH_ANY)) {
             subjects.add(subject);
         }
 
@@ -131,6 +131,14 @@ public class ConfigRepositoryImpl implements ConfigRepository {
             "   CASE WHEN language = :language THEN 1 ELSE 2 END \n" +
             "LIMIT 1";
 
+        /*
+            The first part of the UNION is for message translations
+            The second part is the default message (ENU) that is used if no translation is found
+            Order by explanation:
+                Rank: This makes sure that any translation found is used, then fallback to the default message in ENU
+                CASE: Since the student language preference and the client default is passed in, if it matches both then we want the student preference to be used
+         */
+
         Optional<ClientSystemMessage> maybeClientSystemMessage;
         try {
             maybeClientSystemMessage = Optional.of(
@@ -142,7 +150,7 @@ public class ConfigRepositoryImpl implements ConfigRepository {
                         )
                     ));
         } catch (EmptyResultDataAccessException e) {
-            LOG.debug("{} did not return results for clientName = {}, messageKey = {}, language = {}, context = {}, subject = {}, grade = {}", SQL, clientName);
+            LOG.debug("Missing Message: {} did not return results for clientName = {}, messageKey = {}, language = {}, context = {}, subject = {}, grade = {}", SQL, clientName);
             maybeClientSystemMessage = Optional.empty();
         }
 
