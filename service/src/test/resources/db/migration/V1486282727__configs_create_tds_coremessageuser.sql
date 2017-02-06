@@ -16,4 +16,3 @@ CREATE TABLE tds_coremessageuser (
   PRIMARY KEY (_fk_coremessageobject,systemid)
 );
 
-INSERT INTO tds_coremessageuser VALUES (3146, 'Database');

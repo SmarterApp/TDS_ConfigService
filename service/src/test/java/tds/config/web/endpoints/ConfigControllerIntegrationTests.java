@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.Optional;
 
@@ -17,7 +16,6 @@ import tds.common.web.advice.ExceptionAdvice;
 import tds.config.ClientSystemFlag;
 import tds.config.services.ConfigService;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -34,9 +32,6 @@ public class ConfigControllerIntegrationTests {
     @MockBean
     private ConfigService mockConfigService;
 
-    // -----------------------------------------------------------------------------------------------------------------
-    // ClientSystemFlag Tests
-    // -----------------------------------------------------------------------------------------------------------------
     @Test
     public void shouldGetAClientSystemFlag() throws Exception {
         final String clientName = "SBAC_PT";
@@ -70,26 +65,5 @@ public class ConfigControllerIntegrationTests {
         http.perform(get("/config/client-system-flags/" + clientName + "/" + auditObject)
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound());
-    }
-    // -----------------------------------------------------------------------------------------------------------------
-    // ClientSystemMessage Tests
-    // -----------------------------------------------------------------------------------------------------------------
-    @Test
-    public void shouldGetAClientSystemMessage() throws Exception {
-        String clientName = "UNIT_TEST";
-        String messageKey = "unit test";
-        String languageCode = "Unit Language";
-        String context = "Unit context";
-        String subject = "Unit subject";
-        String grade = "Unit grade";
-        when(mockConfigService.getSystemMessage(clientName, messageKey, languageCode, context, subject, grade))
-            .thenReturn("Mocked message");
-
-        MvcResult result = http.perform(get("/config/" + clientName + "/messages/" + context + "/" + messageKey + "/" + languageCode + "?subject=" + subject + "&grade=" + grade)
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andReturn();
-
-        assertThat(result.getResponse().getContentAsString()).isEqualTo("Mocked message");
     }
 }

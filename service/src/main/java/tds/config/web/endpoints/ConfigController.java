@@ -6,13 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import tds.common.web.exceptions.NotFoundException;
 import tds.config.ClientSystemFlag;
-import tds.config.ClientSystemMessage;
 import tds.config.services.ConfigService;
 
 @RestController
@@ -32,18 +30,5 @@ class ConfigController {
             .orElseThrow(() -> new NotFoundException("Could not find ClientSystemFlag for client name %s and type %s", clientName, type));
 
         return ResponseEntity.ok(clientSystemFlag);
-    }
-
-    @GetMapping(value = "{clientName}/messages/{context}/{messageKey}/{languageCode}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    ResponseEntity<String> getClientSystemMessage(@PathVariable final String clientName,
-                                                  @PathVariable final String languageCode,
-                                                  @PathVariable final String context,
-                                                  @PathVariable final String messageKey,
-                                                  @RequestParam(required = false) final String subject,
-                                                  @RequestParam(required = false) final String grade) {
-        return ResponseEntity.ok(
-            configService.getSystemMessage(clientName, messageKey, languageCode, context, subject, grade)
-        );
     }
 }

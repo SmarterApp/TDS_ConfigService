@@ -17,5 +17,3 @@ CREATE TABLE client (
   defaultlanguage varchar(50) NOT NULL DEFAULT 'enu',
   PRIMARY KEY (name)
 );
-
-INSERT INTO client VALUES ('SBAC_PT', NULL, 1, 'ENU');

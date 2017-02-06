@@ -27,5 +27,3 @@ CREATE TABLE tds_coremessageobject (
   UNIQUE KEY ix_uniqueappmsg (ownerapp,messageid,contexttype,context),
   KEY ix_coremsgcontext (context)
 );
-
-INSERT INTO tds_coremessageobject VALUES ('_CanOpenTestOpportunity', 'database', 10211, 'Database', 'Your next test opportunity is not yet available.', 'You cannot take this test until {0}.', 'DATEPARAMETER', 3146, NULL, '2012-05-03 19:17:37 ', NULL, NULL);
