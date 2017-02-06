@@ -11,6 +11,6 @@ public class ClientSystemMessageTest {
 
         assertThat(clientSystemMessage.getMessageId()).isEqualTo(1234);
         assertThat(clientSystemMessage.getMessage()).isEqualTo("Test message {0}");
-        assertThat(clientSystemMessage.getLanguage()).isEqualTo("ENU");
+        assertThat(clientSystemMessage.getLanguageCode()).isEqualTo("ENU");
     }
 }

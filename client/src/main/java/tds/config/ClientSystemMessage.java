@@ -6,12 +6,12 @@ package tds.config;
 public class ClientSystemMessage {
     private int messageId;
     private String message;
-    private String language;
+    private String languageCode;
 
-    public ClientSystemMessage(int messageId, String message, String language) {
+    public ClientSystemMessage(int messageId, String message, String languageCode) {
         this.messageId = messageId;
         this.message = message;
-        this.language = language;
+        this.languageCode = languageCode;
     }
 
     /**
@@ -29,9 +29,9 @@ public class ClientSystemMessage {
     }
 
     /**
-     * @return The language of the message for this {@link tds.config.ClientSystemMessage}
+     * @return The language code of the message for this {@link tds.config.ClientSystemMessage}
      */
-    public String getLanguage() {
-        return language;
+    public String getLanguageCode() {
+        return languageCode;
     }
 }

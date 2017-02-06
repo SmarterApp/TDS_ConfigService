@@ -88,7 +88,7 @@ public class SystemMessageRepositoryImplIntegrationTests {
         assertThat(result.isPresent()).isTrue();
         assertThat(result.get().getMessageId()).isEqualTo(10211);
         assertThat(result.get().getMessage()).isEqualTo("You cannot take this test until {0}.");
-        assertThat(result.get().getLanguage()).isEqualTo(language);
+        assertThat(result.get().getLanguageCode()).isEqualTo(language);
     }
 
     @Test
@@ -104,7 +104,7 @@ public class SystemMessageRepositoryImplIntegrationTests {
         assertThat(result.isPresent()).isTrue();
         assertThat(result.get().getMessageId()).isEqualTo(10211);
         assertThat(result.get().getMessage()).isEqualTo("No puede realizar esta prueba hasta {0}.");
-        assertThat(result.get().getLanguage()).isEqualTo(language);
+        assertThat(result.get().getLanguageCode()).isEqualTo(language);
     }
 
     @Test
@@ -120,7 +120,7 @@ public class SystemMessageRepositoryImplIntegrationTests {
         assertThat(result.isPresent()).isTrue();
         assertThat(result.get().getMessageId()).isEqualTo(10211);
         assertThat(result.get().getMessage()).isEqualTo("You cannot take this test until {0}.");
-        assertThat(result.get().getLanguage()).isEqualTo(clientDefaultLanguage);
+        assertThat(result.get().getLanguageCode()).isEqualTo(clientDefaultLanguage);
     }
 
     @Test
@@ -136,7 +136,7 @@ public class SystemMessageRepositoryImplIntegrationTests {
         assertThat(result.isPresent()).isTrue();
         assertThat(result.get().getMessageId()).isEqualTo(10211);
         assertThat(result.get().getMessage()).isEqualTo("You cannot take this test until {0}.");
-        assertThat(result.get().getLanguage()).isEqualTo("ENU");
+        assertThat(result.get().getLanguageCode()).isEqualTo("ENU");
     }
 
     // -----------------------------------------------------------------------------------------------------------------
