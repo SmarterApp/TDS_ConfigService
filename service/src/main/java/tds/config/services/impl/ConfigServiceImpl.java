@@ -53,6 +53,7 @@ public class ConfigServiceImpl implements ConfigService {
      * The consumer of the endpoint is expected to handle this.
      */
     @Override
+    @Cacheable(CacheType.LONG_TERM)
     public String getSystemMessage(String clientName, String messageKey, String language, String context, String subject, String grade) {
         String clientDefaultLanguage = null;
         Optional<ClientLanguage> maybeClientLanguage = configRepository.findClientLanguage(clientName);
