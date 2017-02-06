@@ -97,19 +97,19 @@ public class ConfigRepositoryImpl implements ConfigRepository {
                 "   tds_coremessageuser mu \n" +
                 "JOIN \n" +
                 "   tds_coremessageobject mo \n" +
-                "   ON mu._fk_CoreMessageObject = mo._Key \n" +
+                "   ON mu._fk_coremessageobject = mo._Key \n" +
                 "JOIN \n" +
                 "   client_messagetranslation mt \n" +
-                "   ON mo._Key = mt._fk_CoreMessageObject \n" +
+                "   ON mo._Key = mt._fk_coremessageobject \n" +
                 "WHERE \n" +
-                "   mu.SystemID = 'database' \n" +
-                "   and mo.Context = :context \n" +
-                "   and mo.contextType = 'database' \n" +
+                "   mu.systemid = 'database' \n" +
+                "   and mo.context = :context \n" +
+                "   and mo.contexttype = 'database' \n" +
                 "   and mo.appkey = :messageKey \n" +
                 "   and mt.language in (:languages) \n" +
                 "   and mt.client = :clientName \n" +
-                "   and mt.Grade in (:grades) \n" +
-                "   and mt.Subject in (:subjects) \n" +
+                "   and mt.grade in (:grades) \n" +
+                "   and mt.subject in (:subjects) \n" +
                 "UNION \n" +
                 "SELECT \n" +
                 "   mo.message, \n" +
@@ -120,11 +120,11 @@ public class ConfigRepositoryImpl implements ConfigRepository {
                 "   tds_coremessageuser mu \n" +
                 "JOIN \n" +
                 "   tds_coremessageobject mo \n" +
-                "   ON mu._fk_CoreMessageObject = mo._Key \n" +
+                "   ON mu._fk_coremessageobject = mo._Key \n" +
                 "WHERE \n" +
-                "   mu.SystemID = 'database' \n" +
-                "   and mo.Context = :context \n" +
-                "   and mo.contextType = 'database' \n" +
+                "   mu.systemid = 'database' \n" +
+                "   and mo.context = :context \n" +
+                "   and mo.contexttype = 'database' \n" +
                 "   and mo.appkey = :messageKey \n" +
                 "ORDER BY \n" +
                 "   rank, \n" +
