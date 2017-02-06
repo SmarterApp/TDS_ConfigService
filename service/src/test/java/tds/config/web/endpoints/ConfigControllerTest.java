@@ -25,7 +25,7 @@ public class ConfigControllerTest {
     private ConfigService mockConfigService;
 
     @Before
-    public void setup() {
+    public void setUp() {
         HttpServletRequest request = new MockHttpServletRequest();
         ServletRequestAttributes requestAttributes = new ServletRequestAttributes(request);
         RequestContextHolder.setRequestAttributes(requestAttributes);

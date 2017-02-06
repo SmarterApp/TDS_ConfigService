@@ -17,5 +17,16 @@ public interface ConfigService {
      */
     Optional<ClientSystemFlag> findClientSystemFlag(String clientName, String type);
 
+    /**
+     * Get the message string for this client that is translated for the language specified.
+     *
+     * @param clientName The client name
+     * @param messageKey The message key found in the {@code configs.tds_coremessageobject} table in the {@code appkey} column
+     * @param language   The language code to translate the message into
+     * @param context    The context for the message found in the {@code configs.tds_coremessageobject} table in the {@code context} column
+     * @param subject    A subject code used to find a more specific message.  NULL will match on all
+     * @param grade      A grade level used to find a more specific message.  NULL will match on all
+     * @return The message string with placeholders included
+     */
     String getSystemMessage(String clientName, String messageKey, String language, String context, String subject, String grade);
 }
