@@ -5,12 +5,12 @@ package tds.config;
  */
 public class ClientLanguage {
     private String clientName;
-    private String defaultLanguage;
+    private String defaultLanguageCode;
     private boolean internationalize;
 
-    public ClientLanguage(String clientName, String defaultLanguage, boolean internationalize) {
+    public ClientLanguage(String clientName, String defaultLanguageCode, boolean internationalize) {
         this.clientName = clientName;
-        this.defaultLanguage = defaultLanguage;
+        this.defaultLanguageCode = defaultLanguageCode;
         this.internationalize = internationalize;
     }
 
@@ -22,10 +22,10 @@ public class ClientLanguage {
     }
 
     /**
-     * @return The default language for this client
+     * @return The default language code for this client
      */
-    public String getDefaultLanguage() {
-        return defaultLanguage;
+    public String getDefaultLanguageCode() {
+        return defaultLanguageCode;
     }
 
     /**

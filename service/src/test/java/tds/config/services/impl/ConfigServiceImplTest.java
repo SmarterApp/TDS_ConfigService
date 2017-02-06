@@ -87,19 +87,19 @@ public class ConfigServiceImplTest {
     public void shouldGetAClientSystemMessage() {
         String clientName = "SBAC_PT";
         String messageKey = "some message key";
-        String language = "ENU";
+        String languageCode = "ENU";
         String context = "some message context";
         String subject = "ELA";
         String grade = "7";
 
-        ClientLanguage clientLanguage = new ClientLanguage(clientName, language, true);
+        ClientLanguage clientLanguage = new ClientLanguage(clientName, languageCode, true);
         when(mockConfigRepository.findClientLanguage(clientName)).thenReturn(Optional.of(clientLanguage));
 
-        ClientSystemMessage clientSystemMessage = new ClientSystemMessage(123, "Message goes here", language);
-        when(mockConfigRepository.findClientSystemMessage(clientName, messageKey, language, clientLanguage.getDefaultLanguage(), context, subject, grade))
+        ClientSystemMessage clientSystemMessage = new ClientSystemMessage(123, "Message goes here", languageCode);
+        when(mockConfigRepository.findClientSystemMessage(clientName, messageKey, languageCode, clientLanguage.getDefaultLanguageCode(), context, subject, grade))
             .thenReturn(Optional.of(clientSystemMessage));
 
-        String result = configService.getSystemMessage(clientName, messageKey, language, context, subject, grade);
+        String result = configService.getSystemMessage(clientName, messageKey, languageCode, context, subject, grade);
 
         assertThat(result).isEqualTo("Message goes here [123]");
     }
@@ -108,7 +108,7 @@ public class ConfigServiceImplTest {
     public void shouldGetAClientSystemMessageWithClientDefaultLanguage() {
         String clientName = "SBAC_PT";
         String messageKey = "some message key";
-        String language = "ESN";
+        String languageCode = "ESN";
         String context = "some message context";
         String subject = "ELA";
         String grade = "7";
@@ -116,12 +116,12 @@ public class ConfigServiceImplTest {
         ClientLanguage clientLanguage = new ClientLanguage(clientName, "ENU", false);
         when(mockConfigRepository.findClientLanguage(clientName)).thenReturn(Optional.of(clientLanguage));
 
-        // When ClientLanguage internationalize is false, the langauge and defaultClientLanguage passed in are the same since it must always use the client default
-        ClientSystemMessage clientSystemMessage = new ClientSystemMessage(123, "Message goes here", language);
-        when(mockConfigRepository.findClientSystemMessage(clientName, messageKey, clientLanguage.getDefaultLanguage(), clientLanguage.getDefaultLanguage(), context, subject, grade))
+        // When ClientLanguage internationalize is false, the languageCode and defaultClientLanguageCode passed in are the same since it must always use the client default
+        ClientSystemMessage clientSystemMessage = new ClientSystemMessage(123, "Message goes here", languageCode);
+        when(mockConfigRepository.findClientSystemMessage(clientName, messageKey, clientLanguage.getDefaultLanguageCode(), clientLanguage.getDefaultLanguageCode(), context, subject, grade))
             .thenReturn(Optional.of(clientSystemMessage));
 
-        String result = configService.getSystemMessage(clientName, messageKey, language, context, subject, grade);
+        String result = configService.getSystemMessage(clientName, messageKey, languageCode, context, subject, grade);
 
         assertThat(result).isEqualTo("Message goes here [123]");
     }

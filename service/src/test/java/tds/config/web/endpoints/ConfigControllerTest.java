@@ -71,16 +71,16 @@ public class ConfigControllerTest {
     public void shouldGetClientSystemMessage() {
         String clientName = "UNIT_TEST";
         String messageKey = "unit test";
-        String language = "Unit Language";
+        String languageCode = "Unit Language";
         String context = "Unit context";
         String subject = "Unit subject";
         String grade = "Unit grade";
-        when(mockConfigService.getSystemMessage(clientName, messageKey, language, context, subject, grade))
+        when(mockConfigService.getSystemMessage(clientName, messageKey, languageCode, context, subject, grade))
             .thenReturn("Mocked message");
 
-        ResponseEntity<String> response = configController.getClientSystemMessage(clientName, language, context, messageKey, subject, grade);
+        ResponseEntity<String> response = configController.getClientSystemMessage(clientName, languageCode, context, messageKey, subject, grade);
 
-        verify(mockConfigService).getSystemMessage(clientName, messageKey, language, context, subject, grade);
+        verify(mockConfigService).getSystemMessage(clientName, messageKey, languageCode, context, subject, grade);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isEqualTo("Mocked message");

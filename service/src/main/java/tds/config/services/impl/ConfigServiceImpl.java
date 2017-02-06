@@ -54,7 +54,7 @@ public class ConfigServiceImpl implements ConfigService {
      */
     @Override
     @Cacheable(CacheType.LONG_TERM)
-    public String getSystemMessage(String clientName, String messageKey, String language, String context, String subject, String grade) {
+    public String getSystemMessage(String clientName, String messageKey, String languageCode, String context, String subject, String grade) {
         String clientDefaultLanguage = null;
         Optional<ClientLanguage> maybeClientLanguage = configRepository.findClientLanguage(clientName);
 
@@ -64,17 +64,17 @@ public class ConfigServiceImpl implements ConfigService {
          * The internationalize flag allows this fallback, and if it is false then the student always sees the default language of the client
          */
         if (maybeClientLanguage.isPresent()) {
-            clientDefaultLanguage = maybeClientLanguage.get().getDefaultLanguage();
+            clientDefaultLanguage = maybeClientLanguage.get().getDefaultLanguageCode();
 
             if (!maybeClientLanguage.get().isInternationalize()) {
-                language = maybeClientLanguage.get().getDefaultLanguage();
+                languageCode = maybeClientLanguage.get().getDefaultLanguageCode();
             }
         }
 
         /** This repository call replaces calling TDS_GetMessagekey_FN at CommonDLL Line 1987 and then conditionally getting
          *  the message text lines 2008 - 2037
          */
-        Optional<ClientSystemMessage> maybeSystemMessage = configRepository.findClientSystemMessage(clientName, messageKey, language, clientDefaultLanguage, context, subject, grade);
+        Optional<ClientSystemMessage> maybeSystemMessage = configRepository.findClientSystemMessage(clientName, messageKey, languageCode, clientDefaultLanguage, context, subject, grade);
 
         if (!maybeSystemMessage.isPresent()) {
             LOG.info("Message missing for key {} for client {}", messageKey, clientName);

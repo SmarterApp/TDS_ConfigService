@@ -78,14 +78,14 @@ public class ConfigControllerIntegrationTests {
     public void shouldGetAClientSystemMessage() throws Exception {
         String clientName = "UNIT_TEST";
         String messageKey = "unit test";
-        String language = "Unit Language";
+        String languageCode = "Unit Language";
         String context = "Unit context";
         String subject = "Unit subject";
         String grade = "Unit grade";
-        when(mockConfigService.getSystemMessage(clientName, messageKey, language, context, subject, grade))
+        when(mockConfigService.getSystemMessage(clientName, messageKey, languageCode, context, subject, grade))
             .thenReturn("Mocked message");
 
-        MvcResult result = http.perform(get("/config/" + clientName + "/messages/" + context + "/" + messageKey + "/" + language + "?subject=" + subject + "&grade=" + grade)
+        MvcResult result = http.perform(get("/config/" + clientName + "/messages/" + context + "/" + messageKey + "/" + languageCode + "?subject=" + subject + "&grade=" + grade)
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andReturn();

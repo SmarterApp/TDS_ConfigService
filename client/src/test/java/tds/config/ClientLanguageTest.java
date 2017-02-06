@@ -10,7 +10,7 @@ public class ClientLanguageTest {
         ClientLanguage clientLanguage = new ClientLanguage("SBAC_PT", "ENU", true);
 
         assertThat(clientLanguage.getClientName()).isEqualTo("SBAC_PT");
-        assertThat(clientLanguage.getDefaultLanguage()).isEqualTo("ENU");
+        assertThat(clientLanguage.getDefaultLanguageCode()).isEqualTo("ENU");
         assertThat(clientLanguage.isInternationalize()).isTrue();
     }
 }

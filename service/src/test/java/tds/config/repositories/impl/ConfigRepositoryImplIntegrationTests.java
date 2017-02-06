@@ -177,7 +177,7 @@ public class ConfigRepositoryImplIntegrationTests {
 
         assertThat(result.isPresent()).isTrue();
         assertThat(result.get().getClientName()).isEqualTo(clientName);
-        assertThat(result.get().getDefaultLanguage()).isEqualTo("ENU");
+        assertThat(result.get().getDefaultLanguageCode()).isEqualTo("ENU");
         assertThat(result.get().isInternationalize()).isTrue();
     }
 }

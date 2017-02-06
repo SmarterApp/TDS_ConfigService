@@ -67,8 +67,8 @@ public class ConfigRepositoryImpl implements ConfigRepository {
     }
 
     @Override
-    public Optional<ClientSystemMessage> findClientSystemMessage(String clientName, String messageKey, String language, String clientDefaultLanguage, String context, String subject, String grade) {
-        List<String> langauges = Arrays.asList(language, clientDefaultLanguage);
+    public Optional<ClientSystemMessage> findClientSystemMessage(String clientName, String messageKey, String languageCode, String clientDefaultLanguage, String context, String subject, String grade) {
+        List<String> langaugeCodes = Arrays.asList(languageCode, clientDefaultLanguage);
         List<String> grades = new ArrayList<>(Arrays.asList(MATCH_ANY));
         List<String> subjects = new ArrayList<>(Arrays.asList(MATCH_ANY));
 
@@ -81,8 +81,8 @@ public class ConfigRepositoryImpl implements ConfigRepository {
 
         final SqlParameterSource parameters = new MapSqlParameterSource("clientName", clientName)
             .addValue("messageKey", messageKey)
-            .addValue("languages", langauges)
-            .addValue("language", language)
+            .addValue("languageCodes", langaugeCodes)
+            .addValue("languageCode", languageCode)
             .addValue("context", context)
             .addValue("subjects", subjects)
             .addValue("grades", grades);
@@ -97,7 +97,7 @@ public class ConfigRepositoryImpl implements ConfigRepository {
                 "   tds_coremessageuser mu \n" +
                 "JOIN \n" +
                 "   tds_coremessageobject mo \n" +
-                "   ON mu._fk_coremessageobject = mo._Key \n" +
+                "   ON mu._fk_coremessageobject = mo._key \n" +
                 "JOIN \n" +
                 "   client_messagetranslation mt \n" +
                 "   ON mo._Key = mt._fk_coremessageobject \n" +
@@ -106,7 +106,7 @@ public class ConfigRepositoryImpl implements ConfigRepository {
                 "   and mo.context = :context \n" +
                 "   and mo.contexttype = 'database' \n" +
                 "   and mo.appkey = :messageKey \n" +
-                "   and mt.language in (:languages) \n" +
+                "   and mt.language in (:languageCodes) \n" +
                 "   and mt.client = :clientName \n" +
                 "   and mt.grade in (:grades) \n" +
                 "   and mt.subject in (:subjects) \n" +
@@ -128,7 +128,7 @@ public class ConfigRepositoryImpl implements ConfigRepository {
                 "   and mo.appkey = :messageKey \n" +
                 "ORDER BY \n" +
                 "   rank, \n" +
-                "   CASE WHEN language = :language THEN 1 ELSE 2 END \n" +
+                "   CASE WHEN language = :languageCode THEN 1 ELSE 2 END \n" +
                 "LIMIT 1";
 
         /*

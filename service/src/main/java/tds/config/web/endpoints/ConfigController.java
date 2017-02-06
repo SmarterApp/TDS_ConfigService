@@ -34,16 +34,16 @@ class ConfigController {
         return ResponseEntity.ok(clientSystemFlag);
     }
 
-    @GetMapping(value = "{clientName}/messages/{context}/{messageKey}/{language}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "{clientName}/messages/{context}/{messageKey}/{languageCode}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     ResponseEntity<String> getClientSystemMessage(@PathVariable final String clientName,
-                                                  @PathVariable final String language,
+                                                  @PathVariable final String languageCode,
                                                   @PathVariable final String context,
                                                   @PathVariable final String messageKey,
                                                   @RequestParam(required = false) final String subject,
                                                   @RequestParam(required = false) final String grade) {
         return ResponseEntity.ok(
-            configService.getSystemMessage(clientName, messageKey, language, context, subject, grade)
+            configService.getSystemMessage(clientName, messageKey, languageCode, context, subject, grade)
         );
     }
 }
