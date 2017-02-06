@@ -19,6 +19,7 @@ import tds.config.repositories.impl.mappers.ClientSystemFlagRowMapper;
 @Repository
 public class ConfigRepositoryImpl implements ConfigRepository {
     private static final Logger LOG = LoggerFactory.getLogger(ConfigRepositoryImpl.class);
+    private static final String MATCH_ANY = "--ANY--";
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired

@@ -91,7 +91,7 @@ public class ClientSystemFlag {
     }
 
     /**
-     *  @return The name of the client that owns this {@link ClientTestProperty}.
+     *  @return The name of the client that owns this {@link ClientSystemFlag}.
      */
     public String getClientName() {
         return clientName;

@@ -13,8 +13,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
+import tds.config.ClientLanguage;
 import tds.config.ClientSystemFlag;
+import tds.config.ClientSystemMessage;
 import tds.config.repositories.ConfigRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -60,7 +63,7 @@ public class ConfigRepositoryImplIntegrationTests {
     }
 
     @Test
-    public void shouldGetOptionalEmptyClientSystemFlagsForAnInvalidClientName() {
+    public void shouldGetEmptyListClientSystemFlagsForAnInvalidClientName() {
         final String clientName = "foo";
 
         List<ClientSystemFlag> result = configRepository.findClientSystemFlags(clientName);

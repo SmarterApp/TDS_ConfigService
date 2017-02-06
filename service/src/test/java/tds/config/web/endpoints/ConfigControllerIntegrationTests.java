@@ -32,9 +32,6 @@ public class ConfigControllerIntegrationTests {
     @MockBean
     private ConfigService mockConfigService;
 
-    // -----------------------------------------------------------------------------------------------------------------
-    // ClientSystemFlag Tests
-    // -----------------------------------------------------------------------------------------------------------------
     @Test
     public void shouldGetAClientSystemFlag() throws Exception {
         final String clientName = "SBAC_PT";
