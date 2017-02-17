@@ -26,6 +26,7 @@
         <integration-tests.skip>true</integration-tests.skip>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <docker.image.prefix>fwsbac</docker.image.prefix>
+        <spring.cloud.config.version>1.2.2.RELEASE</spring.cloud.config.version>
 
         <tds.config.client.version>0.0.1-SNAPSHOT</tds.config.client.version>
         <tds.common.version>0.0.1-SNAPSHOT</tds.common.version>
