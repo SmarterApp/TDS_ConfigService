@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,15 +26,15 @@ public class SystemMessageRepositoryImpl implements SystemMessageRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
-    public SystemMessageRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
+    public SystemMessageRepositoryImpl(final NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    public Optional<ClientSystemMessage> findClientSystemMessage(String clientName, String messageKey, String languageCode, String clientDefaultLanguage, String context, String subject, String grade) {
-        List<String> langaugeCodes = Arrays.asList(languageCode, clientDefaultLanguage);
-        List<String> grades = new ArrayList<>(Arrays.asList(MATCH_ANY));
-        List<String> subjects = new ArrayList<>(Arrays.asList(MATCH_ANY));
+    public Optional<ClientSystemMessage> findClientSystemMessage(final String clientName, final String messageKey, String languageCode, String clientDefaultLanguage, String context, String subject, String grade) {
+        List<String> languageCodes = Arrays.asList(languageCode, clientDefaultLanguage);
+        List<String> grades = new ArrayList<>(Collections.singletonList(MATCH_ANY));
+        List<String> subjects = new ArrayList<>(Collections.singletonList(MATCH_ANY));
 
         if (grade != null && !grade.equals(MATCH_ANY)) {
             grades.add(grade);
@@ -44,7 +45,7 @@ public class SystemMessageRepositoryImpl implements SystemMessageRepository {
 
         final SqlParameterSource parameters = new MapSqlParameterSource("clientName", clientName)
             .addValue("messageKey", messageKey)
-            .addValue("languageCodes", langaugeCodes)
+            .addValue("languageCodes", languageCodes)
             .addValue("languageCode", languageCode)
             .addValue("context", context)
             .addValue("subjects", subjects)
@@ -121,7 +122,7 @@ public class SystemMessageRepositoryImpl implements SystemMessageRepository {
     }
 
     @Override
-    public Optional<ClientLanguage> findClientLanguage(String clientName) {
+    public Optional<ClientLanguage> findClientLanguage(final String clientName) {
         final SqlParameterSource parameters = new MapSqlParameterSource("clientName", clientName);
 
         final String SQL =

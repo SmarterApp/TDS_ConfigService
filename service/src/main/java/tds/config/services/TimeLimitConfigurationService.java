@@ -42,7 +42,7 @@ public interface TimeLimitConfigurationService {
      *                     fetched.
      * @return A {@link Optional <TimeLimitConfiguration>} for the assessment id and client name.
      */
-    Optional<TimeLimitConfiguration> findTimeLimitConfiguration(String clientName, String assessmentId);
+    Optional<TimeLimitConfiguration> findTimeLimitConfiguration(final String clientName, final String assessmentId);
 
     /**
      * Find the {@link TimeLimitConfiguration} configuration values from the {@code session.timelimits} view for the
@@ -52,5 +52,5 @@ public interface TimeLimitConfigurationService {
      *                   fetched.
      * @return A {@link Optional <TimeLimitConfiguration>} for the client name.
      */
-    Optional<TimeLimitConfiguration> findTimeLimitConfiguration(String clientName);
+    Optional<TimeLimitConfiguration> findTimeLimitConfiguration(final String clientName);
 }

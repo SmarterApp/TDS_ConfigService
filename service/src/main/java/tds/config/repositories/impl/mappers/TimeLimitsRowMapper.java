@@ -12,7 +12,7 @@ import tds.config.TimeLimitConfiguration;
  */
 public class TimeLimitsRowMapper implements RowMapper<TimeLimitConfiguration> {
     @Override
-    public TimeLimitConfiguration mapRow(ResultSet rs, int i) throws SQLException {
+    public TimeLimitConfiguration mapRow(final ResultSet rs, final int i) throws SQLException {
         return new TimeLimitConfiguration.Builder()
             .withClientName(rs.getString("clientName"))
             .withAssessmentId(rs.getString("assessmentId"))

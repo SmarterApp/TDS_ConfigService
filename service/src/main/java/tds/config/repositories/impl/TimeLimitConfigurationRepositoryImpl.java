@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -18,6 +19,7 @@ import tds.config.repositories.impl.mappers.TimeLimitsRowMapper;
 @Repository
 public class TimeLimitConfigurationRepositoryImpl implements TimeLimitConfigurationRepository {
     private static final Logger LOG = LoggerFactory.getLogger(ConfigRepositoryImpl.class);
+    private static final RowMapper<TimeLimitConfiguration> timeLimitConfigurationRowMapper = new TimeLimitsRowMapper();
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -51,7 +53,7 @@ public class TimeLimitConfigurationRepositoryImpl implements TimeLimitConfigurat
                 jdbcTemplate.queryForObject(
                     SQL,
                     parameters,
-                    new TimeLimitsRowMapper()));
+                    timeLimitConfigurationRowMapper));
         } catch (IncorrectResultSizeDataAccessException e) {
             LOG.debug("{} did not return results for clientName = {}", SQL, clientName);
             maybeTimeLimitConfig = Optional.empty();
@@ -89,7 +91,7 @@ public class TimeLimitConfigurationRepositoryImpl implements TimeLimitConfigurat
                 jdbcTemplate.queryForObject(
                     SQL,
                     parameters,
-                    new TimeLimitsRowMapper()));
+                    timeLimitConfigurationRowMapper));
         } catch (IncorrectResultSizeDataAccessException e) {
             LOG.debug("{} did not return results for clientName = {}, assessmentId = {}", SQL, clientName, assessmentId);
             maybeTimeLimitConfig = Optional.empty();

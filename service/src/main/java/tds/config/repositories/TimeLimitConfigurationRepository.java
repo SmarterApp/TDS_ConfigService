@@ -18,7 +18,7 @@ public interface TimeLimitConfigurationRepository {
      * @return An {@link Optional <TimeLimitConfiguration>} representing the time limit configuration values; otherwise
      * {@code Optional.empty()}.
      */
-    Optional<TimeLimitConfiguration> findTimeLimitConfiguration(String clientName);
+    Optional<TimeLimitConfiguration> findTimeLimitConfiguration(final String clientName);
 
     /**
      * Get the time limits from the {@code session.timelimits} view for the specified client name and assessment id.
@@ -36,5 +36,5 @@ public interface TimeLimitConfigurationRepository {
      * @return An {@link Optional<Integer>} representing the TA Check-In time limit in minutes; otherwise
      * {@code Optional.empty()}.
      */
-    Optional<TimeLimitConfiguration> findTimeLimitConfiguration(String clientName, String assessmentId);
+    Optional<TimeLimitConfiguration> findTimeLimitConfiguration(final String clientName, final String assessmentId);
 }

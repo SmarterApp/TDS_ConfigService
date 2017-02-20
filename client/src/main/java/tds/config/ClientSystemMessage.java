@@ -4,11 +4,11 @@ package tds.config;
  * Represents a record in the {@code configs.tds_coremessageobject} or {@code configs.client_messagetranslation} table.
  */
 public class ClientSystemMessage {
-    private int messageId;
-    private String message;
-    private String languageCode;
+    private final int messageId;
+    private final String message;
+    private final String languageCode;
 
-    public ClientSystemMessage(int messageId, String message, String languageCode) {
+    public ClientSystemMessage(final int messageId, final String message, final String languageCode) {
         this.messageId = messageId;
         this.message = message;
         this.languageCode = languageCode;

@@ -18,7 +18,7 @@ class SystemMessageController {
     private final SystemMessageService systemMessageService;
 
     @Autowired
-    public SystemMessageController(SystemMessageService systemMessageService) {
+    public SystemMessageController(final SystemMessageService systemMessageService) {
         this.systemMessageService = systemMessageService;
     }
 

@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -19,11 +20,11 @@ import tds.config.repositories.impl.mappers.ClientSystemFlagRowMapper;
 @Repository
 public class ConfigRepositoryImpl implements ConfigRepository {
     private static final Logger LOG = LoggerFactory.getLogger(ConfigRepositoryImpl.class);
-    private static final String MATCH_ANY = "--ANY--";
     private final NamedParameterJdbcTemplate jdbcTemplate;
+    private static final RowMapper<ClientSystemFlag> clientSystemFlagRowMapper = new ClientSystemFlagRowMapper();
 
     @Autowired
-    public ConfigRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
+    public ConfigRepositoryImpl(final NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -51,7 +52,7 @@ public class ConfigRepositoryImpl implements ConfigRepository {
                 jdbcTemplate.query(
                     SQL,
                     parameters,
-                    new ClientSystemFlagRowMapper());
+                    clientSystemFlagRowMapper);
         } catch (DataAccessException e) {
             LOG.debug("{} did not return results for clientName = {}", SQL, clientName);
             clientSystemFlags = Collections.emptyList();

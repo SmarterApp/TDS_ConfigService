@@ -22,7 +22,7 @@ public interface SystemMessageRepository {
      * @param grade                 A grade level used to find a more specific message.  NULL will match on all
      * @return A {@link tds.config.ClientSystemMessage} if found, empty otherwise
      */
-    Optional<ClientSystemMessage> findClientSystemMessage(String clientName, String messageKey, String languageCode, String clientDefaultLanguage, String context, String subject, String grade);
+    Optional<ClientSystemMessage> findClientSystemMessage(final String clientName, final String messageKey, String languageCode, String clientDefaultLanguage, String context, String subject, String grade);
 
     /**
      * Finds the {@link tds.config.ClientLanguage} by the client name which contains the default language setting for this client.
@@ -30,5 +30,5 @@ public interface SystemMessageRepository {
      * @param clientName The client name
      * @return {@link tds.config.ClientLanguage} if found, otherwise empty
      */
-    Optional<ClientLanguage> findClientLanguage(String clientName);
+    Optional<ClientLanguage> findClientLanguage(final String clientName);
 }

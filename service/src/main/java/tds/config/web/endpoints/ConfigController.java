@@ -19,7 +19,7 @@ class ConfigController {
     private final ConfigService configService;
 
     @Autowired
-    public ConfigController(ConfigService configService) {
+    public ConfigController(final ConfigService configService) {
         this.configService = configService;
     }
 

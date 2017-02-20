@@ -22,7 +22,7 @@ public class SystemMessageServiceImpl implements SystemMessageService {
     private final SystemMessageRepository systemMessageRepository;
 
     @Autowired
-    public SystemMessageServiceImpl(SystemMessageRepository systemMessageRepository) {
+    public SystemMessageServiceImpl(final SystemMessageRepository systemMessageRepository) {
         this.systemMessageRepository = systemMessageRepository;
     }
 
@@ -38,8 +38,13 @@ public class SystemMessageServiceImpl implements SystemMessageService {
      */
     @Override
     @Cacheable(CacheType.LONG_TERM)
-    public String getSystemMessage(String clientName, String messageKey, String languageCode, String context, String subject, String grade) {
-        checkNotNull(languageCode, "languageCode cannot be null");
+    public String getSystemMessage(final String clientName,
+                                   final String messageKey,
+                                   final String languageCode,
+                                   final String context,
+                                   final String subject,
+                                   final String grade) {
+        String languageCodeForTranslation = checkNotNull(languageCode, "languageCodeForTranslation cannot be null");
 
         String clientDefaultLanguage = null;
         Optional<ClientLanguage> maybeClientLanguage = systemMessageRepository.findClientLanguage(clientName);
@@ -53,14 +58,14 @@ public class SystemMessageServiceImpl implements SystemMessageService {
             clientDefaultLanguage = maybeClientLanguage.get().getDefaultLanguageCode();
 
             if (!maybeClientLanguage.get().isInternationalize()) {
-                languageCode = maybeClientLanguage.get().getDefaultLanguageCode();
+                languageCodeForTranslation = maybeClientLanguage.get().getDefaultLanguageCode();
             }
         }
 
         /** This repository call replaces calling TDS_GetMessagekey_FN at CommonDLL Line 1987 and then conditionally getting
          *  the message text lines 2008 - 2037
          */
-        Optional<ClientSystemMessage> maybeSystemMessage = systemMessageRepository.findClientSystemMessage(clientName, messageKey, languageCode, clientDefaultLanguage, context, subject, grade);
+        Optional<ClientSystemMessage> maybeSystemMessage = systemMessageRepository.findClientSystemMessage(clientName, messageKey, languageCodeForTranslation, clientDefaultLanguage, context, subject, grade);
 
         if (!maybeSystemMessage.isPresent()) {
             LOG.info("Message missing for key {} for client {}", messageKey, clientName);

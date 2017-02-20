@@ -66,42 +66,42 @@ public class TimeLimitConfiguration {
         private int requestInterfaceTimeoutMinutes;
         private Integer taCheckinTimeMinutes;
 
-        public Builder withClientName(String clientName) {
+        public Builder withClientName(final String clientName) {
             this.clientName = clientName;
             return this;
         }
 
-        public Builder withEnvironment(String environment) {
+        public Builder withEnvironment(final String environment) {
             this.environment = environment;
             return this;
         }
 
-        public Builder withAssessmentId(String assessmentId) {
+        public Builder withAssessmentId(final String assessmentId) {
             this.assessmentId = assessmentId;
             return this;
         }
 
-        public Builder withExamRestartWindowMinutes(int examRestartWindowMinutes) {
+        public Builder withExamRestartWindowMinutes(final int examRestartWindowMinutes) {
             this.examRestartWindowMinutes = examRestartWindowMinutes;
             return this;
         }
 
-        public Builder withExamDelayDays(int newExamDelayDays) {
+        public Builder withExamDelayDays(final int newExamDelayDays) {
             this.examDelayDays = newExamDelayDays;
             return this;
         }
 
-        public Builder withInterfaceTimeoutMinutes(Integer interfaceTimeoutMinutes) {
+        public Builder withInterfaceTimeoutMinutes(final Integer interfaceTimeoutMinutes) {
             this.interfaceTimeoutMinutes = interfaceTimeoutMinutes;
             return this;
         }
 
-        public Builder withRequestInterfaceTimeoutMinutes(int requestInterfaceTimeoutMinutes) {
+        public Builder withRequestInterfaceTimeoutMinutes(final int requestInterfaceTimeoutMinutes) {
             this.requestInterfaceTimeoutMinutes = requestInterfaceTimeoutMinutes;
             return this;
         }
 
-        public Builder withTaCheckinTimeMinutes(Integer taCheckinTimeMinutes) {
+        public Builder withTaCheckinTimeMinutes(final Integer taCheckinTimeMinutes) {
             this.taCheckinTimeMinutes = taCheckinTimeMinutes;
             return this;
         }
@@ -111,7 +111,7 @@ public class TimeLimitConfiguration {
         }
     }
 
-    private TimeLimitConfiguration(Builder builder) {
+    private TimeLimitConfiguration(final Builder builder) {
         this.clientName = builder.clientName;
         this.environment = builder.environment;
         this.assessmentId = builder.assessmentId;

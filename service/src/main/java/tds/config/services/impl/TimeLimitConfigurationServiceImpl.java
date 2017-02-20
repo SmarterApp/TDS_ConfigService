@@ -16,19 +16,19 @@ public class TimeLimitConfigurationServiceImpl implements TimeLimitConfiguration
     private final TimeLimitConfigurationRepository timeLimitConfigurationRepository;
 
     @Autowired
-    public TimeLimitConfigurationServiceImpl(TimeLimitConfigurationRepository timeLimitConfigurationRepository) {
+    public TimeLimitConfigurationServiceImpl(final TimeLimitConfigurationRepository timeLimitConfigurationRepository) {
         this.timeLimitConfigurationRepository = timeLimitConfigurationRepository;
     }
 
     @Override
     @Cacheable(CacheType.MEDIUM_TERM)
-    public Optional<TimeLimitConfiguration> findTimeLimitConfiguration(String clientName) {
+    public Optional<TimeLimitConfiguration> findTimeLimitConfiguration(final String clientName) {
         return this.findTimeLimitConfiguration(clientName, null);
     }
 
     @Override
     @Cacheable(CacheType.MEDIUM_TERM)
-    public Optional<TimeLimitConfiguration> findTimeLimitConfiguration(String clientName, String assessmentId) {
+    public Optional<TimeLimitConfiguration> findTimeLimitConfiguration(final String clientName, final String assessmentId) {
         Optional<TimeLimitConfiguration> maybeTimeLimitConfig;
 
         if (assessmentId == null) {

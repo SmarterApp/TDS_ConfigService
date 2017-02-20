@@ -15,7 +15,7 @@ import static tds.common.data.mapping.ResultSetMapperUtility.mapTimestampToJodaI
  */
 public class ClientSystemFlagRowMapper implements RowMapper<ClientSystemFlag> {
     @Override
-    public ClientSystemFlag mapRow(ResultSet rs, int i) throws SQLException {
+    public ClientSystemFlag mapRow(final ResultSet rs, final int i) throws SQLException {
         return new ClientSystemFlag.Builder()
             .withAuditObject(rs.getString("auditObject"))
             .withClientName(rs.getString("clientName"))

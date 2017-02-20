@@ -26,37 +26,37 @@ public class ClientSystemFlag {
         private Instant dateChanged;
         private Instant datePublished;
 
-        public Builder withAuditObject(String auditObject) {
+        public Builder withAuditObject(final String auditObject) {
             this.auditObject = auditObject;
             return this;
         }
 
-        public Builder withClientName(String clientName) {
+        public Builder withClientName(final String clientName) {
             this.clientName = clientName;
             return this;
         }
 
-        public Builder withIsPracticeTest(boolean isPracticeTest) {
+        public Builder withIsPracticeTest(final boolean isPracticeTest) {
             this.isPracticeTest = isPracticeTest;
             return this;
         }
 
-        public Builder withEnabled(boolean enabled) {
+        public Builder withEnabled(final boolean enabled) {
             this.enabled = enabled;
             return this;
         }
 
-        public Builder withDescription(String description) {
+        public Builder withDescription(final String description) {
             this.description = description;
             return this;
         }
 
-        public Builder withDateChanged(Instant dateChanged) {
+        public Builder withDateChanged(final Instant dateChanged) {
             this.dateChanged = dateChanged;
             return this;
         }
 
-        public Builder withDatePublished(Instant datePublished) {
+        public Builder withDatePublished(final Instant datePublished) {
             this.datePublished = datePublished;
             return this;
         }
@@ -66,7 +66,7 @@ public class ClientSystemFlag {
         }
     }
 
-    private ClientSystemFlag(Builder builder) {
+    private ClientSystemFlag(final Builder builder) {
         this.auditObject = builder.auditObject;
         this.clientName = builder.clientName;
         this.isPracticeTest = builder.isPracticeTest;
@@ -142,6 +142,9 @@ public class ClientSystemFlag {
         return dateChanged;
     }
 
+    /**
+     * @return the date published for the flag
+     */
     public Instant getDatePublished() {
         return datePublished;
     }

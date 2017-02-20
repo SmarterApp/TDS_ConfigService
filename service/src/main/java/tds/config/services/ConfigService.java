@@ -15,5 +15,5 @@ public interface ConfigService {
      * @param type       The type of the desired {@link ClientSystemFlag}
      * @return The {@link Optional<ClientSystemFlag>} that matches the client and audit name.
      */
-    Optional<ClientSystemFlag> findClientSystemFlag(String clientName, String type);
+    Optional<ClientSystemFlag> findClientSystemFlag(final String clientName, final String type);
 }

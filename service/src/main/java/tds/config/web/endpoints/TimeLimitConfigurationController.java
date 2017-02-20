@@ -19,7 +19,7 @@ class TimeLimitConfigurationController {
     private final TimeLimitConfigurationService timeLimitConfigurationService;
 
     @Autowired
-    public TimeLimitConfigurationController(TimeLimitConfigurationService timeLimitConfigurationService) {
+    public TimeLimitConfigurationController(final TimeLimitConfigurationService timeLimitConfigurationService) {
         this.timeLimitConfigurationService = timeLimitConfigurationService;
     }
 

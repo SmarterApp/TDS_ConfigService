@@ -15,5 +15,5 @@ public interface SystemMessageService {
      * @param grade        A grade level used to find a more specific message.  NULL will match on all
      * @return The message string with placeholders included
      */
-    String getSystemMessage(String clientName, String messageKey, String languageCode, String context, String subject, String grade);
+    String getSystemMessage(final String clientName, final String messageKey, final String languageCode, final String context, final String subject, final String grade);
 }

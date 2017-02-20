@@ -4,11 +4,13 @@ package tds.config;
  Represents a record in the {@code configs.client}  table.
  */
 public class ClientLanguage {
-    private String clientName;
-    private String defaultLanguageCode;
-    private boolean internationalize;
+    private final String clientName;
+    private final String defaultLanguageCode;
+    private final boolean internationalize;
 
-    public ClientLanguage(String clientName, String defaultLanguageCode, boolean internationalize) {
+    public ClientLanguage(final String clientName,
+                          final String defaultLanguageCode,
+                          final boolean internationalize) {
         this.clientName = clientName;
         this.defaultLanguageCode = defaultLanguageCode;
         this.internationalize = internationalize;
