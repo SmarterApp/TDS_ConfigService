@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Optional;
 
+import tds.common.configuration.SecurityConfiguration;
 import tds.common.web.advice.ExceptionAdvice;
 import tds.config.TimeLimitConfiguration;
 import tds.config.services.TimeLimitConfigurationService;
@@ -25,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(TimeLimitConfigurationController.class)
-@Import(ExceptionAdvice.class)
+@Import({ExceptionAdvice.class, SecurityConfiguration.class})
 public class TimeLimitsConfigurationControllerIntegrationTests {
     private static final String TIME_LIMITS_RESOURCE = "/config/time-limits/";
 
