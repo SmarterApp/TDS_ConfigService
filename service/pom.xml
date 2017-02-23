@@ -11,7 +11,7 @@
     <description>The microservice for configuration</description>
 
     <parent>
-        <groupId>org.opentestsystem.config</groupId>
+        <groupId>org.opentestsystem.delivery</groupId>
         <artifactId>tds-config</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
@@ -35,19 +35,19 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.opentestsystem.config</groupId>
+            <groupId>org.opentestsystem.delivery</groupId>
             <artifactId>tds-config-client</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.opentestsystem.common</groupId>
+            <groupId>org.opentestsystem.delivery</groupId>
             <artifactId>tds-common</artifactId>
             <version>${tds.common.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.opentestsystem.common</groupId>
+            <groupId>org.opentestsystem.delivery</groupId>
             <artifactId>tds-common-legacy</artifactId>
             <version>${tds-common-legacy.version}</version>
         </dependency>

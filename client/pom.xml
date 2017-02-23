@@ -11,7 +11,7 @@
     <description>The client classes for interacting with the config service</description>
 
     <parent>
-        <groupId>org.opentestsystem.config</groupId>
+        <groupId>org.opentestsystem.delivery</groupId>
         <artifactId>tds-config</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
