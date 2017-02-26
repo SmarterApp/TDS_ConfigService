@@ -77,4 +77,17 @@ public class ItemScoringConfigurationRepositoryImplIntegrationTests {
         assertThat(customConfig.getContext()).isEqualTo("context");
         assertThat(customConfig.getServerUrl()).isEqualTo("http://www.google.com");
     }
+
+    @Test
+    public void shouldReturnDefaultItemScoringConfigs() {
+        List<ItemScoringConfig> configs = itemScoringConfigurationRepository.findItemScoringConfigs("SBAC_PT",  null, null);
+
+        assertThat(configs).hasSize(1);
+
+        ItemScoringConfig defaultConfig = configs.get(0);
+
+        assertThat(defaultConfig.getContext()).isEqualTo("*");
+        assertThat(defaultConfig.getPriority()).isEqualTo(1);
+        assertThat(defaultConfig.getServerUrl()).isEqualTo("http://localhost:8080/itemscoring/Scoring/ItemScoring");
+    }
 }
