@@ -1,5 +1,5 @@
 /***********************************************************************************************************************
-  File: V1486288010__configs_create_client.sql
+  File: V1488144734__configs_client_itemscoringconfig.sql
 
   Desc: Creates the client_itemscoringconfig table containing scoring configuration data
 
