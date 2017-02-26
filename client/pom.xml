@@ -40,6 +40,34 @@
             <artifactId>joda-time</artifactId>
             <version>${joda-time.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.opentestsystem.delivery</groupId>
+            <artifactId>student.library</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.opentestsystem.delivery</groupId>
+                    <artifactId>tds-exam-client</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.opentestsystem.shared</groupId>
+                    <artifactId>shared-tr-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.opentestsystem.delivery</groupId>
+                    <artifactId>item-renderer</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.opentestsystem.delivery</groupId>
+                    <artifactId>tds-dll-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.opentestsystem.delivery</groupId>
+                    <artifactId>item-scoring-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
 
     <build>
