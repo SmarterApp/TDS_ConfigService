@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <artifactId>tds-config-service</artifactId>
     <packaging>jar</packaging>
-
     <name>tds-config-service</name>
     <description>The microservice for configuration</description>
+    <version>0.0.2-SNAPSHOT</version>
 
     <parent>
         <groupId>org.opentestsystem.delivery</groupId>
@@ -14,9 +13,19 @@
         <version>0.0.2-SNAPSHOT</version>
     </parent>
 
+    <scm>
+        <connection>scm:git:https://github.com/SmarterApp/TDS_ConfigService.git</connection>
+        <developerConnection>scm:git:https://git@github.com/SmarterApp/TDS_ConfigService.git</developerConnection>
+        <url>https://github.com/SmarterApp/TDS_ConfigService</url>
+        <tag>HEAD</tag>
+    </scm>
+
     <properties>
         <java.version>1.8</java.version>
         <assertj.version>3.4.1</assertj.version>
+
+        <tds.common.version>0.0.2</tds.common.version>
+        <tds.common.legacy.version>0.0.2</tds.common.legacy.version>
     </properties>
 
     <dependencyManagement>
@@ -47,7 +56,7 @@
         <dependency>
             <groupId>org.opentestsystem.delivery</groupId>
             <artifactId>tds-common-legacy</artifactId>
-            <version>${tds-common-legacy.version}</version>
+            <version>${tds.common.legacy.version}</version>
         </dependency>
 
         <dependency>
