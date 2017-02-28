@@ -15,7 +15,7 @@
 
     <scm>
         <connection>scm:git:https://github.com/SmarterApp/TDS_ConfigService.git</connection>
-        <developerConnection>scm:git:https://git@github.com/SmarterApp/TDS_ConfigService.git</developerConnection>
+        <developerConnection>scm:git:git://github.com/SmarterApp/TDS_ConfigService.git</developerConnection>
         <url>https://github.com/SmarterApp/TDS_ConfigService</url>
         <tag>HEAD</tag>
     </scm>
