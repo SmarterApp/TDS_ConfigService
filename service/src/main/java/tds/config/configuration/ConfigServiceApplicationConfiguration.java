@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Import;
 
 import tds.common.configuration.CacheConfiguration;
 import tds.common.configuration.DataSourceConfiguration;
-import tds.common.configuration.JacksonObjectMapperConfiguration;
 import tds.common.configuration.RestTemplateConfiguration;
 import tds.common.configuration.SecurityConfiguration;
 import tds.common.web.advice.ExceptionAdvice;
@@ -18,7 +17,6 @@ import tds.common.web.advice.ExceptionAdvice;
     ExceptionAdvice.class,
     RestTemplateConfiguration.class,
     DataSourceConfiguration.class,
-    JacksonObjectMapperConfiguration.class,
     CacheConfiguration.class,
     SecurityConfiguration.class
 })
