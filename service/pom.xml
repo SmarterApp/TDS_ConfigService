@@ -17,6 +17,7 @@
     <properties>
         <java.version>1.8</java.version>
         <assertj.version>3.4.1</assertj.version>
+        <tds-student-common.version>3.0.1</tds-student-common.version>
     </properties>
 
     <dependencyManagement>
@@ -48,6 +49,13 @@
             <groupId>org.opentestsystem.delivery</groupId>
             <artifactId>tds-common-legacy</artifactId>
             <version>${tds-common-legacy.version}</version>
+        </dependency>
+
+        <!-- TDS Legacy Dependencies-->
+        <dependency>
+            <groupId>org.opentestsystem.delivery</groupId>
+            <artifactId>student-library</artifactId>
+            <version>${tds-student-common.version}</version>
         </dependency>
 
         <dependency>
