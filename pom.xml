@@ -31,11 +31,10 @@
         <integration-tests.skip>true</integration-tests.skip>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <docker.image.prefix>fwsbac</docker.image.prefix>
-        <spring.cloud.config.version>1.2.3.RELEASE</spring.cloud.config.version>
         <mockito.version>1.10.19</mockito.version>
         <joda-time.version>2.9.5</joda-time.version>
 
-        <tds.common.version>0.0.8</tds.common.version>
+        <tds.common.version>0.0.10</tds.common.version>
         <tds-common-legacy.version>0.0.8</tds-common-legacy.version>
 
         <maven.compiler.plugin.version>3.5.1</maven.compiler.plugin.version>
