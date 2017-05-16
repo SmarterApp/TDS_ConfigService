@@ -22,7 +22,7 @@ class SystemMessageController {
         this.systemMessageService = systemMessageService;
     }
 
-    @GetMapping(value = "/{clientName}/{context}/{messageKey}/{languageCode}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/{clientName}/{context}/{messageKey}/{languageCode}", produces = MediaType.TEXT_PLAIN_VALUE)
     @ResponseBody
     ResponseEntity<String> getClientSystemMessage(@PathVariable final String clientName,
                                                   @PathVariable final String languageCode,
