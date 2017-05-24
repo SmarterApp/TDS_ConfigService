@@ -23,7 +23,7 @@ public class TimeLimitConfigurationServiceImpl implements TimeLimitConfiguration
     @Override
     @Cacheable(CacheType.MEDIUM_TERM)
     public Optional<TimeLimitConfiguration> findTimeLimitConfiguration(final String clientName) {
-        return this.findTimeLimitConfiguration(clientName, null);
+        return timeLimitConfigurationRepository.findTimeLimitConfiguration(clientName);
     }
 
     @Override
@@ -32,14 +32,14 @@ public class TimeLimitConfigurationServiceImpl implements TimeLimitConfiguration
         Optional<TimeLimitConfiguration> maybeTimeLimitConfig;
 
         if (assessmentId == null) {
-            return timeLimitConfigurationRepository.findTimeLimitConfiguration(clientName);
+            return findTimeLimitConfiguration(clientName);
         }
 
         // RULE:  If time limit configuration cannot be found for clientName + assessmentId, get time limit configuration
         // for clientName.
         maybeTimeLimitConfig = timeLimitConfigurationRepository.findTimeLimitConfiguration(clientName, assessmentId);
         if (!maybeTimeLimitConfig.isPresent()) {
-            maybeTimeLimitConfig = timeLimitConfigurationRepository.findTimeLimitConfiguration(clientName);
+            maybeTimeLimitConfig = findTimeLimitConfiguration(clientName);
         }
 
         return maybeTimeLimitConfig;
