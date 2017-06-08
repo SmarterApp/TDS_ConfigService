@@ -18,8 +18,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TimeLimitsServiceImplTest {
-    private TimeLimitConfigurationService timeLimitConfigurationService;
+public class TimeLimitConfigurationServiceImplTest {
+
+    private TimeLimitConfigurationServiceImpl timeLimitConfigurationService;
 
     @Mock
     private TimeLimitConfigurationRepository mockTimeLimitConfigurationRepository;
