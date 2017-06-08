@@ -23,7 +23,7 @@ public class TimeLimitConfigurationRepositoryImpl implements TimeLimitConfigurat
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
-    public TimeLimitConfigurationRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
+    public TimeLimitConfigurationRepositoryImpl(final NamedParameterJdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -49,12 +49,12 @@ public class TimeLimitConfigurationRepositoryImpl implements TimeLimitConfigurat
 
         Optional<TimeLimitConfiguration> maybeTimeLimitConfig;
         try {
-            maybeTimeLimitConfig = Optional.of(
+            maybeTimeLimitConfig = Optional.ofNullable(
                 jdbcTemplate.queryForObject(
                     SQL,
                     parameters,
                     timeLimitConfigurationRowMapper));
-        } catch (IncorrectResultSizeDataAccessException e) {
+        } catch (final IncorrectResultSizeDataAccessException e) {
             LOG.debug("{} did not return results for clientName = {}", SQL, clientName);
             maybeTimeLimitConfig = Optional.empty();
         }
@@ -87,12 +87,12 @@ public class TimeLimitConfigurationRepositoryImpl implements TimeLimitConfigurat
 
         Optional<TimeLimitConfiguration> maybeTimeLimitConfig;
         try {
-            maybeTimeLimitConfig = Optional.of(
+            maybeTimeLimitConfig = Optional.ofNullable(
                 jdbcTemplate.queryForObject(
                     SQL,
                     parameters,
                     timeLimitConfigurationRowMapper));
-        } catch (IncorrectResultSizeDataAccessException e) {
+        } catch (final IncorrectResultSizeDataAccessException e) {
             LOG.debug("{} did not return results for clientName = {}, assessmentId = {}", SQL, clientName, assessmentId);
             maybeTimeLimitConfig = Optional.empty();
         }
