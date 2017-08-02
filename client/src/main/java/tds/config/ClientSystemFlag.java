@@ -184,6 +184,13 @@ public class ClientSystemFlag {
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hashCode(this);
+        int result = auditObject != null ? auditObject.hashCode() : 0;
+        result = 31 * result + (clientName != null ? clientName.hashCode() : 0);
+        result = 31 * result + (isPracticeTest ? 1 : 0);
+        result = 31 * result + (enabled ? 1 : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (dateChanged != null ? dateChanged.hashCode() : 0);
+        result = 31 * result + (datePublished != null ? datePublished.hashCode() : 0);
+        return result;
     }
 }
