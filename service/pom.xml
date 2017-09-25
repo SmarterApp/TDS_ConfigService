@@ -17,7 +17,7 @@
     <properties>
         <java.version>1.8</java.version>
         <assertj.version>3.4.1</assertj.version>
-        <tds-student-common.version>4.0.1</tds-student-common.version>
+        <tds-student-common.version>4.0.1.RELEASE</tds-student-common.version>
     </properties>
 
     <dependencies>
