@@ -5,13 +5,13 @@
     <artifactId>tds-config</artifactId>
     <name>tds-config</name>
     <packaging>pom</packaging>
-    <version>4.0.2.RELEASE</version>
+    <version>4.0.3-SNAPSHOT</version>
   
     <scm>
         <connection>scm:git:https://github.com/SmarterApp/TDS_ConfigService.git</connection>
         <developerConnection>scm:git:git://github.com/SmarterApp/TDS_ConfigService.git</developerConnection>
         <url>https://github.com/SmarterApp/TDS_ConfigService</url>
-        <tag>4.0.2.RELEASE</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <modules>
