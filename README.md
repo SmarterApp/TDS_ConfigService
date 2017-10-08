@@ -71,3 +71,6 @@ V[***timestamp***]_\_[***database name***]\_[***DDL operation***]\_[***object na
 
 * Example file name: `V1472923547__configs_create_table_client_systemflags.sql`
 * To generate the timestamp, use [http://www.unixtimestamp.com/](http://www.unixtimestamp.com/) and copy the UTC timestamp
+
+## Spring Configuration
+The application uses Spring and Spring boot. The configuration options for this application can be found [here](documentation/spring_configuration.md)
