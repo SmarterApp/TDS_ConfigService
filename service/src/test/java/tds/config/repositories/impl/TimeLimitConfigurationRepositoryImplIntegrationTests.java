@@ -46,7 +46,7 @@ public class TimeLimitConfigurationRepositoryImplIntegrationTests {
     @Before
     public void setUp() {
         String timeLimitsInsert = "INSERT INTO client_timelimits VALUES (UNHEX('0AEFBFBD6C362DEFBFBD49EFBFBDEFBF'),NULL,1,10,-1,10,'SBAC_PT',1,30,20,20,'2012-12-21 00:02:53.000','2012-12-21 00:02:53.000','Development',8,15,2),\n" +
-            "(UNHEX('C3AD5010256F4F2AA68653A0CF56CF55'),'SBAC Math 3-MATH-3',1,10,-1,10,'SBAC_PT',1,30,20,50,'2012-12-21 00:02:53.000','2012-12-21 00:02:53.000','Development',8,15,2),\n" +
+            "(UNHEX('C3AD5010256F4F2AA68653A0CF56CF55'),'SBAC Math 3-MATH-3',2,10,-1,10,'SBAC_PT',1,30,20,50,'2012-12-21 00:02:53.000','2012-12-21 00:02:53.000','Development',8,15,2),\n" +
             "(UNHEX('0B6CEFBFBDEFBFBD6D064042EFBFBD7D'),NULL,1,10,-1,15,'SBAC',0,20,20,20,'2010-07-07 15:39:31.433',NULL,'Development',8,120,2);";
 
         jdbcTemplate.update(timeLimitsInsert, new MapSqlParameterSource());
@@ -71,6 +71,7 @@ public class TimeLimitConfigurationRepositoryImplIntegrationTests {
         assertThat(result.get().getInterfaceTimeoutMinutes()).isEqualTo(10);
         assertThat(result.get().getRequestInterfaceTimeoutMinutes()).isEqualTo(15);
         assertThat(result.get().getTaCheckinTimeMinutes()).isEqualTo(20);
+        assertThat(result.get().getExamExpireDays()).isEqualTo(1);
     }
 
     @Test
@@ -90,6 +91,7 @@ public class TimeLimitConfigurationRepositoryImplIntegrationTests {
         assertThat(result.get().getInterfaceTimeoutMinutes()).isEqualTo(10);
         assertThat(result.get().getRequestInterfaceTimeoutMinutes()).isEqualTo(15);
         assertThat(result.get().getTaCheckinTimeMinutes()).isEqualTo(50);
+        assertThat(result.get().getExamExpireDays()).isEqualTo(2);
     }
 
     @Test

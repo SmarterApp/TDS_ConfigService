@@ -23,11 +23,12 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Optional;
 
 import tds.config.TimeLimitConfiguration;
 import tds.config.repositories.TimeLimitConfigurationRepository;
-import tds.config.repositories.impl.mappers.TimeLimitsRowMapper;
 
 @Repository
 public class TimeLimitConfigurationRepositoryImpl implements TimeLimitConfigurationRepository {
@@ -50,6 +51,7 @@ public class TimeLimitConfigurationRepositoryImpl implements TimeLimitConfigurat
                 "   _efk_testid AS assessmentId, \n" +
                 "   environment, \n" +
                 "   opprestart AS examRestartWindowMinutes, \n" +
+                "   oppexpire as examExpireDays, \n" +
                 "   oppdelay AS examDelayDays, \n" +
                 "   interfacetimeout AS interfaceTimeoutMinutes, \n" +
                 "   requestinterfacetimeout AS requestInterfaceTimeoutMinutes, \n" +
@@ -88,6 +90,7 @@ public class TimeLimitConfigurationRepositoryImpl implements TimeLimitConfigurat
                 "   _efk_testid AS assessmentId, \n" +
                 "   environment, \n" +
                 "   opprestart AS examRestartWindowMinutes, \n" +
+                "   oppexpire as examExpireDays, \n" +
                 "   oppdelay AS examDelayDays, \n" +
                 "   interfacetimeout AS interfaceTimeoutMinutes, \n" +
                 "   requestinterfacetimeout AS requestInterfaceTimeoutMinutes, \n" +
@@ -111,5 +114,22 @@ public class TimeLimitConfigurationRepositoryImpl implements TimeLimitConfigurat
         }
 
         return maybeTimeLimitConfig;
+    }
+
+    private static class TimeLimitsRowMapper implements RowMapper<TimeLimitConfiguration> {
+        @Override
+        public TimeLimitConfiguration mapRow(final ResultSet rs, final int i) throws SQLException {
+            return new TimeLimitConfiguration.Builder()
+                .withClientName(rs.getString("clientName"))
+                .withAssessmentId(rs.getString("assessmentId"))
+                .withEnvironment(rs.getString("environment"))
+                .withExamRestartWindowMinutes(rs.getInt("examRestartWindowMinutes"))
+                .withExamDelayDays(rs.getInt("examDelayDays"))
+                .withInterfaceTimeoutMinutes((Integer) rs.getObject("interfaceTimeoutMinutes")) // can be null in db
+                .withRequestInterfaceTimeoutMinutes(rs.getInt("requestInterfaceTimeoutMinutes"))
+                .withTaCheckinTimeMinutes((Integer) rs.getObject("taCheckinTimeMinutes")) // can be null in db
+                .withExamExpireDays(rs.getInt("examExpireDays"))
+                .build();
+        }
     }
 }
