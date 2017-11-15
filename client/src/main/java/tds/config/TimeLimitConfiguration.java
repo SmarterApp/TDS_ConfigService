@@ -68,6 +68,7 @@ public class TimeLimitConfiguration {
     private Integer interfaceTimeoutMinutes;
     private int requestInterfaceTimeoutMinutes;
     private Integer taCheckinTimeMinutes;
+    private int examExpireDays;
 
     public static class Builder {
         private String clientName;
@@ -78,6 +79,7 @@ public class TimeLimitConfiguration {
         private Integer interfaceTimeoutMinutes;
         private int requestInterfaceTimeoutMinutes;
         private Integer taCheckinTimeMinutes;
+        private int examExpireDays;
 
         public Builder withClientName(final String clientName) {
             this.clientName = clientName;
@@ -119,6 +121,11 @@ public class TimeLimitConfiguration {
             return this;
         }
 
+        public Builder withExamExpireDays(final int examExpireDays) {
+            this.examExpireDays = examExpireDays;
+            return this;
+        }
+
         public TimeLimitConfiguration build() {
             return new TimeLimitConfiguration(this);
         }
@@ -133,6 +140,7 @@ public class TimeLimitConfiguration {
         this.interfaceTimeoutMinutes = builder.interfaceTimeoutMinutes;
         this.requestInterfaceTimeoutMinutes = builder.requestInterfaceTimeoutMinutes;
         this.taCheckinTimeMinutes = builder.taCheckinTimeMinutes;
+        this.examExpireDays = builder.examExpireDays;
     }
 
     /**
@@ -196,5 +204,12 @@ public class TimeLimitConfiguration {
      */
     public Integer getTaCheckinTimeMinutes() {
         return taCheckinTimeMinutes;
+    }
+
+    /**
+     * @return the number of days that must pass before an exam can be expired
+     */
+    public int getExamExpireDays() {
+        return examExpireDays;
     }
 }
