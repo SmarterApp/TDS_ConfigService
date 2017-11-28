@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collection;
+
 import tds.common.web.exceptions.NotFoundException;
 import tds.config.ClientSystemFlag;
 import tds.config.services.ConfigService;
@@ -43,5 +45,11 @@ class ConfigController {
             .orElseThrow(() -> new NotFoundException("Could not find ClientSystemFlag for client name %s and type %s", clientName, type));
 
         return ResponseEntity.ok(clientSystemFlag);
+    }
+
+    @GetMapping(value = "/client-test-properties/{clientName}/forceComplete", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<Collection<String>> findForceCompleteAssessmentIds(@PathVariable final String clientName) {
+        return ResponseEntity.ok(configService.findForceCompleteAssessmentIds(clientName));
     }
 }

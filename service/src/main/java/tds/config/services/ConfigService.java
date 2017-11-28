@@ -13,6 +13,7 @@
 
 package tds.config.services;
 
+import java.util.Collection;
 import java.util.Optional;
 
 import tds.config.ClientSystemFlag;
@@ -29,4 +30,12 @@ public interface ConfigService {
      * @return The {@link Optional<ClientSystemFlag>} that matches the client and audit name.
      */
     Optional<ClientSystemFlag> findClientSystemFlag(final String clientName, final String type);
+
+    /**
+     * Retrieves assessment ids that are force complete enabled
+     *
+     * @param clientName client name associated with assessment ids
+     * @return list of assessment ids
+     */
+    Collection<String> findForceCompleteAssessmentIds(final String clientName);
 }

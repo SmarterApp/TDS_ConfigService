@@ -13,6 +13,7 @@
 
 package tds.config.repositories;
 
+import java.util.Collection;
 import java.util.List;
 
 import tds.config.ClientSystemFlag;
@@ -37,4 +38,12 @@ public interface ConfigRepository {
      * @return A collection of {@link tds.config.ClientSystemFlag} records for the specified client name.
      */
     List<ClientSystemFlag> findClientSystemFlags(final String clientName);
+
+    /**
+     * Fetch all assessment ids that are configured for force complete
+     *
+     * @param clientName client name
+     * @return collection of assessment ids that have force complete enabled
+     */
+    Collection<String> findForceCompleteAssessmentIds(final String clientName);
 }

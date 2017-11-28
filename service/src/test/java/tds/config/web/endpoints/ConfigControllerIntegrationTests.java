@@ -23,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Collections;
 import java.util.Optional;
 
 import tds.common.configuration.SecurityConfiguration;
@@ -79,5 +80,16 @@ public class ConfigControllerIntegrationTests {
         http.perform(get("/config/client-system-flags/" + clientName + "/" + auditObject)
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void shouldGetForceCompleteAssessmentIds() throws Exception {
+        final String clientName = "SBAC";
+
+        when(mockConfigService.findForceCompleteAssessmentIds(clientName)).thenReturn(Collections.singletonList("testId"));
+
+        http.perform(get("/config/client-test-properties/" + clientName + "/forceComplete")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk());
     }
 }

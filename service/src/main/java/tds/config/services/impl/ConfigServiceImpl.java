@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,5 +49,10 @@ public class ConfigServiceImpl implements ConfigService {
         return clientSystemFlags.stream()
             .filter(f -> f.getAuditObject().equals(type))
             .findFirst();
+    }
+
+    @Override
+    public Collection<String> findForceCompleteAssessmentIds(final String clientName) {
+        return configRepository.findForceCompleteAssessmentIds(clientName);
     }
 }

@@ -25,6 +25,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.List;
 
 import tds.config.ClientSystemFlag;
@@ -48,7 +49,10 @@ public class ConfigRepositoryImplIntegrationTests {
         String clientFlagInsertSQL = "INSERT INTO client_systemflags (auditobject,ison,description,clientname,ispracticetest,datechanged,datepublished) " +
             "VALUES ('accommodations',1,'keeps an audit trail of various changes to accommodations settings','SBAC_PT',1,'2011-06-01 11:27:47.980',NULL);";
 
+        String clientTestPropertiesInsertSQL = "INSERT INTO `client_testproperties` VALUES ('SBAC','(SBAC) STSAssessment-ICA-5-2017-2018-81638630',3,NULL,2,NULL,'\\0','\u0001','Grade 5 ELA','','\u0001','\\0','ELA',NULL,NULL,'\u0001','\u0001',NULL,NULL,NULL,NULL,'ELA',NULL,'tds-testform','tds-testwindow','\\0','\\0',NULL,NULL,'\u0001','tds-testmode','\\0','\\0','\\0','\\0',1,0,'\\0','Grade 5',NULL,0,NULL,'\\0')";
+
         jdbcTemplate.update(clientFlagInsertSQL, new MapSqlParameterSource());
+        jdbcTemplate.update(clientTestPropertiesInsertSQL, new MapSqlParameterSource());
     }
 
     @After
@@ -79,5 +83,11 @@ public class ConfigRepositoryImplIntegrationTests {
         List<ClientSystemFlag> result = configRepository.findClientSystemFlags(clientName);
 
         assertThat(result.size()).isEqualTo(0);
+    }
+
+    @Test
+    public void shouldGetForceCompleteAssessmentIds() {
+        Collection<String> assessmentIds = configRepository.findForceCompleteAssessmentIds("SBAC");
+        assertThat(assessmentIds).containsOnly("(SBAC) STSAssessment-ICA-5-2017-2018-81638630");
     }
 }
