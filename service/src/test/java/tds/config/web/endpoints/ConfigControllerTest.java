@@ -22,6 +22,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 
 import tds.common.web.exceptions.NotFoundException;
@@ -78,5 +80,15 @@ public class ConfigControllerTest {
             .thenReturn(Optional.empty());
 
         configController.getClientSystemFlag(clientName, auditObject);
+    }
+
+    @Test
+    public void shouldFindAssessmentsThatAreForceComplete() {
+        when(mockConfigService.findForceCompleteAssessmentIds("SBAC")).thenReturn(Collections.singletonList("testId"));
+
+        ResponseEntity<Collection<String>> responseEntity = configController.findForceCompleteAssessmentIds("SBAC");
+
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).containsExactly("testId");
     }
 }

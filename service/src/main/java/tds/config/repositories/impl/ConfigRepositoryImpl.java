@@ -23,6 +23,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -72,5 +73,21 @@ public class ConfigRepositoryImpl implements ConfigRepository {
         }
 
         return clientSystemFlags;
+    }
+
+    @Override
+    public Collection<String> findForceCompleteAssessmentIds(final String clientName) {
+        final SqlParameterSource parameters = new MapSqlParameterSource("clientName", clientName);
+
+        final String SQL =
+            "SELECT \n" +
+                "  testid \n" +
+                "FROM \n " +
+                "  configs.client_testproperties " +
+                "WHERE " +
+                "  clientname = :clientName \n" +
+                "  AND forcecomplete = true";
+
+        return jdbcTemplate.queryForList(SQL, parameters, String.class);
     }
 }

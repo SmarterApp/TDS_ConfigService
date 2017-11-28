@@ -21,12 +21,11 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import tds.config.ClientLanguage;
 import tds.config.ClientSystemFlag;
-import tds.config.ClientSystemMessage;
 import tds.config.repositories.ConfigRepository;
 import tds.config.services.ConfigService;
 
@@ -73,6 +72,13 @@ public class ConfigServiceImplTest {
         Optional<ClientSystemFlag> result = configService.findClientSystemFlag("SBAC_PT", "foo");
 
         assertThat(result).isNotPresent();
+    }
+
+    @Test
+    public void shouldReturnForceCompleteAssessmentIds() {
+        when(mockConfigRepository.findForceCompleteAssessmentIds("SBAC")).thenReturn(Collections.singletonList("testId"));
+
+        assertThat(configService.findForceCompleteAssessmentIds("SBAC")).containsExactly("testId");
     }
 
     private List<ClientSystemFlag> getMockClientSystemFlag() {
